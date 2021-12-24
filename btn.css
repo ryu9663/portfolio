@@ -1,0 +1,38 @@
+.home-mouse {
+  position: relative;
+  top: 13%;
+  left: calc(50% + 18px);
+  transition: top 0.3s;
+  transform: translate(-50%, -50%);
+  width: 73px;
+  height: 100px;
+  cursor: pointer;
+}
+.home-mouse > div {
+  display: inline-block;
+}
+.home-mouse > div div {
+  display: inline-block;
+  width: 50px;
+  height: 2px;
+  background: rgb(82, 255, 14);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.home-mouse > div div:first-child {
+  transform: rotate(45deg) translateX(-50%);
+}
+.home-mouse > div div:nth-child(2) {
+  transform: rotate(90deg) translate(-50%);
+  left: -25px;
+  width: 100px;
+
+  /* background-color: red; */
+}
+.home-mouse > div div:last-child {
+  transform: rotate(-45deg) translateX(50%);
+}
+.home-mouse:hover {
+  top: 16%;
+}
