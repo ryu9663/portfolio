@@ -1,0 +1,31 @@
+$DOCK_BOTTOM_BAR_HEIGHT: 30px;
+$DOCK_BAR_WIDTH: 200px;
+$DOCK_BAR_HEIGHT: 500px;
+
+/**
+* z-index 변수
+**/
+$below: -1;
+$above: 1;
+
+// 페이지 레이아웃
+$zlayout: 0;
+$zlayout__backdrop: $below + $zlayout;
+$zlayout__hierarchy: $above + $zlayout; // UI 순서 정리
+$zlayout__popover: $above * 2 + $zlayout; // 드랍다운 메뉴, select 옵션
+$zlayout__footer: $above * 3 + $zlayout; // page footer
+$zlayout__tooltip: $above * 3 + $zlayout; // 툴팁 메시지
+$zlayout__sidebar: $above * 4 + $zlayout; // 사이드바
+
+// 팝업 (모달, 토스트 메시지, 배너, 설문)
+$zpopup: 100;
+$zpopup__backdrop: $below + $zpopup; // 팝업의 백그라운드 오버레이
+$zpopup__modal: $zpopup;
+$zpopup__toast: $above + $zpopup;
+
+// 페이지 위에 표시되는 전환 (로딩, 페이지 전환 효과)
+$ztransition: 200;
+$ztransition__loader: $ztransition;
+
+$page-title--height: 86px;
+$page-footer--height: 113px;

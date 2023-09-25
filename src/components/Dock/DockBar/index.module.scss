@@ -1,0 +1,17 @@
+@use "src/styles" as *;
+
+.dockbar-wrapper {
+  position: absolute;
+  bottom: $DOCK_BOTTOM_BAR_HEIGHT;
+
+  display: flex;
+  width: $DOCK_BAR_WIDTH;
+  height: $DOCK_BAR_HEIGHT;
+  background-color: #c0c0c0;
+  color: #c7c4ce;
+  &_left {
+    width: 30px;
+    height: 100%;
+    background-color: #817f85;
+  }
+}
