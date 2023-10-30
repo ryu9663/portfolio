@@ -1,0 +1,45 @@
+@use 'src/styles/libs' as *;
+.nav {
+  position: fixed;
+  left: 0;
+  bottom: -200px;
+
+  width: 350px;
+
+  padding: 20px 10px;
+  transition: all 0.5s linear;
+
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  &_isopen {
+    bottom: $UNDERBAR_HEIGHT;
+  }
+
+  &_title {
+    color: $GRAY-300;
+    font-size: $LARGE;
+  }
+  &_information {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-right: 1px #24292f solid;
+    padding-right: 10px;
+  }
+
+  &_project {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+  button {
+    color: $GRAY-500;
+  }
+
+  @include priority-background-layer;
+  @include half-transperant-background(0.8);
+}

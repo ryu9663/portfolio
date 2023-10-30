@@ -1,0 +1,35 @@
+@forward "reset";
+
+@use "libs" as libs;
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  margin: 100px 16px;
+}
+
+body {
+  color: libs.$BLUISH-GRAY-800;
+  font-family: "Pretendard Variable", Pretendard, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+html {
+  font-size: 16px;
+}
+
+h1 {
+  font-size: libs.$LARGE6X;
+}
+h2 {
+  font-size: libs.$LARGE4X;
+}
+h3 {
+  font-size: libs.$LARGE2X;
+}
+h4 {
+  font-size: libs.$LARGE;
+}
