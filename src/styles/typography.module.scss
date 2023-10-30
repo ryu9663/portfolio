@@ -1,0 +1,53 @@
+@use 'libs' as libs;
+
+.font-size-large4x {
+  font-size: libs.$LARGE4X;
+}
+
+.font-size-large3x {
+  font-size: libs.$LARGE3X;
+}
+
+.font-size-large2x {
+  font-size: libs.$LARGE2X;
+}
+
+.font-size-large {
+  font-size: libs.$LARGE;
+}
+
+.font-size-medium {
+  font-size: libs.$MEDIUM;
+}
+
+.font-size-normal {
+  font-size: libs.$NORMAL;
+}
+
+.font-size-small {
+  font-size: libs.$SMALL;
+}
+
+.font-size-small2x {
+  font-size: libs.$SMALL2X;
+}
+
+.font-size-small3x {
+  font-size: libs.$SMALL3X;
+}
+
+.font-weight-700 {
+  font-weight: 700;
+}
+
+.font-weight-600 {
+  font-weight: 600;
+}
+
+.font-weight-500 {
+  font-weight: 500;
+}
+
+.font-weight-400 {
+  font-weight: 400;
+}

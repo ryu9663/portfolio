@@ -1,0 +1,7 @@
+@use 'src/styles/libs' as *;
+
+.home {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(90deg, $SKYBLUE-50 0%, $BLUE-600 50%, $SKYBLUE-100 100%);
+}

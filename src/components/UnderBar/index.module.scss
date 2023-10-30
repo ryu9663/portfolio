@@ -1,0 +1,37 @@
+@use 'src/styles/libs' as *;
+
+.underbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: $UNDERBAR_HEIGHT;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+
+  &_window-button {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 20px;
+
+    &:hover {
+      background-color: $GRAY-800;
+    }
+  }
+
+  &_time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // width: 300px;
+    color: $GRAY-500;
+    border-left: 1px $GRAY-500 solid;
+    padding: 10px;
+    margin: 10px;
+  }
+
+  @include priority-focus-layer;
+  @include half-transperant-background(1);
+}

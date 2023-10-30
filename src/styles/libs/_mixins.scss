@@ -1,0 +1,138 @@
+@use 'vars' as vars;
+@use 'palette' as palette;
+
+@mixin border($color, $lineWidth) {
+  box-shadow: inset 0 0 0 $lineWidth $color;
+}
+@mixin font-size {
+  font-size: inherit;
+
+  &.font-size-large {
+    font-size: vars.$LARGE;
+  }
+
+  &.font-size-normal {
+    font-size: vars.$NORMAL;
+  }
+
+  &.font-size-small {
+    font-size: vars.$SMALL;
+  }
+}
+@mixin font-weight {
+  font-weight: inherit;
+
+  &.font-weight-700 {
+    font-weight: 700;
+  }
+
+  &.font-weight-500 {
+    font-weight: 500;
+  }
+
+  &.font-weight-400 {
+    font-weight: 400;
+  }
+}
+
+@mixin priority-background-layer {
+  &.priority-1 {
+    z-index: 99;
+  }
+
+  &.priority-2 {
+    z-index: 66;
+  }
+
+  &.priority-3 {
+    z-index: 33;
+  }
+}
+
+@mixin priority-focus-layer {
+  &.priority-1 {
+    z-index: 100;
+  }
+
+  &.priority-2 {
+    z-index: 67;
+  }
+
+  &.priority-3 {
+    z-index: 34;
+  }
+}
+
+@mixin half-transperant-background($opacity: 0.8) {
+  background-color: palette.$BLACK;
+  opacity: $opacity;
+}
+
+@mixin flex-row-centerize {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-column-centerize {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin markdown-body {
+  //https://github.com/sindresorhus/github-markdown-css#usage
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+  @media (max-width: 767px) {
+    padding: 15px;
+  }
+
+  ol li {
+    list-style: decimal;
+  }
+
+  ul li {
+    list-style: disc;
+  }
+
+  pre {
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    overflow: auto;
+  }
+
+  img {
+    margin: 0 auto;
+    display: block;
+    height: auto;
+    object-fit: contain;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  section {
+    margin: 50px 16px;
+  }
+
+  h1 {
+    font-size: vars.$LARGE6X;
+  }
+  h2 {
+    font-size: vars.$LARGE4X;
+  }
+  h3 {
+    font-size: vars.$LARGE2X;
+  }
+  h4 {
+    font-size: vars.$LARGE;
+  }
+}

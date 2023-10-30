@@ -1,17 +1,5 @@
-import { Button } from 'junyeol-components';
-import { useState } from 'react';
+import styles from './index.module.scss';
 
-const Home = () => {
-  const [count, setCount] = useState(0);
-  const handleClickButton = () => setCount(count => count + 1);
-  return (
-    <>
-      <a href="/">home</a>
-      <Button onClick={handleClickButton}>count++</Button>
-      {count}
-      <button>hi</button>
-    </>
-  );
-};
+const Home = () => <div className={styles.home}>home</div>;
 
 export default Home;

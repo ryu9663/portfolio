@@ -1,0 +1,23 @@
+// Breakpoints
+$breakpoint-mobile: 375px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+@mixin mobile {
+  /* Mobile :  768px 미만 */
+  @media (max-width: #{$breakpoint-tablet - 1px}) {
+    @content;
+  }
+}
+/* Tablet :  768px ~ 1024px */
+@mixin tablet {
+  @media (min-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}
+/* Desktop : 1024px ~ */
+@mixin desktop {
+  @media (min-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}
