@@ -8,6 +8,7 @@ interface NavBarProps {
   className?: string;
 }
 
+const GRAY_500 = '#a3a3a3';
 export const NavBar = ({ className }: NavBarProps) => {
   const isNavBarOpen = useNavbarStore(state => state.isNavBarOpen);
 
@@ -18,8 +19,7 @@ export const NavBar = ({ className }: NavBarProps) => {
         <li>
           <Button>
             <a href="https://www.notion.so/41daf0a85b9f46d186114573d2781a78?pvs=4" target="_blank">
-              {/* // gray-500 */}
-              <User color="#a3a3a3" />
+              <User color={GRAY_500} />
             </a>
           </Button>
         </li>
