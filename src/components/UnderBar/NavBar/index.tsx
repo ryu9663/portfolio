@@ -2,7 +2,7 @@ import { Button } from 'junyeol-components';
 import styles from './index.module.scss';
 import { User } from 'react-feather';
 import GithubSVG from '@/assets/github.svg';
-import { useNavbarStore } from '@/components/UnderBar/index.store';
+import { useModalStore } from '@/components/UnderBar/index.store';
 
 interface NavBarProps {
   className?: string;
@@ -10,10 +10,10 @@ interface NavBarProps {
 
 const GRAY_500 = '#a3a3a3';
 export const NavBar = ({ className }: NavBarProps) => {
-  const isNavBarOpen = useNavbarStore(state => state.isNavBarOpen);
+  const isModalOpen = useModalStore(state => state.isModalOpen);
 
   return (
-    <nav className={`${className} ${styles.nav} ${isNavBarOpen ? styles.nav_isopen : ''}`}>
+    <nav className={`${className} ${styles.nav} ${isModalOpen ? styles.nav_isopen : ''}`}>
       <ul className={styles.nav_information}>
         <span className={styles.nav_title}>INFO</span>
         <li>
