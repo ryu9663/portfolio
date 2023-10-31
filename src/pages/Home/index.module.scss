@@ -5,14 +5,4 @@
   width: 100vw;
   background: linear-gradient(90deg, $SKYBLUE-50 0%, $BLUE-600 50%, $SKYBLUE-100 100%);
   overflow: hidden;
-  padding: 10px;
-
-  position: relative;
-}
-
-img {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
 }

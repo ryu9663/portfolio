@@ -1,6 +1,6 @@
 import { Icon } from '@/pages/Home/components/Icon';
 import { useState, DragEvent } from 'react';
-import styles from '../../index.module.scss';
+import styles from './index.module.scss';
 interface DraggableProps {
   icons: {
     id: number;
@@ -46,7 +46,7 @@ export const Draggable = ({ icons: _icons }: DraggableProps) => {
   };
 
   return (
-    <div className={styles.home} onDragOver={handleDragOver} onDrop={handleDrop}>
+    <div className={styles.draggable} onDragOver={handleDragOver} onDrop={handleDrop}>
       {icons.map(icon => (
         <Icon key={icon.id} icon={icon} handleDragStart={handleDragStart} />
       ))}
