@@ -7,12 +7,11 @@ import { ICON_IMAGES } from '@/utils/constant';
 const Home = () => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   return (
-    <div className={styles.home} onClick={() => setIsReadOnly(true)}>
+    <div className={styles.home} onClick={() => !isReadOnly && setIsReadOnly(true)}>
       <Draggable>
         <div
           onClick={e => {
-            e.stopPropagation();
-            e.preventDefault();
+            !isReadOnly && e.stopPropagation();
           }}
         >
           {ICON_IMAGES.map((iconImg, i) => (

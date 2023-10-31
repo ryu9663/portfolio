@@ -18,7 +18,6 @@ export const Icon = ({ iconImg, isReadOnly, setIsReadOnly }: IconProps) => {
     countRef.current = 0;
   }, 3000);
 
-  console.log(isReadOnly);
   return (
     <div
       className={styles.icon}
