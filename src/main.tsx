@@ -5,7 +5,7 @@ import 'junyeol-components/style.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { App } from './app.tsx';
-import Home from './pages/Home/index.tsx';
+import { Home } from './pages/Home/index.tsx';
 
 const router = createBrowserRouter([
   {

@@ -1,16 +1,21 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, DragEvent } from 'react';
 import styles from './index.module.scss';
 
-interface IconProps {
-  iconImg: {
+export interface IconProps {
+  icon: {
+    id: number;
     src: string;
     alt: string;
+    left: number;
+    top: number;
   };
-  isReadOnly: boolean;
-  setIsReadOnly: (isReadOnly: boolean) => void;
+
+  handleDragStart: (e: DragEvent, id: number) => void;
 }
-export const Icon = ({ iconImg, isReadOnly, setIsReadOnly }: IconProps) => {
-  const [iconTitle, setIconTitle] = useState(iconImg.alt);
+
+export const Icon = ({ icon, handleDragStart }: IconProps) => {
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [iconTitle, setIconTitle] = useState(icon.alt);
 
   const countRef = useRef(0);
 
@@ -20,12 +25,18 @@ export const Icon = ({ iconImg, isReadOnly, setIsReadOnly }: IconProps) => {
 
   return (
     <div
+      draggable
+      onDragStart={e => handleDragStart(e, icon.id)}
+      style={{
+        left: icon.left,
+        top: icon.top,
+      }}
       className={styles.icon}
       onMouseDown={e => {
         !isReadOnly && e.stopPropagation();
       }}
     >
-      <img src={iconImg.src} alt={iconImg.alt} width={30} height={30} />
+      <img src={icon.src} alt={icon.alt} width={30} height={30} />
       <input
         type="text"
         readOnly={isReadOnly}

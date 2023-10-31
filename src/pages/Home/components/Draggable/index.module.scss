@@ -1,0 +1,13 @@
+.draggable {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  position: relative;
+}
+
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
