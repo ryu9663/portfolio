@@ -11,21 +11,32 @@ export interface IconProps {
   };
 
   handleDragStart: (e: DragEvent, id: number) => void;
+  isDraggable: boolean;
+  setIsDraggable: (isDraggable: boolean) => void;
 }
 
-export const Icon = ({ icon, handleDragStart }: IconProps) => {
+export const Icon = ({ icon, handleDragStart, isDraggable, setIsDraggable }: IconProps) => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [iconTitle, setIconTitle] = useState(icon.alt);
 
   const countRef = useRef(0);
 
-  setTimeout(() => {
-    countRef.current = 0;
-  }, 3000);
+  const handleEditIconTitle = () => {
+    countRef.current++;
+    if (countRef.current === 2) {
+      setIsReadOnly(false);
+      setIsDraggable(false);
+
+      setTimeout(() => {
+        countRef.current = 0;
+        console.log(countRef.current);
+      }, 3000);
+    }
+  };
 
   return (
     <div
-      draggable
+      draggable={isDraggable}
       onDragStart={e => handleDragStart(e, icon.id)}
       style={{
         left: icon.left,
@@ -40,19 +51,26 @@ export const Icon = ({ icon, handleDragStart }: IconProps) => {
       <input
         type="text"
         readOnly={isReadOnly}
-        size={iconTitle.length}
+        size={iconTitle.length + 2}
         className={`${styles.icon_title} ${isReadOnly ? '' : styles.icon_title_edit}`}
-        onClick={() => {
-          countRef.current++;
-          countRef.current === 2 && setIsReadOnly(false);
-        }}
+        onClick={() => handleEditIconTitle()}
         onFocus={e => {
           !isReadOnly && e.target.select();
+        }}
+        onBlur={() => {
+          setIsReadOnly(true);
+          setIsDraggable(true);
         }}
         value={iconTitle}
         onChange={e => {
           if (!isReadOnly) {
             setIconTitle(e.target.value);
+          }
+        }}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            setIsReadOnly(true);
+            setIsDraggable(true);
           }
         }}
       />

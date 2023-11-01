@@ -7,15 +7,22 @@
   width: fit-content;
   position: absolute;
   cursor: pointer;
+  padding: 5px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    border-radius: 5px;
+  }
 
   &_title {
     font-size: $SMALL;
-    width: fit-content;
+
     border: none;
     background-color: transparent;
     text-align: center;
     outline: none;
-
+    padding: 3px;
     &_edit {
       outline: auto;
     }

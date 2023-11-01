@@ -10,45 +10,58 @@ interface DraggableProps {
     top: number;
   }[];
 }
+
 export const Draggable = ({ icons: _icons }: DraggableProps) => {
   const [draggingIcon, setDraggingIcon] = useState<{ id: number } | null>(null);
   const [icons, setIcons] = useState(_icons);
+  const [isDraggable, setIsDraggable] = useState(true);
 
   const handleDragStart = (e: DragEvent, id: number) => {
-    e.dataTransfer.setData('id', id.toString());
-    setDraggingIcon({ id });
+    if (isDraggable) {
+      e.dataTransfer.setData('id', id.toString());
+      setDraggingIcon({ id });
+    }
   };
 
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
   };
+
   const handleDrop = (e: DragEvent) => {
-    e.preventDefault();
-    if (draggingIcon) {
-      const id = Number(e.dataTransfer.getData('id'));
-      const icon = icons.find(i => i.id === id);
-      if (icon) {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    if (isDraggable) {
+      e.preventDefault();
+      if (draggingIcon) {
+        const id = Number(e.dataTransfer.getData('id'));
+        const icon = icons.find(i => i.id === id);
+        if (icon) {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
 
-        const updatedIcons = icons.map(i => {
-          if (i.id === id) {
-            return { ...i, left: x, top: y };
-          }
-          return i;
-        });
+          const updatedIcons = icons.map(i => {
+            if (i.id === id) {
+              return { ...i, left: x - 30, top: y - 25 };
+            }
+            return i;
+          });
 
-        setIcons(updatedIcons);
+          setIcons(updatedIcons);
+        }
+        setDraggingIcon(null);
       }
-      setDraggingIcon(null);
     }
   };
 
   return (
     <div className={styles.draggable} onDragOver={handleDragOver} onDrop={handleDrop}>
       {icons.map(icon => (
-        <Icon key={icon.id} icon={icon} handleDragStart={handleDragStart} />
+        <Icon
+          key={icon.id}
+          icon={icon}
+          isDraggable={isDraggable}
+          setIsDraggable={setIsDraggable}
+          handleDragStart={handleDragStart}
+        />
       ))}
     </div>
   );
