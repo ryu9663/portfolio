@@ -1,6 +1,8 @@
 import { Icon } from '@/pages/Home/components/Icon';
 import { useState, DragEvent } from 'react';
 import styles from './index.module.scss';
+import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
+
 interface DraggableProps {
   icons: {
     id: number;
@@ -14,8 +16,7 @@ interface DraggableProps {
 export const Draggable = ({ icons: _icons }: DraggableProps) => {
   const [draggingIcon, setDraggingIcon] = useState<{ id: number } | null>(null);
   const [icons, setIcons] = useState(_icons);
-  const [isDraggable, setIsDraggable] = useState(true);
-
+  const [setMousePosistion, isDraggable] = useDraggableStore(state => [state.setMousePosistion, state.isDraggable]);
   const handleDragStart = (e: DragEvent, id: number) => {
     if (isDraggable) {
       e.dataTransfer.setData('id', id.toString());
@@ -53,16 +54,26 @@ export const Draggable = ({ icons: _icons }: DraggableProps) => {
   };
 
   return (
-    <div className={styles.draggable} onDragOver={handleDragOver} onDrop={handleDrop}>
-      {icons.map(icon => (
-        <Icon
-          key={icon.id}
-          icon={icon}
-          isDraggable={isDraggable}
-          setIsDraggable={setIsDraggable}
-          handleDragStart={handleDragStart}
-        />
-      ))}
-    </div>
+    <>
+      <div
+        className={styles.draggable}
+        onMouseMove={e => {
+          if (isDraggable) {
+            setMousePosistion({ x: e.clientX, y: e.clientY });
+          }
+        }}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onContextMenu={e => {
+          e.preventDefault();
+        }}
+      >
+        <div onContextMenu={e => e.stopPropagation()}>
+          {icons.map(icon => (
+            <Icon key={icon.id} icon={icon} handleDragStart={handleDragStart} />
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
