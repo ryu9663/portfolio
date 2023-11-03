@@ -62,9 +62,6 @@ export const Draggable = ({ icons: _icons }: DraggableProps) => {
         onContextMenu={e => {
           e.preventDefault();
         }}
-        onClick={e => {
-          console.log(e.target);
-        }}
       >
         <div onContextMenu={e => e.stopPropagation()}>
           {icons.map(icon => (

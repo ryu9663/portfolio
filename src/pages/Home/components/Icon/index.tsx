@@ -54,9 +54,7 @@ export const Icon = memo(
           }}
           onContextMenu={e => {
             e.preventDefault();
-            console.log(icon.alt, isDraggable, isRightClick);
             if (isDraggable && !isRightClick) {
-              console.log('hihi');
               setIsDraggable(false);
               setMousePosition({ x: e.clientX, y: e.clientY });
               setIsRightClick(true);
@@ -74,8 +72,10 @@ export const Icon = memo(
               !isReadOnly && e.target.select();
             }}
             onBlur={() => {
-              setIsReadOnly(true);
-              setIsDraggable(true);
+              if (!isRightClick) {
+                setIsReadOnly(true);
+                setIsDraggable(true);
+              }
             }}
             value={iconTitle}
             onChange={e => {

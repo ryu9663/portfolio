@@ -48,7 +48,6 @@ export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = fa
             style={{ left: mousePosition.x, top: mousePosition.y }}
             onClick={e => {
               e.stopPropagation();
-              console.log('안녕');
             }}
           >
             {options.map(option => (
