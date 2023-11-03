@@ -16,7 +16,7 @@ interface DraggableProps {
 export const Draggable = ({ icons: _icons }: DraggableProps) => {
   const [draggingIcon, setDraggingIcon] = useState<{ id: number } | null>(null);
   const [icons, setIcons] = useState(_icons);
-  const [setMousePosistion, isDraggable] = useDraggableStore(state => [state.setMousePosistion, state.isDraggable]);
+  const isDraggable = useDraggableStore(state => state.isDraggable);
   const handleDragStart = (e: DragEvent, id: number) => {
     if (isDraggable) {
       e.dataTransfer.setData('id', id.toString());
@@ -57,15 +57,13 @@ export const Draggable = ({ icons: _icons }: DraggableProps) => {
     <>
       <div
         className={styles.draggable}
-        onMouseMove={e => {
-          if (isDraggable) {
-            setMousePosistion({ x: e.clientX, y: e.clientY });
-          }
-        }}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onContextMenu={e => {
           e.preventDefault();
+        }}
+        onClick={e => {
+          console.log(e.target);
         }}
       >
         <div onContextMenu={e => e.stopPropagation()}>

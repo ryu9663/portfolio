@@ -8,6 +8,7 @@
   position: absolute;
   cursor: pointer;
   padding: 5px;
+  @include priority-background-layer;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);

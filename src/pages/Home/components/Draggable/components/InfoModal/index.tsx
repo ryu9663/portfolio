@@ -15,7 +15,7 @@ interface InfoModalProps {
 export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = false }: InfoModalProps) => {
   const [mousePosition, setMousePosition, setIsDraggable] = useDraggableStore(state => [
     state.mousePosition,
-    state.setMousePosistion,
+    state.setMousePosition,
     state.setIsDraggable,
   ]);
 
@@ -27,7 +27,7 @@ export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = fa
     },
     [onClose, setIsDraggable, setMousePosition],
   );
-  console.log(mousePosition);
+
   return (
     <>
       {isOpen && (
@@ -36,7 +36,6 @@ export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = fa
             isBackdropTransparent ? styles['backdrop-transperant'] : ''
           }`}
           onClick={e => {
-            e.stopPropagation();
             onModalClose(e);
           }}
           onContextMenu={e => {
@@ -49,6 +48,7 @@ export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = fa
             style={{ left: mousePosition.x, top: mousePosition.y }}
             onClick={e => {
               e.stopPropagation();
+              console.log('안녕');
             }}
           >
             {options.map(option => (
