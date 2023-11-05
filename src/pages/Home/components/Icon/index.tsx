@@ -107,6 +107,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconProps) => {
       </div>
 
       <InfoModal
+        isBackdropTransparent
         isOpen={isRightClick && !isDraggable}
         onClose={() => {
           setIsRightClick(false);
