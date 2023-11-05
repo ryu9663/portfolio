@@ -1,11 +1,12 @@
-import { useCallback, MouseEvent } from 'react';
+import { useCallback, MouseEvent, MouseEventHandler } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
 
 export interface OptionType {
   name: string;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLLIElement>;
 }
+
 interface InfoModalProps {
   isOpen: boolean;
   onClose: () => void;
