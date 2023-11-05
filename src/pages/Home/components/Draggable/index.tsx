@@ -1,16 +1,10 @@
-import { Icon } from '@/pages/Home/components/Icon';
+import { Icon, IconProps } from '@/pages/Home/components/Icon';
 import { useState, DragEvent } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
 
 interface DraggableProps {
-  icons: {
-    id: number;
-    src: string;
-    alt: string;
-    left: number;
-    top: number;
-  }[];
+  icons: IconProps['icon'][];
 }
 
 export const Draggable = ({ icons: _icons }: DraggableProps) => {
@@ -65,7 +59,7 @@ export const Draggable = ({ icons: _icons }: DraggableProps) => {
       >
         <div onContextMenu={e => e.stopPropagation()}>
           {icons.map(icon => (
-            <Icon key={icon.id} icon={icon} handleDragStart={handleDragStart} />
+            <Icon key={icon.id} icon={icon} setIcons={setIcons} handleDragStart={handleDragStart} />
           ))}
         </div>
       </div>
