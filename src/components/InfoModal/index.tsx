@@ -1,6 +1,6 @@
 import { useCallback, MouseEvent, MouseEventHandler } from 'react';
 import styles from './index.module.scss';
-import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
+import { useDraggableStore } from '@/components/Draggable/index.store';
 
 export interface OptionType {
   name: string;

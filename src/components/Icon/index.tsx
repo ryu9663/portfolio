@@ -1,7 +1,8 @@
 import { useRef, useState, DragEvent, Dispatch, SetStateAction } from 'react';
 import styles from './index.module.scss';
-import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
-import { InfoModal } from '@/pages/Home/components/Draggable/components/InfoModal';
+import { useDraggableStore } from '@/components/Draggable/index.store';
+import { InfoModal } from '@/components/InfoModal';
+import { useUnderbarStore } from '@/components/UnderBar/index.store';
 
 export interface IconType {
   type: 'file' | 'folder';
@@ -25,23 +26,29 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.isDraggable,
     state.setIsDraggable,
   ]);
-  const countRef = useRef(0);
+
+  const [iconsOnUnderbar, setIconsOnUnderbar] = useUnderbarStore(state => [
+    state.iconsOnUnderbar,
+    state.setIconsOnUnderbar,
+  ]);
+  const titleClickCountRef = useRef(0);
+  const iconClickCountRef = useRef(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
 
   const handleClickToEditIconTitle = (whichClick: 'onTitle' | 'onMenu') => {
     if (whichClick === 'onTitle') {
-      countRef.current++;
+      titleClickCountRef.current++;
     } else {
-      countRef.current = 2;
+      titleClickCountRef.current = 2;
       iconTitleInpuRef.current?.focus();
     }
 
-    if (countRef.current === 2) {
+    if (titleClickCountRef.current === 2) {
       setIsReadOnly(false);
       setIsDraggable(false);
 
       setTimeout(() => {
-        countRef.current = 0;
+        titleClickCountRef.current = 0;
       }, 3000);
     }
   };
@@ -67,6 +74,19 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
             setIsRightClick(true);
           }
         }}
+        onClick={() => {
+          iconClickCountRef.current++;
+          console.log(iconClickCountRef.current);
+          if (iconClickCountRef.current === 2) {
+            const isAlreadyOpenedSameIcon = !!iconsOnUnderbar.find(i => i.id === icon.id);
+
+            !isAlreadyOpenedSameIcon && setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
+
+            setTimeout(() => {
+              iconClickCountRef.current = 0;
+            }, 1000);
+          }
+        }}
       >
         <img src={icon.src} alt={icon.alt} width={30} height={30} />
         <input
@@ -75,7 +95,10 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
           readOnly={isReadOnly}
           size={icon.alt.length + 2}
           className={`${styles.icon_title} ${isReadOnly ? '' : styles.icon_title_edit}`}
-          onClick={() => handleClickToEditIconTitle('onTitle')}
+          onClick={e => {
+            e.stopPropagation();
+            handleClickToEditIconTitle('onTitle');
+          }}
           onFocus={e => {
             !isReadOnly && e.target.select();
           }}
@@ -123,9 +146,9 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
               setIsRightClick(false);
               setIsDraggable(true);
               setIsReadOnly(true);
-              countRef.current = 2;
+              titleClickCountRef.current = 2;
               handleClickToEditIconTitle('onMenu');
-              console.log(countRef.current);
+              console.log(titleClickCountRef.current);
             },
           },
           { name: '정보 보기', onClick: () => console.log('정보 보기') },

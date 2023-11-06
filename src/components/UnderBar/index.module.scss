@@ -9,15 +9,43 @@
 
   display: flex;
   justify-content: space-between;
-
-  &_window-button {
+  &_left {
     display: flex;
     align-items: center;
-    height: 100%;
-    margin-left: 20px;
+    gap: 10px;
+    &_window-button {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      margin-left: 20px;
 
-    &:hover {
-      background-color: $GRAY-800;
+      &:hover {
+        background-color: $GRAY-800;
+      }
+    }
+
+    &_window-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 100%;
+      li {
+        height: 100%;
+      }
+      &-button {
+        margin-left: 20px;
+        height: 100%;
+        padding: 0 10px;
+
+        color: $GRAY-500;
+        font-size: $SMALL2X;
+        font-weight: 500;
+        text-transform: uppercase;
+
+        &:hover {
+          background-color: $GRAY-800;
+        }
+      }
     }
   }
 

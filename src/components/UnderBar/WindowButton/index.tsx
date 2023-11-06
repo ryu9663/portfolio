@@ -1,4 +1,4 @@
-import { useModalStore } from '@/components/UnderBar/index.store';
+import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { Button } from 'junyeol-components';
 import WindowSVG from '@/assets/window.svg';
 
@@ -7,7 +7,7 @@ interface WindowButton {
 }
 
 export const WindowButton = ({ className }: WindowButton) => {
-  const [isModalOpen, setisModalOpen] = useModalStore(state => [state.isModalOpen, state.setIsModalOpen]);
+  const [isModalOpen, setisModalOpen] = useUnderbarStore(state => [state.isModalOpen, state.setIsModalOpen]);
   return (
     <>
       <Button onClick={() => setisModalOpen(!isModalOpen)} className={className}>

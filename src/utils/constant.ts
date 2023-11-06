@@ -1,7 +1,7 @@
 import NotionSVG from '@/assets/notion.svg';
 import GithubSVG from '@/assets/github.svg';
 import FolderSVG from '@/assets/folder.svg';
-import { IconType } from '@/pages/Home/components/Icon';
+import { IconType } from '@/components/Icon';
 
 export const ICONS: IconType[] = [
   { type: 'file', id: 1, src: NotionSVG, alt: 'notion', left: 50, top: 50 },

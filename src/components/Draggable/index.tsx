@@ -1,7 +1,7 @@
-import { Icon, IconComponentProps } from '@/pages/Home/components/Icon';
+import { Icon, IconComponentProps } from '@/components/Icon';
 import { useState, DragEvent } from 'react';
 import styles from './index.module.scss';
-import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
+import { useDraggableStore } from '@/components/Draggable/index.store';
 
 interface DraggableProps {
   icons: IconComponentProps['icon'][];
