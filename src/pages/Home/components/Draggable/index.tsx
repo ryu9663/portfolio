@@ -1,10 +1,10 @@
-import { Icon, IconProps } from '@/pages/Home/components/Icon';
+import { Icon, IconComponentProps } from '@/pages/Home/components/Icon';
 import { useState, DragEvent } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
 
 interface DraggableProps {
-  icons: IconProps['icon'][];
+  icons: IconComponentProps['icon'][];
 }
 
 export const Draggable = ({ icons: _icons }: DraggableProps) => {
