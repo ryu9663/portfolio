@@ -4,6 +4,7 @@ import { Button } from 'junyeol-components';
 
 export const WindowInfoes = () => {
   const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);
+
   return (
     <ul className={styles['window_infoes']}>
       {iconsOnUnderbar.map(icon => (
