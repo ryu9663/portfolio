@@ -3,19 +3,21 @@ import styles from './index.module.scss';
 import { useDraggableStore } from '@/pages/Home/components/Draggable/index.store';
 import { InfoModal } from '@/pages/Home/components/Draggable/components/InfoModal';
 
-export interface IconProps {
-  icon: {
-    id: number;
-    src: string;
-    alt: string;
-    left: number;
-    top: number;
-  };
-  setIcons: Dispatch<SetStateAction<IconProps['icon'][]>>;
+export interface IconType {
+  type: 'file' | 'folder';
+  id: number;
+  src: string;
+  alt: string;
+  left: number;
+  top: number;
+}
+export interface IconComponentProps {
+  icon: IconType;
+  setIcons: Dispatch<SetStateAction<IconComponentProps['icon'][]>>;
   handleDragStart: (e: DragEvent, id: number) => void;
 }
 
-export const Icon = ({ icon, setIcons, handleDragStart }: IconProps) => {
+export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isRightClick, setIsRightClick] = useState(false);
   const [setMousePosition, isDraggable, setIsDraggable] = useDraggableStore(state => [
