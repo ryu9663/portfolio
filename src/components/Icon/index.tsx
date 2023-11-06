@@ -53,6 +53,19 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     }
   };
 
+  const handleDoubleClickIcon = () => {
+    iconClickCountRef.current++;
+    console.log(iconClickCountRef.current);
+    if (iconClickCountRef.current === 2) {
+      const isAlreadyOpenedSameIcon = !!iconsOnUnderbar.find(i => i.id === icon.id);
+
+      !isAlreadyOpenedSameIcon && setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
+
+      setTimeout(() => {
+        iconClickCountRef.current = 0;
+      }, 1000);
+    }
+  };
   return (
     <>
       <div
@@ -74,19 +87,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
             setIsRightClick(true);
           }
         }}
-        onClick={() => {
-          iconClickCountRef.current++;
-          console.log(iconClickCountRef.current);
-          if (iconClickCountRef.current === 2) {
-            const isAlreadyOpenedSameIcon = !!iconsOnUnderbar.find(i => i.id === icon.id);
-
-            !isAlreadyOpenedSameIcon && setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
-
-            setTimeout(() => {
-              iconClickCountRef.current = 0;
-            }, 1000);
-          }
-        }}
+        onClick={handleDoubleClickIcon}
       >
         <img src={icon.src} alt={icon.alt} width={30} height={30} />
         <input
