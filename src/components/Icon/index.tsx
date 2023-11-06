@@ -14,7 +14,7 @@ export interface IconType {
 }
 export interface IconComponentProps {
   icon: IconType;
-  setIcons: Dispatch<SetStateAction<IconComponentProps['icon'][]>>;
+  setIcons: Dispatch<SetStateAction<IconType[]>>;
   handleDragStart: (e: DragEvent, id: number) => void;
 }
 
@@ -66,6 +66,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
       }, 1000);
     }
   };
+
   return (
     <>
       <div
@@ -127,6 +128,15 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
             if (e.key === 'Enter') {
               setIsReadOnly(true);
               setIsDraggable(true);
+              setIconsOnUnderbar(prev => {
+                const updatedIcons = prev.map(i => {
+                  if (i.id === icon.id) {
+                    return { ...i, alt: icon.alt };
+                  }
+                  return i;
+                });
+                return updatedIcons;
+              });
             }
           }}
         />
