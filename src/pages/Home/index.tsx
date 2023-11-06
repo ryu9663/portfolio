@@ -1,4 +1,4 @@
-import { Draggable } from '@/pages/Home/components/Draggable';
+import { Draggable } from '@/components/Draggable';
 import { ICONS } from '@/utils/constant';
 import styles from './index.module.scss';
 
