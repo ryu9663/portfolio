@@ -2,7 +2,7 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import styles from './index.module.scss';
 import { Button } from 'junyeol-components';
 
-export const WindowInfoes = () => {
+export const IconsOnUnderbar = () => {
   const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);
 
   return (

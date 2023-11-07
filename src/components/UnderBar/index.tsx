@@ -2,7 +2,7 @@ import styles from './index.module.scss';
 import { NavBar } from '@/components/UnderBar/NavBar';
 import { CurrentTime } from '@/components/UnderBar/CurrentTime';
 import { WindowButton } from '@/components/UnderBar/WindowButton';
-import { WindowInfoes } from '@/components/UnderBar/WindowInfoes';
+import { IconsOnUnderbar } from '@/components/UnderBar/IconsOnUnderbar';
 
 export const Underbar = () => (
   <>
@@ -10,7 +10,7 @@ export const Underbar = () => (
     <div className={`${styles.underbar} ${styles['priority-1']}`}>
       <div className={styles['underbar_left']}>
         <WindowButton className={styles['underbar_left_window-button']} />
-        <WindowInfoes />
+        <IconsOnUnderbar />
       </div>
 
       <CurrentTime className={styles.underbar_time} />

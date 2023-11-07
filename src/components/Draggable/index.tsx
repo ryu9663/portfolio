@@ -1,51 +1,24 @@
-import { Icon, IconComponentProps } from '@/components/Icon';
+import { Icon, IconType } from '@/components/Icon';
 import { useState, DragEvent } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/components/Draggable/index.store';
+import {
+  handleDragStart as _handleDragStart,
+  handleDragOver,
+  handleDrop as _handleDrop,
+} from '@/components/Draggable/handler';
 
 interface DraggableProps {
-  icons: IconComponentProps['icon'][];
+  icons: IconType[];
 }
 
 export const Draggable = ({ icons: _icons }: DraggableProps) => {
   const [draggingIcon, setDraggingIcon] = useState<{ id: number } | null>(null);
   const [icons, setIcons] = useState(_icons);
   const isDraggable = useDraggableStore(state => state.isDraggable);
-  const handleDragStart = (e: DragEvent, id: number) => {
-    if (isDraggable) {
-      e.dataTransfer.setData('id', id.toString());
-      setDraggingIcon({ id });
-    }
-  };
 
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: DragEvent) => {
-    if (isDraggable) {
-      e.preventDefault();
-      if (draggingIcon) {
-        const id = Number(e.dataTransfer.getData('id'));
-        const icon = icons.find(i => i.id === id);
-        if (icon) {
-          const rect = e.currentTarget.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          const updatedIcons = icons.map(i => {
-            if (i.id === id) {
-              return { ...i, left: x - 30, top: y - 25 };
-            }
-            return i;
-          });
-
-          setIcons(updatedIcons);
-        }
-        setDraggingIcon(null);
-      }
-    }
-  };
+  const handleDragStart = (e: DragEvent, id: number) => _handleDragStart(e, id, isDraggable, setDraggingIcon);
+  const handleDrop = (e: DragEvent) => _handleDrop(e, isDraggable, draggingIcon, setDraggingIcon, icons, setIcons);
 
   return (
     <>

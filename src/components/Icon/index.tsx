@@ -3,14 +3,17 @@ import styles from './index.module.scss';
 import { useDraggableStore } from '@/components/Draggable/index.store';
 import { InfoModal } from '@/components/InfoModal';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
+import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 
 export interface IconType {
-  type: 'file' | 'folder';
+  type: 'file' | 'folder' | '';
   id: number;
   src: string;
   alt: string;
   left: number;
   top: number;
+  //! TODO : type 이 folder' 인데 children 필수값 아닌 이슈.
+  children?: IconType['type'] extends 'file' ? undefined : IconType[];
 }
 export interface IconComponentProps {
   icon: IconType;
@@ -31,6 +34,8 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.iconsOnUnderbar,
     state.setIconsOnUnderbar,
   ]);
+
+  const openWindow = useWindowBoxStore(state => state.setIcon);
   const titleClickCountRef = useRef(0);
   const iconClickCountRef = useRef(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
@@ -53,13 +58,15 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     }
   };
 
-  const handleDoubleClickIcon = () => {
+  const handleDoubleClickIcon = (icon: IconType) => {
     iconClickCountRef.current++;
-    console.log(iconClickCountRef.current);
     if (iconClickCountRef.current === 2) {
       const isAlreadyOpenedSameIcon = !!iconsOnUnderbar.find(i => i.id === icon.id);
 
-      !isAlreadyOpenedSameIcon && setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
+      if (!isAlreadyOpenedSameIcon) {
+        setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
+        openWindow(icon);
+      }
 
       setTimeout(() => {
         iconClickCountRef.current = 0;
@@ -88,7 +95,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
             setIsRightClick(true);
           }
         }}
-        onClick={handleDoubleClickIcon}
+        onClick={() => handleDoubleClickIcon(icon)}
       >
         <img src={icon.src} alt={icon.alt} width={30} height={30} />
         <input
