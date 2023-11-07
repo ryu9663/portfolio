@@ -8,7 +8,7 @@ interface WindowBoxStoreProps {
 }
 export const useWindowBoxStore = create<WindowBoxStoreProps>(set => ({
   icon: {
-    type: 'notset',
+    type: '',
     id: 0,
     src: '',
     alt: '',

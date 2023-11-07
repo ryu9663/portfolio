@@ -9,7 +9,7 @@ export const Home = () => {
 
   return (
     <div className={styles.home}>
-      <WindowBox icon={openedIcon} />
+      {openedIcon.type !== '' && <WindowBox icon={openedIcon} />}
       <Draggable icons={ICONS} />
     </div>
   );

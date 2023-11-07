@@ -6,7 +6,7 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 
 export interface IconType {
-  type: 'file' | 'folder' | 'notset';
+  type: 'file' | 'folder' | '';
   id: number;
   src: string;
   alt: string;

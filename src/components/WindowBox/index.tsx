@@ -32,15 +32,15 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
             </li>
           </ul>
         </header>
-        {children ? (
-          <section>
+        <section className={styles['windowbox_body']}>
+          {children ? (
             <Draggable icons={children} />
-          </section>
-        ) : (
-          <section>
-            {id}, {src}, {alt}, {left}, {top}
-          </section>
-        )}
+          ) : (
+            <div>
+              ({id}, {src}, {alt}, {left}, {top})
+            </div>
+          )}
+        </section>
       </div>
     )
   );
