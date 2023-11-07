@@ -4,16 +4,13 @@ import { User } from 'react-feather';
 import GithubSVG from '@/assets/github.svg';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 
-interface NavBarProps {
-  className?: string;
-}
-
 const GRAY_500 = '#a3a3a3';
-export const NavBar = ({ className }: NavBarProps) => {
+
+export const NavBar = () => {
   const isModalOpen = useUnderbarStore(state => state.isModalOpen);
 
   return (
-    <nav className={`${className} ${styles.nav} ${isModalOpen ? styles.nav_isopen : ''}`}>
+    <nav className={`${styles['priority-0']} ${styles.nav} ${isModalOpen ? styles.nav_isopen : ''}`}>
       <ul className={styles.nav_information}>
         <span className={styles.nav_title}>INFO</span>
         <li>

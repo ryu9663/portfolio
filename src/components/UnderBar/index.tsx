@@ -6,8 +6,8 @@ import { IconsOnUnderbar } from '@/components/UnderBar/IconsOnUnderbar';
 
 export const Underbar = () => (
   <>
-    <NavBar className={styles['priority-1']} />
-    <div className={`${styles.underbar} ${styles['priority-1']}`}>
+    <NavBar />
+    <div className={`${styles.underbar} ${styles['priority-0']}`}>
       <div className={styles['underbar_left']}>
         <WindowButton className={styles['underbar_left_window-button']} />
         <IconsOnUnderbar />

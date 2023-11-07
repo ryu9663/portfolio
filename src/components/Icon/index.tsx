@@ -12,6 +12,7 @@ export interface IconType {
   alt: string;
   left: number;
   top: number;
+  zIndex: number;
   //! TODO : type 이 folder' 인데 children 필수값 아닌 이슈.
   children?: IconType['type'] extends 'file' ? undefined : IconType[];
 }
@@ -35,7 +36,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.setIconsOnUnderbar,
   ]);
 
-  const openWindow = useWindowBoxStore(state => state.setIcon);
+  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
   const titleClickCountRef = useRef(0);
   const iconClickCountRef = useRef(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
@@ -56,6 +57,11 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
         titleClickCountRef.current = 0;
       }, 3000);
     }
+  };
+
+  const openWindow = (icon: IconType) => {
+    const zIndexs = openedIcons.map(icon => icon.zIndex);
+    setOpenedIcons([...openedIcons, { ...icon, zIndex: Math.max(...zIndexs) + 1 }]);
   };
 
   const handleDoubleClickIcon = (icon: IconType) => {

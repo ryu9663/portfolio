@@ -5,12 +5,12 @@ import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { WindowBox } from '@/components/WindowBox';
 
 export const Home = () => {
-  const openedIcon = useWindowBoxStore(state => state.icon);
+  const openedIcons = useWindowBoxStore(state => state.icons);
 
   return (
     <div className={styles.home}>
-      {openedIcon.type !== '' && <WindowBox icon={openedIcon} />}
       <Draggable icons={ICONS} />
+      {openedIcons.map((openedIcon, i) => openedIcon.type !== '' && <WindowBox key={i} index={i} icon={openedIcon} />)}
     </div>
   );
 };
