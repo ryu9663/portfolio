@@ -36,6 +36,9 @@
 }
 
 @mixin priority-background-layer {
+  &.priority-0 {
+    z-index: 99998;
+  }
   &.priority-1 {
     z-index: 99;
   }
@@ -50,6 +53,9 @@
 }
 
 @mixin priority-focus-layer {
+  &.priority-0 {
+    z-index: 99999;
+  }
   &.priority-1 {
     z-index: 100;
   }
