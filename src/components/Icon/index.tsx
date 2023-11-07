@@ -12,6 +12,7 @@ export interface IconType {
   alt: string;
   left: number;
   top: number;
+  //! TODO : type 이 folder' 인데 children 필수값 아닌 이슈.
   children?: IconType['type'] extends 'file' ? undefined : IconType[];
 }
 export interface IconComponentProps {
