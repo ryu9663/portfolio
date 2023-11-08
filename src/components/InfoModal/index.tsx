@@ -37,7 +37,7 @@ export const InfoModal = ({
         <div
           className={`${styles.back_drop} ${styles['priority-1']} ${
             isBackdropTransparent ? styles['backdrop-transperant'] : ''
-          } ${isUpward ? styles['upward'] : ''}`}
+          }`}
           onClick={e => {
             onModalClose(e);
           }}
@@ -48,7 +48,7 @@ export const InfoModal = ({
         >
           <ul
             className={styles.info_modal}
-            style={{ left: mousePosition.x, top: mousePosition.y - 80 }}
+            style={{ left: mousePosition.x, top: mousePosition.y - (isUpward ? 80 : 0) }}
             onClick={e => {
               e.stopPropagation();
             }}

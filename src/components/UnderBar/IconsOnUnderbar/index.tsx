@@ -14,11 +14,6 @@ export const IconsOnUnderbar = () => {
     <>
       <ul className={styles['window_infoes']}>
         {iconsOnUnderbar.map(icon => (
-          // <li data-testid="windowinfo" key={icon.id}>
-          //   <Button className={styles['window_infoes-button']} onContextMenu={() => {}}>
-          //     <img src={icon.src} alt={icon.alt} width={30} height={30} /> <span>{icon.alt}</span>
-          //   </Button>
-          // </li>
           <IconOnUnderbar key={icon.id} icon={icon} />
         ))}
       </ul>
@@ -53,6 +48,7 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
         <img src={icon.src} alt={icon.alt} width={30} height={30} /> <span>{icon.alt}</span>
       </Button>
       <InfoModal
+        isUpward
         isOpen={isInfoModalOpen}
         onClose={closeInfoModal}
         options={[
