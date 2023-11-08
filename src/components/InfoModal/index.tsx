@@ -12,8 +12,15 @@ interface InfoModalProps {
   onClose: () => void;
   options: OptionType[];
   isBackdropTransparent?: boolean;
+  isUpward?: boolean;
 }
-export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = false }: InfoModalProps) => {
+export const InfoModal = ({
+  isOpen,
+  onClose,
+  options,
+  isBackdropTransparent = false,
+  isUpward = false,
+}: InfoModalProps) => {
   const [mousePosition, setMousePosition] = useDraggableStore(state => [state.mousePosition, state.setMousePosition]);
 
   const onModalClose = useCallback(
@@ -41,7 +48,7 @@ export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = fa
         >
           <ul
             className={styles.info_modal}
-            style={{ left: mousePosition.x, top: mousePosition.y }}
+            style={{ left: mousePosition.x, top: mousePosition.y - (isUpward ? 80 : 0) }}
             onClick={e => {
               e.stopPropagation();
             }}
