@@ -163,12 +163,15 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
           setIsDraggable(true);
         }}
         options={[
-          { name: icon.alt, onClick: () => console.log(icon.alt) },
+          {
+            name: icon.alt,
+            onClick: () => {
+              openWindow(icon);
+            },
+          },
           {
             name: '이름 변경',
             onClick: () => {
-              setIsRightClick(false);
-              setIsDraggable(true);
               setIsReadOnly(true);
               titleClickCountRef.current = 2;
               handleClickToEditIconTitle('onMenu');

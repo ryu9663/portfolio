@@ -4,7 +4,7 @@ import { useDraggableStore } from '@/components/Draggable/index.store';
 
 export interface OptionType {
   name: string;
-  onClick?: MouseEventHandler<HTMLLIElement>;
+  onClick: MouseEventHandler<HTMLLIElement>;
 }
 
 interface InfoModalProps {
@@ -14,19 +14,14 @@ interface InfoModalProps {
   isBackdropTransparent?: boolean;
 }
 export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = false }: InfoModalProps) => {
-  const [mousePosition, setMousePosition, setIsDraggable] = useDraggableStore(state => [
-    state.mousePosition,
-    state.setMousePosition,
-    state.setIsDraggable,
-  ]);
+  const [mousePosition, setMousePosition] = useDraggableStore(state => [state.mousePosition, state.setMousePosition]);
 
   const onModalClose = useCallback(
     (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-      setIsDraggable(true);
       onClose();
     },
-    [onClose, setIsDraggable, setMousePosition],
+    [onClose, setMousePosition],
   );
 
   return (
@@ -52,7 +47,13 @@ export const InfoModal = ({ isOpen, onClose, options, isBackdropTransparent = fa
             }}
           >
             {options.map(option => (
-              <li key={option.name} onClick={option.onClick}>
+              <li
+                key={option.name}
+                onClick={e => {
+                  option.onClick(e);
+                  onClose();
+                }}
+              >
                 {option.name}
               </li>
             ))}
