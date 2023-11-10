@@ -8,10 +8,28 @@
 
   background-color: $WHITE;
   border: 1px $GRAY_100 solid;
-  width: 700px;
-  height: 700px;
-  margin: auto;
+  &.normal {
+    width: 500px;
+    height: 500px;
+  }
 
+  &.maximized {
+    width: 100%;
+    height: 100%;
+
+    @include priority-background-layer;
+  }
+
+  &.minimized {
+    width: 100px;
+    height: 0;
+    left: 0;
+  }
+  transition:
+    width 1s,
+    height 1s,
+    bottom 1s,
+    left 1s;
   &_header {
     cursor: grab;
     height: 40px;
@@ -37,7 +55,11 @@
     }
   }
   &_body {
+    background-color: $WHITE;
     height: 100%;
     width: 100%;
+    &.minimized {
+      display: none;
+    }
   }
 }
