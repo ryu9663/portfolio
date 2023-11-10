@@ -2,7 +2,7 @@ import styles from './index.module.scss';
 import { IconType } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { maximizeZIndex as _maximizeZIndex } from '@/utils';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
@@ -19,7 +19,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
 
-  const maximizeZIndex = (zIndex?: number) => _maximizeZIndex(openedIcons, id, setOpenedIcons, zIndex);
+  const maximizeZIndex = () => _maximizeZIndex(openedIcons, id, setOpenedIcons);
 
   useEffect(() => {
     setIsOpen(true);
@@ -35,18 +35,22 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
       openedIcons.map(icon => (icon.id === id ? { ...icon, windowState, prevWindowState } : icon)),
     );
   };
-  console.log(openedIcons);
-  const position = (() => {
-    if (windowState === 'maximized') {
-      return { left: 0, bottom: 0 };
-    } else if (windowState === 'minimized') {
-      return { bottom: '-100px' };
-    } else if (windowState === 'normal') {
-      return { left: 200 + newTapPosition, bottom: 100 + newTapPosition, zIndex: icon.zIndex };
-    } else {
-      return { left: 0, top: 0 };
-    }
-  })();
+
+  const position = useMemo(
+    () =>
+      (() => {
+        if (windowState === 'maximized') {
+          return { bottom: 0, left: 100 + index === 0 ? 1 : index * 120 };
+        } else if (windowState === 'minimized') {
+          return { bottom: '-100px', left: 100 + index === 0 ? 1 : index * 120 };
+        } else if (windowState === 'normal') {
+          return { left: 200 + newTapPosition, bottom: 150 + newTapPosition, zIndex: icon.zIndex };
+        } else {
+          return { left: 0, top: 0 };
+        }
+      })(),
+    [windowState, icon.zIndex, newTapPosition],
+  );
 
   const windowClassName = (() => {
     switch (windowState) {
@@ -64,7 +68,6 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
         className={`${styles.windowbox} ${windowClassName}`}
         style={{
           ...position,
-          transition: 'all 1s',
         }}
         draggable
         onClick={() => maximizeZIndex()}
@@ -86,7 +89,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
                 className={styles.button}
                 onClick={() => {
                   if (windowState === 'normal') {
-                    maximizeZIndex(9999);
+                    maximizeZIndex();
                     setWindowState('maximized', 'normal');
                   } else setWindowState('normal', 'maximized');
                 }}

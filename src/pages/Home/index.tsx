@@ -10,7 +10,9 @@ export const Home = () => {
   return (
     <div className={styles.home}>
       <Draggable icons={ICONS} />
-      {openedIcons.map((openedIcon, i) => openedIcon.type !== '' && <WindowBox key={i} index={i} icon={openedIcon} />)}
+      {openedIcons.map(
+        (openedIcon, i) => openedIcon.windowState !== 'closed' && <WindowBox key={i} index={i} icon={openedIcon} />,
+      )}
     </div>
   );
 };

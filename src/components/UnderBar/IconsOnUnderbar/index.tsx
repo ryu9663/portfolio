@@ -24,7 +24,7 @@ export const IconsOnUnderbar = () => {
 const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const setOpenedIcons = useWindowBoxStore(state => state.setIcons);
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
