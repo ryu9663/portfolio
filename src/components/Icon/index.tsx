@@ -5,8 +5,16 @@ import { InfoModal } from '@/components/InfoModal';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 
+/**
+ * @description 'closed' : 언더바에도 없는 상태, 'normal' : 일반 크기로 켜진 상태, 'maximized' : 최대화된 상태, 'minimized' : 최소화된 상태, 언더바에 있음
+ */
+type WindowState = 'closed' | 'normal' | 'maximized' | 'minimized';
+type PrevWindowState = 'normal' | 'maximized';
+
 export interface IconType {
   type: 'file' | 'folder' | '';
+  windowState: WindowState;
+  prevWindowState?: PrevWindowState;
   id: number;
   src: string;
   alt: string;
@@ -61,7 +69,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
 
   const openWindow = (icon: IconType) => {
     const zIndexs = openedIcons.map(icon => icon.zIndex);
-    setOpenedIcons([...openedIcons, { ...icon, zIndex: Math.max(...zIndexs) + 1 }]);
+    setOpenedIcons([...openedIcons, { ...icon, windowState: 'normal', zIndex: Math.max(...zIndexs) + 1 }]);
   };
 
   const handleDoubleClickIcon = (icon: IconType) => {
@@ -175,7 +183,6 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
               setIsReadOnly(true);
               titleClickCountRef.current = 2;
               handleClickToEditIconTitle('onMenu');
-              console.log(titleClickCountRef.current);
             },
           },
           { name: '정보 보기', onClick: () => console.log('정보 보기') },

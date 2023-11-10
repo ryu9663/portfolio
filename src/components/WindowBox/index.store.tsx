@@ -10,6 +10,7 @@ export const useWindowBoxStore = create<WindowBoxStoreProps>(set => ({
   icons: [
     {
       type: '',
+      windowState: 'closed',
       id: 0,
       src: '',
       alt: '',

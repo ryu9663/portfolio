@@ -24,7 +24,7 @@ export const IconsOnUnderbar = () => {
 const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const setOpenedIcons = useWindowBoxStore(state => state.setIcons);
+  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
@@ -35,6 +35,16 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
     setOpenedIcons(openedIcons => openedIcons.filter(icon => icon.id !== id));
   };
 
+  const openWindow = (id: number) => {
+    setOpenedIcons(openedIcons =>
+      openedIcons.map(i => {
+        if (i.id === id) {
+          return { ...i, windowState: i.prevWindowState || 'normal' };
+        }
+        return i;
+      }),
+    );
+  };
   return (
     <li data-testid="windowinfo" key={icon.id}>
       <Button
@@ -44,6 +54,7 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
           setMousePosition({ x: e.clientX, y: e.clientY });
           setIsInfoModalOpen(true);
         }}
+        onClick={() => openWindow(icon.id)}
       >
         <img src={icon.src} alt={icon.alt} width={30} height={30} /> <span>{icon.alt}</span>
       </Button>
@@ -53,7 +64,7 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
         onClose={closeInfoModal}
         options={[
           {
-            name: icon.alt,
+            name: `${icon.alt} 열기`,
             onClick: () => {
               console.log('최소화 되어있는거 꺼내기');
             },
