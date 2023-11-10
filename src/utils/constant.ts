@@ -4,16 +4,19 @@ import FolderSVG from '@/assets/folder.svg';
 import { IconType } from '@/components/Icon';
 
 export const ICONS: IconType[] = [
-  { type: 'file', id: 1, src: NotionSVG, alt: 'notion', left: 50, top: 50, zIndex: 100 },
-  { type: 'file', id: 2, src: GithubSVG, alt: 'github', left: 150, top: 50, zIndex: 100 },
+  { type: 'file', windowState: 'closed', id: 1, src: NotionSVG, alt: 'notion', left: 50, top: 50, zIndex: 100 },
+  { type: 'file', windowState: 'closed', id: 2, src: GithubSVG, alt: 'github', left: 150, top: 50, zIndex: 100 },
   {
     type: 'folder',
+    windowState: 'closed',
     id: 3,
     src: FolderSVG,
     alt: 'Project',
     left: 250,
     top: 50,
     zIndex: 100,
-    children: [{ type: 'file', id: 4, src: NotionSVG, alt: 'notion', left: 50, top: 50, zIndex: 100 }],
+    children: [
+      { type: 'file', windowState: 'closed', id: 4, src: NotionSVG, alt: 'notion', left: 50, top: 50, zIndex: 100 },
+    ],
   },
 ];
