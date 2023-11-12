@@ -4,7 +4,7 @@ import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
 import { useEffect, useMemo, useState } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
-import { maximizeZIndex as _maximizeZIndex } from '@/utils';
+import { maximizeZIndex as _maximizeZIndex, minimizeWindow } from '@/utils';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 
 interface WindowBoxProps {
@@ -69,8 +69,14 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
         style={{
           ...position,
         }}
-        draggable
-        onClick={() => maximizeZIndex()}
+        onFocus={() => {
+          maximizeZIndex();
+        }}
+        onBlur={() => {
+          setOpenedIcons(openedIcons =>
+            openedIcons.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)),
+          );
+        }}
       >
         <header className={styles['windowbox_header']}>
           <ul>
@@ -79,6 +85,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
                 className={styles.button}
                 onClick={() => {
                   if (windowState === 'maximized' || windowState === 'normal') setWindowState('minimized', windowState);
+                  minimizeWindow(icon.id, setOpenedIcons);
                 }}
               >
                 -
@@ -110,7 +117,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
             </li>
           </ul>
         </header>
-        <section className={styles['windowbox_body']}>
+        <section className={styles['windowbox_body']} onClick={e => e.stopPropagation()}>
           {children ? (
             <Draggable icons={children} />
           ) : (

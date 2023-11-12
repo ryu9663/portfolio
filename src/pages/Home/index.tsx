@@ -3,9 +3,12 @@ import { ICONS } from '@/utils/constant';
 import styles from './index.module.scss';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { WindowBox } from '@/components/WindowBox';
+import { useZIndex } from '@/utils/hooks/useZIndex';
 
 export const Home = () => {
-  const openedIcons = useWindowBoxStore(state => state.icons);
+  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+
+  useZIndex(openedIcons, setOpenedIcons);
 
   return (
     <div className={styles.home}>
