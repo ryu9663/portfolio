@@ -14,6 +14,7 @@ type PrevWindowState = 'normal' | 'maximized';
 export interface IconType {
   type: 'file' | 'folder' | '';
   windowState: WindowState;
+  activated?: boolean;
   prevWindowState?: PrevWindowState;
   id: number;
   src: string;
@@ -69,7 +70,10 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
 
   const openWindow = (icon: IconType) => {
     const zIndexs = openedIcons.map(icon => icon.zIndex);
-    setOpenedIcons([...openedIcons, { ...icon, windowState: 'normal', zIndex: Math.max(...zIndexs) + 1 }]);
+    setOpenedIcons([
+      ...openedIcons.map(el => ({ ...el, activated: false })),
+      { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
+    ]);
   };
 
   const handleDoubleClickIcon = (icon: IconType) => {

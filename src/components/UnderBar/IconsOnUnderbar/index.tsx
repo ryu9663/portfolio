@@ -6,6 +6,7 @@ import { IconType } from '@/components/Icon';
 import { useState } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useDraggableStore } from '@/components/Draggable/index.store';
+import { maximizeZIndex, minimizeWindow } from '@/utils';
 
 export const IconsOnUnderbar = () => {
   const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);
@@ -24,7 +25,8 @@ export const IconsOnUnderbar = () => {
 const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const setOpenedIcons = useWindowBoxStore(state => state.setIcons);
+  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const thisIconOnOpened = openedIcons.find(i => i.id === icon.id)!;
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
@@ -41,12 +43,30 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
         if (i.id === id) {
           return { ...i, windowState: i.prevWindowState || 'normal' };
         }
-        return i;
+        return { ...i, activated: false };
       }),
     );
+    maximizeZIndex(openedIcons, id, setOpenedIcons);
   };
+
+  const handleClick = (icon: IconType) => {
+    const { activated, windowState } = icon;
+
+    if (activated) {
+      minimizeWindow(icon.id, setOpenedIcons);
+    } else {
+      if (windowState !== 'minimized') {
+        maximizeZIndex(openedIcons, icon.id, setOpenedIcons);
+      }
+
+      if (windowState === 'minimized') {
+        openWindow(icon.id);
+      }
+    }
+  };
+
   return (
-    <li data-testid="windowinfo" key={icon.id}>
+    <li data-testid="windowinfo" key={icon.id} style={{ background: thisIconOnOpened.activated ? 'blue' : 'red' }}>
       <Button
         className={styles['window_infoes-button']}
         onContextMenu={e => {
@@ -54,7 +74,9 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
           setMousePosition({ x: e.clientX, y: e.clientY });
           setIsInfoModalOpen(true);
         }}
-        onClick={() => openWindow(icon.id)}
+        onClick={() => {
+          handleClick(thisIconOnOpened);
+        }}
       >
         <img src={icon.src} alt={icon.alt} width={30} height={30} /> <span>{icon.alt}</span>
       </Button>
