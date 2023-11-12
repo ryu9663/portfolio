@@ -40,7 +40,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
     () =>
       (() => {
         if (windowState === 'maximized') {
-          return { bottom: 0, left: 100 + index === 0 ? 1 : index * 120 };
+          return { bottom: 0, left: 0, zIndex: icon.zIndex };
         } else if (windowState === 'minimized') {
           return { bottom: '-100px', left: 100 + index === 0 ? 1 : index * 120 };
         } else if (windowState === 'normal') {
@@ -49,7 +49,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
           return { left: 0, top: 0 };
         }
       })(),
-    [windowState, icon.zIndex, newTapPosition],
+    [windowState, index, newTapPosition, icon.zIndex],
   );
 
   const windowClassName = (() => {
