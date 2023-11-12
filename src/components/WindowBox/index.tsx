@@ -16,10 +16,10 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   const { id, src, alt, left, top, children, windowState } = icon;
   const [isOpen, setIsOpen] = useState(false);
   const newTapPosition = index === 0 ? 1 : index * 30;
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.icons, state.setIcons]);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
 
-  const maximizeZIndex = () => _maximizeZIndex(openedIcons, id, setOpenedIcons);
+  const maximizeZIndex = () => _maximizeZIndex(openedWindows, id, setOpenedWindows);
 
   useEffect(() => {
     setIsOpen(true);
@@ -31,8 +31,8 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   };
 
   const setWindowState = (windowState: IconType['windowState'], prevWindowState?: IconType['prevWindowState']) => {
-    setOpenedIcons(openedIcons =>
-      openedIcons.map(icon => (icon.id === id ? { ...icon, windowState, prevWindowState } : icon)),
+    setOpenedWindows(openedWindows =>
+      openedWindows.map(icon => (icon.id === id ? { ...icon, windowState, prevWindowState } : icon)),
     );
   };
 
@@ -73,8 +73,8 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
           maximizeZIndex();
         }}
         onBlur={() => {
-          setOpenedIcons(openedIcons =>
-            openedIcons.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)),
+          setOpenedWindows(openedWindows =>
+            openedWindows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)),
           );
         }}
       >
@@ -85,7 +85,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
                 className={styles.button}
                 onClick={() => {
                   if (windowState === 'maximized' || windowState === 'normal') setWindowState('minimized', windowState);
-                  minimizeWindow(icon.id, setOpenedIcons);
+                  minimizeWindow(icon.id, setOpenedWindows);
                 }}
               >
                 -

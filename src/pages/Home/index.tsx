@@ -6,14 +6,14 @@ import { WindowBox } from '@/components/WindowBox';
 import { useZIndex } from '@/utils/hooks/useZIndex';
 
 export const Home = () => {
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.icons, state.setIcons]);
 
-  useZIndex(openedIcons, setOpenedIcons);
+  useZIndex(openedWindows, setOpenedWindows);
 
   return (
     <div className={styles.home}>
       <Draggable icons={ICONS} />
-      {openedIcons.map(
+      {openedWindows.map(
         (openedIcon, i) => openedIcon.windowState !== 'closed' && <WindowBox key={i} index={i} icon={openedIcon} />,
       )}
     </div>

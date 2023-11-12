@@ -45,7 +45,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.setIconsOnUnderbar,
   ]);
 
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.icons, state.setIcons]);
   const titleClickCountRef = useRef(0);
   const iconClickCountRef = useRef(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
@@ -69,9 +69,9 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
   };
 
   const openWindow = (icon: IconType) => {
-    const zIndexs = openedIcons.map(icon => icon.zIndex);
-    setOpenedIcons([
-      ...openedIcons.map(el => ({ ...el, activated: false })),
+    const zIndexs = openedWindows.map(icon => icon.zIndex);
+    setOpenedWindows([
+      ...openedWindows.map(el => ({ ...el, activated: false })),
       { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
     ]);
   };

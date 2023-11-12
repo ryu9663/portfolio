@@ -25,8 +25,8 @@ export const IconsOnUnderbar = () => {
 const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
-  const thisIconOnOpened = openedIcons.find(i => i.id === icon.id)!;
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const thisIconOnOpened = openedWindows.find(i => i.id === icon.id)!;
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
@@ -34,29 +34,29 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
 
   const closeWindow = (id: number) => {
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
-    setOpenedIcons(openedIcons => openedIcons.filter(icon => icon.id !== id));
+    setOpenedWindows(openedWindows => openedWindows.filter(icon => icon.id !== id));
   };
 
   const openWindow = (id: number) => {
-    setOpenedIcons(openedIcons =>
-      openedIcons.map(i => {
+    setOpenedWindows(openedWindows =>
+      openedWindows.map(i => {
         if (i.id === id) {
           return { ...i, windowState: i.prevWindowState || 'normal' };
         }
         return { ...i, activated: false };
       }),
     );
-    maximizeZIndex(openedIcons, id, setOpenedIcons);
+    maximizeZIndex(openedWindows, id, setOpenedWindows);
   };
 
   const handleClick = (icon: IconType) => {
     const { activated, windowState } = icon;
 
     if (activated) {
-      minimizeWindow(icon.id, setOpenedIcons);
+      minimizeWindow(icon.id, setOpenedWindows);
     } else {
       if (windowState !== 'minimized') {
-        maximizeZIndex(openedIcons, icon.id, setOpenedIcons);
+        maximizeZIndex(openedWindows, icon.id, setOpenedWindows);
       }
 
       if (windowState === 'minimized') {

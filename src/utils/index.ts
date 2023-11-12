@@ -2,13 +2,13 @@ import { IconType } from '@/components/Icon';
 import { SetStateAction } from 'react';
 
 export const maximizeZIndex = (
-  openedIcons: IconType[],
+  openedWindows: IconType[],
   thisIconId: number,
-  setOpenedIcons: (prev: SetStateAction<IconType[]>) => void,
+  setOpenedWindows: (prev: SetStateAction<IconType[]>) => void,
 ) => {
-  const zIndexs = openedIcons.map(icon => icon.zIndex);
+  const zIndexs = openedWindows.map(icon => icon.zIndex);
 
-  setOpenedIcons(icon =>
+  setOpenedWindows(icon =>
     icon.map(icon =>
       icon.id === thisIconId
         ? { ...icon, activated: true, zIndex: Math.max(...zIndexs) + 1 }
@@ -17,9 +17,9 @@ export const maximizeZIndex = (
   );
 };
 
-export const minimizeWindow = (thisIconId: number, setOpenedIcons: (prev: SetStateAction<IconType[]>) => void) => {
-  setOpenedIcons(openedIcons =>
-    openedIcons.map(i => {
+export const minimizeWindow = (thisIconId: number, setOpenedWindows: (prev: SetStateAction<IconType[]>) => void) => {
+  setOpenedWindows(openedWindows =>
+    openedWindows.map(i => {
       if (i.id === thisIconId) {
         return { ...i, windowState: 'minimized', activated: false };
       }

@@ -4,13 +4,13 @@ import { SetStateAction } from 'react';
 
 /**
  *
- * @param openedIcons
- * @param setOpenedIcons
+ * @param openedWindows
+ * @param setOpenedWindows
  * @returns
  */
-export const useZIndex = (openedIcons: IconType[], setOpenedIcons: (prev: SetStateAction<IconType[]>) => void) => {
+export const useZIndex = (openedWindows: IconType[], setOpenedWindows: (prev: SetStateAction<IconType[]>) => void) => {
   const openedOnlyOneWindowId = (() => {
-    const openedIconIds = openedIcons
+    const openedIconIds = openedWindows
       .map(i => {
         if (i.windowState !== 'closed' && i.windowState !== 'minimized') {
           return i.id;
@@ -24,8 +24,8 @@ export const useZIndex = (openedIcons: IconType[], setOpenedIcons: (prev: SetSta
 
   useMountedEffect(() => {
     if (openedOnlyOneWindowId) {
-      setOpenedIcons(openedIcons =>
-        openedIcons.map(i => {
+      setOpenedWindows(openedWindows =>
+        openedWindows.map(i => {
           if (i.id === openedOnlyOneWindowId) {
             return { ...i, windowState: 'normal', activated: true };
           } else return i;
