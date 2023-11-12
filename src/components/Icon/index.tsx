@@ -8,14 +8,21 @@ import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 /**
  * @description 'closed' : 언더바에도 없는 상태, 'normal' : 일반 크기로 켜진 상태, 'maximized' : 최대화된 상태, 'minimized' : 최소화된 상태, 언더바에 있음
  */
-type WindowState = 'closed' | 'normal' | 'maximized' | 'minimized';
-type PrevWindowState = 'normal' | 'maximized';
+export const WindowState = {
+  CLOSED: 'closed',
+  NORMAL: 'normal',
+  MAXIMIZED: 'maximized',
+  MINIMIZED: 'minimized',
+} as const;
+
+export type PrevWindowStateType = typeof WindowState.NORMAL | typeof WindowState.MAXIMIZED;
+export type WindowStateType = (typeof WindowState)[keyof typeof WindowState];
 
 export interface IconType {
   type: 'file' | 'folder' | '';
-  windowState: WindowState;
+  windowState: WindowStateType;
   activated?: boolean;
-  prevWindowState?: PrevWindowState;
+  prevWindowState?: PrevWindowStateType;
   id: number;
   src: string;
   alt: string;

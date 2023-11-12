@@ -1,5 +1,5 @@
 import styles from './index.module.scss';
-import { IconType } from '@/components/Icon';
+import { IconType, PrevWindowStateType, WindowState, WindowStateType } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
 import { useEffect, useMemo, useState } from 'react';
@@ -30,7 +30,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
   };
 
-  const setWindowState = (windowState: IconType['windowState'], prevWindowState?: IconType['prevWindowState']) => {
+  const setWindowState = (windowState: WindowStateType, prevWindowState?: PrevWindowStateType) => {
     setOpenedWindows(openedWindows =>
       openedWindows.map(icon => (icon.id === id ? { ...icon, windowState, prevWindowState } : icon)),
     );
@@ -39,11 +39,11 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   const position = useMemo(
     () =>
       (() => {
-        if (windowState === 'maximized') {
+        if (windowState === WindowState.MAXIMIZED) {
           return { bottom: 0, left: 0, zIndex: icon.zIndex };
-        } else if (windowState === 'minimized') {
+        } else if (windowState === WindowState.MINIMIZED) {
           return { bottom: '-100px', left: 100 + index === 0 ? 1 : index * 120 };
-        } else if (windowState === 'normal') {
+        } else if (windowState === WindowState.NORMAL) {
           return { left: 200 + newTapPosition, bottom: 150 + newTapPosition, zIndex: icon.zIndex };
         } else {
           return { left: 0, top: 0 };
