@@ -86,14 +86,6 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
                 onClick={() => {
                   if (windowState === 'maximized' || windowState === 'normal') setWindowState('minimized', windowState);
                   minimizeWindow(icon.id, setOpenedIcons);
-                  setOpenedIcons(openedIcons =>
-                    openedIcons.map(i => {
-                      if (i.id === icon.id) {
-                        return { ...i, windowState: 'minimized', activated: false };
-                      }
-                      return i;
-                    }),
-                  );
                 }}
               >
                 -

@@ -18,7 +18,6 @@ export const maximizeZIndex = (
 };
 
 export const minimizeWindow = (thisIconId: number, setOpenedIcons: (prev: SetStateAction<IconType[]>) => void) => {
-  console.log(thisIconId);
   setOpenedIcons(openedIcons =>
     openedIcons.map(i => {
       if (i.id === thisIconId) {
