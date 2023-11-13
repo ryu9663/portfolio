@@ -1,10 +1,11 @@
 import { Draggable } from '@/components/Draggable';
-import { ICONS } from '@/utils';
+import { ICONS } from '@/utils/constant';
 import styles from './index.module.scss';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { WindowBox } from '@/components/WindowBox';
 import { useZIndex } from '@/utils/hooks/useZIndex';
 import { Fragment } from 'react';
+import { IconType } from '@/components/Icon';
 
 export const Home = () => {
   const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
@@ -19,8 +20,8 @@ export const Home = () => {
   );
 };
 
-const renderIconsRecursively = icons =>
-  icons.map((icon, i) => {
+const renderIconsRecursively = (icons: IconType[]) =>
+  icons.map((icon: IconType, i: number) => {
     if (icon.windowState === 'closed') {
       return null; // windowState가 'closed'인 경우 렌더링하지 않음
     }

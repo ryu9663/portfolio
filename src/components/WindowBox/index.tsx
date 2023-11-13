@@ -3,7 +3,7 @@ import { IconType, WindowState } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
 import { useEffect, useMemo, useState } from 'react';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
+import { useThisWindowState, useWindowBoxStore } from '@/components/WindowBox/index.store';
 
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 
@@ -16,13 +16,10 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   const { id, src, alt, left, top, children, windowState } = icon;
   const [isOpen, setIsOpen] = useState(false);
   const newTapPosition = index === 0 ? 1 : index * 30;
-  const [openedWindows, setOpenedWindows, setWindowState] = useWindowBoxStore(state => [
-    state.windows,
-    state.setWindows,
-    state.setWindowState,
-  ]);
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const setThisWindowState = useThisWindowState(icon.id, openedWindows);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-
+  /** refactor */
   const collectZIndexes = (icons: IconType[]) =>
     icons.reduce<number[]>((zIndexes, icon) => {
       zIndexes.push(icon.zIndex);
@@ -45,9 +42,6 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
   };
 
-  const setThisWindowState = (thisWindowState: IconType, otherWindowState?: Partial<IconType>) => {
-    setWindowState(icon.id, openedWindows, thisWindowState, otherWindowState);
-  };
   const position = useMemo(
     () =>
       (() => {
@@ -72,7 +66,6 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
         return styles[windowState];
     }
   })();
-  console.log(icon.zIndex, icon.id, icon.alt, icon.type);
   return (
     isOpen && (
       <div

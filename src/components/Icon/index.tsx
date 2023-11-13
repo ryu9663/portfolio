@@ -52,7 +52,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.setIconsOnUnderbar,
   ]);
 
-  const [openedWindows, setWindowState] = useWindowBoxStore(state => [state.windows, state.setWindowState]);
+  const [windows, setWindowState] = useWindowBoxStore(state => [state.windows, state.setWindowState]);
   const titleClickCountRef = useRef(0);
   const iconClickCountRef = useRef(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
@@ -77,9 +77,9 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
 
   const openWindow = (icon: IconType) => {
     const setThisWindowState = (thisWindowState: IconType, otherWindowState?: Partial<IconType>) => {
-      setWindowState(icon.id, openedWindows, thisWindowState, otherWindowState);
+      setWindowState(icon.id, windows, thisWindowState, otherWindowState);
     };
-    const zIndexs = openedWindows.map(icon => icon.zIndex);
+    /**  TODO : zIndexs 변경해야함. children까지 탐색하도록 */ const zIndexs = windows.map(window => window.zIndex);
     setThisWindowState(
       { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
       { activated: false },

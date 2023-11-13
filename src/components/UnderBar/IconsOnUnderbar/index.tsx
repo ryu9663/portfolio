@@ -2,11 +2,10 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import styles from './index.module.scss';
 import { Button } from 'junyeol-components';
 import { InfoModal } from '@/components/InfoModal';
-import { IconType } from '@/components/Icon';
+import { IconType, WindowState } from '@/components/Icon';
 import { useState } from 'react';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
+import { useThisWindowState, useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useDraggableStore } from '@/components/Draggable/index.store';
-import { maximizeZIndex, minimizeWindow } from '@/utils';
 
 export const IconsOnUnderbar = () => {
   const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);
@@ -22,6 +21,7 @@ export const IconsOnUnderbar = () => {
   );
 };
 
+/** refactor 해야함. handler만 모아서 넣어줘야함 */
 const findIconById = (id: number, icons: IconType[]): IconType | null => {
   for (const icon of icons) {
     if (icon.id === id) {
@@ -44,6 +44,8 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
   const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const thisIconOnOpened = findIconById(icon.id, openedWindows) as IconType;
+  const setThisWindowState = useThisWindowState(thisIconOnOpened.id, openedWindows);
+
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
@@ -54,30 +56,67 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
     setOpenedWindows(openedWindows => openedWindows.filter(icon => icon.id !== id));
   };
 
-  const openWindow = (id: number) => {
-    setOpenedWindows(openedWindows =>
-      openedWindows.map(i => {
-        if (i.id === id) {
-          return { ...i, windowState: i.prevWindowState || 'normal' };
+  const openWindow = () => {
+    /** refactor */
+    const collectZIndexes = (icons: IconType[]) =>
+      icons.reduce<number[]>((zIndexes, icon) => {
+        zIndexes.push(icon.zIndex);
+
+        if (icon.children && icon.children.length > 0) {
+          zIndexes = zIndexes.concat(collectZIndexes(icon.children));
         }
-        return { ...i, activated: false };
-      }),
+
+        return zIndexes;
+      }, []);
+
+    const zIndexs = collectZIndexes(openedWindows);
+
+    setThisWindowState(
+      {
+        ...thisIconOnOpened,
+        windowState: thisIconOnOpened.prevWindowState || 'normal',
+        zIndex: Math.max(...zIndexs) + 1,
+        activated: true,
+      },
+      { activated: false },
     );
-    maximizeZIndex(openedWindows, id, setOpenedWindows);
   };
 
   const handleClick = (icon: IconType) => {
     const { activated, windowState } = icon;
-
     if (activated) {
-      minimizeWindow(icon.id, setOpenedWindows);
+      setThisWindowState({
+        ...thisIconOnOpened,
+        windowState: WindowState.MINIMIZED,
+        activated: false,
+      });
     } else {
       if (windowState !== 'minimized') {
-        maximizeZIndex(openedWindows, icon.id, setOpenedWindows);
+        /** refactor */
+        const collectZIndexes = (icons: IconType[]) =>
+          icons.reduce<number[]>((zIndexes, icon) => {
+            zIndexes.push(icon.zIndex);
+
+            if (icon.children && icon.children.length > 0) {
+              zIndexes = zIndexes.concat(collectZIndexes(icon.children));
+            }
+
+            return zIndexes;
+          }, []);
+        const zIndexs = collectZIndexes(openedWindows);
+
+        setThisWindowState(
+          {
+            ...thisIconOnOpened,
+            zIndex: Math.max(...zIndexs),
+            activated: true,
+          },
+          { activated: false },
+        );
       }
 
       if (windowState === 'minimized') {
-        openWindow(icon.id);
+        openWindow();
       }
     }
   };
