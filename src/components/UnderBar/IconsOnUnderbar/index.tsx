@@ -22,11 +22,28 @@ export const IconsOnUnderbar = () => {
   );
 };
 
+const findIconById = (id: number, icons: IconType[]): IconType | null => {
+  for (const icon of icons) {
+    if (icon.id === id) {
+      return icon;
+    }
+
+    if (icon.children) {
+      const childResult = findIconById(id, icon.children);
+      if (childResult) {
+        return childResult;
+      }
+    }
+  }
+
+  return null;
+};
+
 const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.icons, state.setIcons]);
-  const thisIconOnOpened = openedWindows.find(i => i.id === icon.id)!;
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const thisIconOnOpened = findIconById(icon.id, openedWindows) as IconType;
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
@@ -66,7 +83,7 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   };
 
   return (
-    <li data-testid="windowinfo" key={icon.id} style={{ background: thisIconOnOpened.activated ? 'blue' : 'red' }}>
+    <li data-testid="windowinfo" key={icon.id} style={{ background: thisIconOnOpened.activated ? 'red' : 'blue' }}>
       <Button
         className={styles['window_infoes-button']}
         onContextMenu={e => {

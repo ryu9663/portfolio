@@ -8,6 +8,8 @@ import { SetStateAction } from 'react';
  * @param setOpenedWindows
  * @returns
  */
+
+//! zIndexs 넣고 리팩토링. 리턴값 있어야함.
 export const useZIndex = (openedWindows: IconType[], setOpenedWindows: (prev: SetStateAction<IconType[]>) => void) => {
   const openedOnlyOneWindowId = (() => {
     const openedIconIds = openedWindows

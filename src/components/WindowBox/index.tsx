@@ -1,10 +1,10 @@
 import styles from './index.module.scss';
-import { IconType, PrevWindowStateType, WindowState, WindowStateType } from '@/components/Icon';
+import { IconType, WindowState } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
 import { useEffect, useMemo, useState } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
-import { maximizeZIndex as _maximizeZIndex, minimizeWindow } from '@/utils';
+
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 
 interface WindowBoxProps {
@@ -16,10 +16,25 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   const { id, src, alt, left, top, children, windowState } = icon;
   const [isOpen, setIsOpen] = useState(false);
   const newTapPosition = index === 0 ? 1 : index * 30;
-  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const [openedWindows, setOpenedWindows, setWindowState] = useWindowBoxStore(state => [
+    state.windows,
+    state.setWindows,
+    state.setWindowState,
+  ]);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
 
-  const maximizeZIndex = () => _maximizeZIndex(openedWindows, id, setOpenedWindows);
+  const collectZIndexes = (icons: IconType[]) =>
+    icons.reduce<number[]>((zIndexes, icon) => {
+      zIndexes.push(icon.zIndex);
+
+      if (icon.children && icon.children.length > 0) {
+        zIndexes = zIndexes.concat(collectZIndexes(icon.children));
+      }
+
+      return zIndexes;
+    }, []);
+
+  const zIndexs = collectZIndexes(openedWindows);
 
   useEffect(() => {
     setIsOpen(true);
@@ -30,12 +45,9 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
   };
 
-  const setWindowState = (windowState: WindowStateType, prevWindowState?: PrevWindowStateType) => {
-    setOpenedWindows(openedWindows =>
-      openedWindows.map(icon => (icon.id === id ? { ...icon, windowState, prevWindowState } : icon)),
-    );
+  const setThisWindowState = (thisWindowState: IconType, otherWindowState?: Partial<IconType>) => {
+    setWindowState(icon.id, openedWindows, thisWindowState, otherWindowState);
   };
-
   const position = useMemo(
     () =>
       (() => {
@@ -60,7 +72,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
         return styles[windowState];
     }
   })();
-
+  console.log(icon.zIndex, icon.id, icon.alt, icon.type);
   return (
     isOpen && (
       <div
@@ -70,7 +82,16 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
           ...position,
         }}
         onFocus={() => {
-          maximizeZIndex();
+          setThisWindowState(
+            {
+              ...icon,
+              activated: true,
+              zIndex: Math.max(...zIndexs) + 1,
+            },
+            {
+              activated: false,
+            },
+          );
         }}
         onBlur={() => {
           setOpenedWindows(openedWindows =>
@@ -84,8 +105,13 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
               <Button
                 className={styles.button}
                 onClick={() => {
-                  if (windowState === 'maximized' || windowState === 'normal') setWindowState('minimized', windowState);
-                  minimizeWindow(icon.id, setOpenedWindows);
+                  if (windowState === WindowState.MAXIMIZED || windowState === WindowState.NORMAL)
+                    setThisWindowState({
+                      ...icon,
+                      windowState: WindowState.MINIMIZED,
+                      prevWindowState: windowState,
+                      activated: false,
+                    });
                 }}
               >
                 -
@@ -95,10 +121,18 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
               <Button
                 className={styles.button}
                 onClick={() => {
-                  if (windowState === 'normal') {
-                    maximizeZIndex();
-                    setWindowState('maximized', 'normal');
-                  } else setWindowState('normal', 'maximized');
+                  if (windowState === WindowState.NORMAL) {
+                    setThisWindowState({
+                      ...icon,
+                      windowState: WindowState.MAXIMIZED,
+                      prevWindowState: WindowState.NORMAL,
+                    });
+                  } else
+                    setThisWindowState({
+                      ...icon,
+                      windowState: WindowState.NORMAL,
+                      prevWindowState: WindowState.MAXIMIZED,
+                    });
                 }}
               >
                 +
@@ -108,7 +142,11 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
               <Button
                 className={styles.button}
                 onClick={() => {
-                  setWindowState('closed');
+                  setThisWindowState({
+                    ...icon,
+                    windowState: 'closed',
+                    prevWindowState: undefined,
+                  });
                   onClose(icon.id);
                 }}
               >

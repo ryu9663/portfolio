@@ -52,7 +52,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.setIconsOnUnderbar,
   ]);
 
-  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const [openedWindows, setWindowState] = useWindowBoxStore(state => [state.windows, state.setWindowState]);
   const titleClickCountRef = useRef(0);
   const iconClickCountRef = useRef(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
@@ -76,19 +76,22 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
   };
 
   const openWindow = (icon: IconType) => {
+    const setThisWindowState = (thisWindowState: IconType, otherWindowState?: Partial<IconType>) => {
+      setWindowState(icon.id, openedWindows, thisWindowState, otherWindowState);
+    };
     const zIndexs = openedWindows.map(icon => icon.zIndex);
-    setOpenedWindows([
-      ...openedWindows.map(el => ({ ...el, activated: false })),
+    setThisWindowState(
       { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
-    ]);
+      { activated: false },
+    );
   };
 
   const handleDoubleClickIcon = (icon: IconType) => {
     iconClickCountRef.current++;
     if (iconClickCountRef.current === 2) {
-      const isAlreadyOpenedSameIcon = !!iconsOnUnderbar.find(i => i.id === icon.id);
+      const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);
 
-      if (!isAlreadyOpenedSameIcon) {
+      if (!isAlreadySameIconOpened) {
         setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
         openWindow(icon);
       }

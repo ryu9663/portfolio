@@ -27,3 +27,5 @@ export const minimizeWindow = (thisIconId: number, setOpenedWindows: (prev: SetS
     }),
   );
 };
+
+export * from '@/utils/constant';
