@@ -3,9 +3,9 @@ import { IconType, WindowState } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
 import { useEffect, useMemo, useState } from 'react';
-import { useThisWindowState, useWindowBoxStore } from '@/components/WindowBox/index.store';
-
+import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
+import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 
 interface WindowBoxProps {
   icon: IconType;

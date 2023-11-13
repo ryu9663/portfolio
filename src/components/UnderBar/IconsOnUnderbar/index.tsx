@@ -4,8 +4,9 @@ import { Button } from 'junyeol-components';
 import { InfoModal } from '@/components/InfoModal';
 import { IconType, WindowState } from '@/components/Icon';
 import { useState } from 'react';
-import { useThisWindowState, useWindowBoxStore } from '@/components/WindowBox/index.store';
+import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useDraggableStore } from '@/components/Draggable/index.store';
+import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 
 export const IconsOnUnderbar = () => {
   const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);

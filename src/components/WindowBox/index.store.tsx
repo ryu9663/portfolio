@@ -42,9 +42,3 @@ export const useWindowBoxStore = create<WindowBoxStoreProps>()(
     { name: 'window-storage', enabled: process.env.NODE_ENV !== 'production' },
   ),
 );
-
-export const useThisWindowState = (id: number, windows: IconType[]) => {
-  const setWindowState = useWindowBoxStore(state => state.setWindowState);
-  return (thisWindowState: IconType, otherWindowState?: Partial<IconType>) =>
-    setWindowState(id, windows, thisWindowState, otherWindowState);
-};
