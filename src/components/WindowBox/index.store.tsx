@@ -19,7 +19,6 @@ export const useWindowBoxStore = create<WindowBoxStoreProps>()(
       setWindowState: (id: number, windows: IconType[], thisWindow: IconType, otherWindow?: Partial<IconType>) => {
         const updateWindows = (iconsArray: IconType[]): IconType[] =>
           iconsArray.map(window => {
-            console.log(id, { ...window, ...otherWindow });
             if (window.id === id) {
               return thisWindow;
             }

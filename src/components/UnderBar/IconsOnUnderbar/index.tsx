@@ -108,7 +108,7 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
         setThisWindowState(
           {
             ...thisIconOnOpened,
-            zIndex: Math.max(...zIndexs),
+            zIndex: Math.max(...zIndexs) + 1,
             activated: true,
           },
           { activated: false },
