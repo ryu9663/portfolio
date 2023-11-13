@@ -2,11 +2,10 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import styles from './index.module.scss';
 import { Button } from 'junyeol-components';
 import { InfoModal } from '@/components/InfoModal';
-import { IconType } from '@/components/Icon';
+import { IconType, WindowState } from '@/components/Icon';
 import { useState } from 'react';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
+import { useThisWindowState, useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useDraggableStore } from '@/components/Draggable/index.store';
-import { maximizeZIndex, minimizeWindow } from '@/utils';
 
 export const IconsOnUnderbar = () => {
   const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);
@@ -22,11 +21,31 @@ export const IconsOnUnderbar = () => {
   );
 };
 
+/** refactor 해야함. handler만 모아서 넣어줘야함 */
+const findIconById = (id: number, icons: IconType[]): IconType | null => {
+  for (const icon of icons) {
+    if (icon.id === id) {
+      return icon;
+    }
+
+    if (icon.children) {
+      const childResult = findIconById(id, icon.children);
+      if (childResult) {
+        return childResult;
+      }
+    }
+  }
+
+  return null;
+};
+
 const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
-  const thisIconOnOpened = openedIcons.find(i => i.id === icon.id)!;
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const thisIconOnOpened = findIconById(icon.id, openedWindows) as IconType;
+  const setThisWindowState = useThisWindowState(thisIconOnOpened.id, openedWindows);
+
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
@@ -34,39 +53,76 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
 
   const closeWindow = (id: number) => {
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
-    setOpenedIcons(openedIcons => openedIcons.filter(icon => icon.id !== id));
+    setOpenedWindows(openedWindows => openedWindows.filter(icon => icon.id !== id));
   };
 
-  const openWindow = (id: number) => {
-    setOpenedIcons(openedIcons =>
-      openedIcons.map(i => {
-        if (i.id === id) {
-          return { ...i, windowState: i.prevWindowState || 'normal' };
+  const openWindow = () => {
+    /** refactor */
+    const collectZIndexes = (icons: IconType[]) =>
+      icons.reduce<number[]>((zIndexes, icon) => {
+        zIndexes.push(icon.zIndex);
+
+        if (icon.children && icon.children.length > 0) {
+          zIndexes = zIndexes.concat(collectZIndexes(icon.children));
         }
-        return { ...i, activated: false };
-      }),
+
+        return zIndexes;
+      }, []);
+
+    const zIndexs = collectZIndexes(openedWindows);
+
+    setThisWindowState(
+      {
+        ...thisIconOnOpened,
+        windowState: thisIconOnOpened.prevWindowState || 'normal',
+        zIndex: Math.max(...zIndexs) + 1,
+        activated: true,
+      },
+      { activated: false },
     );
-    maximizeZIndex(openedIcons, id, setOpenedIcons);
   };
 
   const handleClick = (icon: IconType) => {
     const { activated, windowState } = icon;
-
     if (activated) {
-      minimizeWindow(icon.id, setOpenedIcons);
+      setThisWindowState({
+        ...thisIconOnOpened,
+        windowState: WindowState.MINIMIZED,
+        activated: false,
+      });
     } else {
       if (windowState !== 'minimized') {
-        maximizeZIndex(openedIcons, icon.id, setOpenedIcons);
+        /** refactor */
+        const collectZIndexes = (icons: IconType[]) =>
+          icons.reduce<number[]>((zIndexes, icon) => {
+            zIndexes.push(icon.zIndex);
+
+            if (icon.children && icon.children.length > 0) {
+              zIndexes = zIndexes.concat(collectZIndexes(icon.children));
+            }
+
+            return zIndexes;
+          }, []);
+        const zIndexs = collectZIndexes(openedWindows);
+
+        setThisWindowState(
+          {
+            ...thisIconOnOpened,
+            zIndex: Math.max(...zIndexs) + 1,
+            activated: true,
+          },
+          { activated: false },
+        );
       }
 
       if (windowState === 'minimized') {
-        openWindow(icon.id);
+        openWindow();
       }
     }
   };
 
   return (
-    <li data-testid="windowinfo" key={icon.id} style={{ background: thisIconOnOpened.activated ? 'blue' : 'red' }}>
+    <li data-testid="windowinfo" key={icon.id} style={{ background: thisIconOnOpened.activated ? 'red' : 'blue' }}>
       <Button
         className={styles['window_infoes-button']}
         onContextMenu={e => {

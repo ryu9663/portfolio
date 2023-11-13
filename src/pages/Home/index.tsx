@@ -4,18 +4,32 @@ import styles from './index.module.scss';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { WindowBox } from '@/components/WindowBox';
 import { useZIndex } from '@/utils/hooks/useZIndex';
+import { Fragment } from 'react';
+import { IconType } from '@/components/Icon';
 
 export const Home = () => {
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
 
-  useZIndex(openedIcons, setOpenedIcons);
+  useZIndex(openedWindows, setOpenedWindows);
 
   return (
     <div className={styles.home}>
       <Draggable icons={ICONS} />
-      {openedIcons.map(
-        (openedIcon, i) => openedIcon.windowState !== 'closed' && <WindowBox key={i} index={i} icon={openedIcon} />,
-      )}
+      {renderIconsRecursively(openedWindows)}
     </div>
   );
 };
+
+const renderIconsRecursively = (icons: IconType[]) =>
+  icons.map((icon: IconType, i: number) => {
+    if (icon.windowState === 'closed') {
+      return null; // windowState가 'closed'인 경우 렌더링하지 않음
+    }
+
+    return (
+      <Fragment key={i}>
+        <WindowBox index={i} icon={icon} />
+        {icon.children && icon.children.length > 0 && renderIconsRecursively(icon.children)}
+      </Fragment>
+    );
+  });

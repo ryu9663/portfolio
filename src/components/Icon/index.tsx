@@ -8,14 +8,21 @@ import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 /**
  * @description 'closed' : 언더바에도 없는 상태, 'normal' : 일반 크기로 켜진 상태, 'maximized' : 최대화된 상태, 'minimized' : 최소화된 상태, 언더바에 있음
  */
-type WindowState = 'closed' | 'normal' | 'maximized' | 'minimized';
-type PrevWindowState = 'normal' | 'maximized';
+export const WindowState = {
+  CLOSED: 'closed',
+  NORMAL: 'normal',
+  MAXIMIZED: 'maximized',
+  MINIMIZED: 'minimized',
+} as const;
+
+export type PrevWindowStateType = typeof WindowState.NORMAL | typeof WindowState.MAXIMIZED;
+export type WindowStateType = (typeof WindowState)[keyof typeof WindowState];
 
 export interface IconType {
   type: 'file' | 'folder' | '';
-  windowState: WindowState;
+  windowState: WindowStateType;
   activated?: boolean;
-  prevWindowState?: PrevWindowState;
+  prevWindowState?: PrevWindowStateType;
   id: number;
   src: string;
   alt: string;
@@ -45,7 +52,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.setIconsOnUnderbar,
   ]);
 
-  const [openedIcons, setOpenedIcons] = useWindowBoxStore(state => [state.icons, state.setIcons]);
+  const [windows, setWindowState] = useWindowBoxStore(state => [state.windows, state.setWindowState]);
   const titleClickCountRef = useRef(0);
   const iconClickCountRef = useRef(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
@@ -69,19 +76,22 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
   };
 
   const openWindow = (icon: IconType) => {
-    const zIndexs = openedIcons.map(icon => icon.zIndex);
-    setOpenedIcons([
-      ...openedIcons.map(el => ({ ...el, activated: false })),
+    const setThisWindowState = (thisWindowState: IconType, otherWindowState?: Partial<IconType>) => {
+      setWindowState(icon.id, windows, thisWindowState, otherWindowState);
+    };
+    /**  TODO : zIndexs 변경해야함. children까지 탐색하도록 */ const zIndexs = windows.map(window => window.zIndex);
+    setThisWindowState(
       { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
-    ]);
+      { activated: false },
+    );
   };
 
   const handleDoubleClickIcon = (icon: IconType) => {
     iconClickCountRef.current++;
     if (iconClickCountRef.current === 2) {
-      const isAlreadyOpenedSameIcon = !!iconsOnUnderbar.find(i => i.id === icon.id);
+      const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);
 
-      if (!isAlreadyOpenedSameIcon) {
+      if (!isAlreadySameIconOpened) {
         setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
         openWindow(icon);
       }
