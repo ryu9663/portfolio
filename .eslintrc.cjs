@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'arrow-body-style': ['error', 'as-needed'],
+    'react-refresh/only-export-components': 'warn',
 
     'prefer-arrow-callback': ['error', { allowNamedFunctions: true, allowUnboundThis: false }],
     'prefer-arrow/prefer-arrow-functions': [

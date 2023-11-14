@@ -4,6 +4,7 @@ import { useDraggableStore } from '@/components/Draggable/index.store';
 import { InfoModal } from '@/components/InfoModal';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
+import { getZIndexesWithChildren } from '@/utils';
 
 /**
  * @description 'closed' : 언더바에도 없는 상태, 'normal' : 일반 크기로 켜진 상태, 'maximized' : 최대화된 상태, 'minimized' : 최소화된 상태, 언더바에 있음
@@ -79,7 +80,8 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     const setThisWindowState = (thisWindowState: IconType, otherWindowState?: Partial<IconType>) => {
       setWindowState(icon.id, windows, thisWindowState, otherWindowState);
     };
-    /**  TODO : zIndexs 변경해야함. children까지 탐색하도록 */ const zIndexs = windows.map(window => window.zIndex);
+
+    const zIndexs = getZIndexesWithChildren(windows);
     setThisWindowState(
       { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
       { activated: false },
