@@ -20,21 +20,18 @@ export const useWindowBoxStore = create<WindowBoxStoreProps>()(
         const updateWindows = (iconsArray: IconType[]): IconType[] =>
           iconsArray.map(window => {
             if (window.id === id) {
-              return thisWindow;
+              return { ...thisWindow, children: window.children ? updateWindows(window.children) : undefined };
             }
-            // ! PR-27에서
-            // if (window.children) {
-            //   return {
-            //     ...window,
-            //     children: updateWindows(window.children),
-            //   };
-            // }
-            //!
 
-            return { ...window, ...otherWindow };
+            return {
+              ...window,
+              children: window.children ? updateWindows(window.children) : undefined,
+              ...otherWindow,
+            };
           });
 
         const updatedIcons = updateWindows(windows);
+
         set({ windows: updatedIcons });
       },
     }),
