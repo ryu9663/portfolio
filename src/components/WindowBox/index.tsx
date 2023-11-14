@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
+import { getZIndexesWithChildren } from '@/utils';
 
 interface WindowBoxProps {
   icon: IconType;
@@ -19,19 +20,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, openedWindows);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  /** refactor */
-  const collectZIndexes = (icons: IconType[]) =>
-    icons.reduce<number[]>((zIndexes, icon) => {
-      zIndexes.push(icon.zIndex);
-
-      if (icon.children && icon.children.length > 0) {
-        zIndexes = zIndexes.concat(collectZIndexes(icon.children));
-      }
-
-      return zIndexes;
-    }, []);
-
-  const zIndexs = collectZIndexes(openedWindows);
+  const zIndexs = getZIndexesWithChildren(openedWindows);
 
   useEffect(() => {
     setIsOpen(true);
@@ -98,13 +87,14 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
               <Button
                 className={styles.button}
                 onClick={() => {
-                  if (windowState === WindowState.MAXIMIZED || windowState === WindowState.NORMAL)
+                  if (windowState === WindowState.MAXIMIZED || windowState === WindowState.NORMAL) {
                     setThisWindowState({
                       ...icon,
                       windowState: WindowState.MINIMIZED,
                       prevWindowState: windowState,
                       activated: false,
                     });
+                  }
                 }}
               >
                 -

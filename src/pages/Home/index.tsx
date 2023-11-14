@@ -3,19 +3,19 @@ import { ICONS } from '@/utils/constant';
 import styles from './index.module.scss';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { WindowBox } from '@/components/WindowBox';
-import { useZIndex } from '@/utils/hooks/useZIndex';
+import { useHighestZIndex } from '@/utils/hooks/useZIndex';
 import { Fragment } from 'react';
 import { IconType } from '@/components/Icon';
 
 export const Home = () => {
-  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
 
-  useZIndex(openedWindows, setOpenedWindows);
+  useHighestZIndex(windows, setWindows);
 
   return (
     <div className={styles.home}>
       <Draggable icons={ICONS} />
-      {renderIconsRecursively(openedWindows)}
+      {renderIconsRecursively(windows)}
     </div>
   );
 };

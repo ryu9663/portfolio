@@ -1,39 +1,54 @@
 import { IconType } from '@/components/Icon';
+import { flattenAndExtract } from '@/utils';
 import { useMountedEffect } from 'junyeol-components';
 import { SetStateAction } from 'react';
 
 /**
  *
- * @param openedWindows
- * @param setOpenedWindows
- * @returns
+ * @param openedWindows : window 전체
+ * @param setOpenedWindows : setWindow
+ * @returns : 아직없음
  */
 
 //! zIndexs 넣고 리팩토링. 리턴값 있어야함.
-export const useZIndex = (openedWindows: IconType[], setOpenedWindows: (prev: SetStateAction<IconType[]>) => void) => {
-  const openedOnlyOneWindowId = (() => {
-    const openedIconIds = openedWindows
-      .map(i => {
-        if (i.windowState !== 'closed' && i.windowState !== 'minimized') {
-          return i.id;
+export const useHighestZIndex = (windows: IconType[], setWindows: (prev: SetStateAction<IconType[]>) => void) => {
+  /**
+   * 열려있는 것(normal || maximized)중에 zIndex가 제일 높은것 찾는다.
+   */
+  const highestZIndexIdInOpenedWindows = (() => {
+    const openedWindows = flattenAndExtract(windows, window => {
+      if (window.windowState !== 'closed' && window.windowState !== 'minimized') {
+        return { id: window.id, zIndex: window.zIndex };
+      } else return;
+    }).filter(Boolean) as { id: number; zIndex: number }[];
+
+    function findHighestZIndexId(arr: { id: number; zIndex: number }[]): number | undefined {
+      let highestZIndex = -Infinity;
+      let highestZIndexId: number | undefined;
+
+      arr.forEach(el => {
+        if (el.zIndex > highestZIndex) {
+          highestZIndex = el.zIndex;
+          highestZIndexId = el.id;
         }
-        return;
-      })
-      .filter(Boolean);
-    if (openedIconIds.length === 1) return openedIconIds[0] as number;
-    return null;
+      });
+
+      return highestZIndexId;
+    }
+
+    const highestZIndexId = findHighestZIndexId(openedWindows);
+    return highestZIndexId;
   })();
 
   useMountedEffect(() => {
-    if (openedOnlyOneWindowId) {
-      setOpenedWindows(openedWindows =>
-        openedWindows.map(i => {
-          if (i.id === openedOnlyOneWindowId) {
-            return { ...i, windowState: 'normal', activated: true };
+    if (highestZIndexIdInOpenedWindows) {
+      setWindows(window =>
+        window.map(i => {
+          if (i.id === highestZIndexIdInOpenedWindows) {
+            return { ...i, windowState: i.prevWindowState || 'normal', activated: true };
           } else return i;
         }),
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openedOnlyOneWindowId]);
+  }, [highestZIndexIdInOpenedWindows]);
 };
