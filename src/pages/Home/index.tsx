@@ -21,14 +21,14 @@ export const Home = () => {
 };
 
 const renderIconsRecursively = (icons: IconType[]) =>
-  icons.map((icon: IconType, i: number) => {
+  icons.map((icon: IconType) => {
     if (icon.windowState === 'closed') {
       return null; // windowState가 'closed'인 경우 렌더링하지 않음
     }
 
     return (
-      <Fragment key={i}>
-        <WindowBox index={i} icon={icon} />
+      <Fragment key={icon.id}>
+        <WindowBox icon={icon} />
         {icon.children && icon.children.length > 0 && renderIconsRecursively(icon.children)}
       </Fragment>
     );

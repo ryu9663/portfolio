@@ -10,17 +10,19 @@ import { getZIndexesWithChildren } from '@/utils';
 
 interface WindowBoxProps {
   icon: IconType;
-  index: number;
 }
 
-export const WindowBox = ({ icon, index }: WindowBoxProps) => {
+export const WindowBox = ({ icon }: WindowBoxProps) => {
   const { id, src, alt, left, top, children, windowState } = icon;
   const [isOpen, setIsOpen] = useState(false);
-  const newTapPosition = index === 0 ? 1 : index * 30;
-  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
-  const setThisWindowState = useThisWindowState(icon.id, openedWindows);
-  const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const zIndexs = getZIndexesWithChildren(openedWindows);
+  const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const setThisWindowState = useThisWindowState(icon.id, windows);
+  const [iconsOnUnderbar, setIconsOnUnderbar, getIndexOnUnderbar] = useUnderbarStore(state => [
+    state.iconsOnUnderbar,
+    state.setIconsOnUnderbar,
+    state.getIndexOnUnderbar,
+  ]);
+  const zIndexs = getZIndexesWithChildren(windows);
 
   useEffect(() => {
     setIsOpen(true);
@@ -34,17 +36,20 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
   const position = useMemo(
     () =>
       (() => {
+        const indexOnUnderbar = getIndexOnUnderbar(id, iconsOnUnderbar);
+
         if (windowState === WindowState.MAXIMIZED) {
           return { bottom: 0, left: 0, zIndex: icon.zIndex };
         } else if (windowState === WindowState.MINIMIZED) {
-          return { bottom: '-100px', left: 100 + index === 0 ? 1 : index * 120 };
+          return { bottom: '-100px', left: `${70 + indexOnUnderbar * 120}px` };
         } else if (windowState === WindowState.NORMAL) {
-          return { left: 200 + newTapPosition, bottom: 150 + newTapPosition, zIndex: icon.zIndex };
+          return { left: `${300 + indexOnUnderbar * 120}px`, bottom: 150 + indexOnUnderbar * 30, zIndex: icon.zIndex };
         } else {
           return { left: 0, top: 0 };
         }
       })(),
-    [windowState, index, newTapPosition, icon.zIndex],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [id, iconsOnUnderbar.length, windowState, icon.zIndex],
   );
 
   const windowClassName = (() => {
@@ -76,9 +81,7 @@ export const WindowBox = ({ icon, index }: WindowBoxProps) => {
           );
         }}
         onBlur={() => {
-          setOpenedWindows(openedWindows =>
-            openedWindows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)),
-          );
+          setWindows(windows => windows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)));
         }}
       >
         <header className={styles['windowbox_header']}>
