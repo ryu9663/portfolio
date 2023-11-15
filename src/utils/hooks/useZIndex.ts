@@ -42,13 +42,25 @@ export const useHighestZIndex = (windows: IconType[], setWindows: (prev: SetStat
 
   useMountedEffect(() => {
     if (highestZIndexIdInOpenedWindows) {
-      setWindows(window =>
-        window.map(i => {
-          if (i.id === highestZIndexIdInOpenedWindows) {
-            return { ...i, windowState: i.prevWindowState || 'normal', activated: true };
-          } else return i;
-        }),
-      );
+      const updateWindow = (windows: IconType[]): IconType[] =>
+        windows.map(window => {
+          if (window.id === highestZIndexIdInOpenedWindows) {
+            return {
+              ...window,
+              windowState: window.prevWindowState || 'normal',
+              activated: true,
+              children: window.children ? updateWindow(window.children) : undefined,
+            };
+          } else
+            return {
+              ...window,
+              children: window.children ? updateWindow(window.children) : undefined,
+              activated: false,
+            };
+        });
+      const updatedWindows = updateWindow(windows);
+
+      setWindows(updatedWindows);
     }
   }, [highestZIndexIdInOpenedWindows]);
 };
