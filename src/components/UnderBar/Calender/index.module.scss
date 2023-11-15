@@ -1,0 +1,15 @@
+@use 'src/styles/libs' as *;
+
+.calendar {
+  position: fixed;
+  right: 0;
+  bottom: -300px;
+
+  &.isOpen {
+    bottom: $UNDERBAR_HEIGHT;
+  }
+
+  @include priority-focus-layer;
+
+  transition: bottom 1s;
+}

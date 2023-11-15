@@ -1,9 +1,18 @@
 import { useCurrentTime } from '@/utils/hooks/useCurrentTime';
+import styles from './index.module.scss';
+import { MouseEventHandler } from 'react';
 
 interface CurrentTimeProps {
-  className?: string;
+  onChange: MouseEventHandler<HTMLDivElement>;
 }
-export const CurrentTime = ({ className }: CurrentTimeProps) => {
+export const CurrentTime = ({ onChange }: CurrentTimeProps) => {
   const currentTime = useCurrentTime();
-  return <div className={className}>{currentTime}</div>;
+
+  return (
+    <div className={styles.relative}>
+      <div onClick={onChange} className={styles.current_time}>
+        {currentTime}
+      </div>
+    </div>
+  );
 };

@@ -1,0 +1,14 @@
+@use 'src/styles/libs' as *;
+.relative {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.current_time {
+  color: $GRAY-500;
+  border-left: 1px $GRAY-500 solid;
+  padding: 10px;
+
+  cursor: pointer;
+}

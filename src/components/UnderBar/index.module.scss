@@ -25,16 +25,6 @@
     }
   }
 
-  &_time {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: $GRAY-500;
-    border-left: 1px $GRAY-500 solid;
-    padding: 10px;
-    margin: 10px;
-  }
-
   @include priority-focus-layer;
   @include half-transperant-background(1);
 }

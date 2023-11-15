@@ -29,6 +29,7 @@ const renderIconsRecursively = (icons: IconType[]) =>
     return (
       <Fragment key={icon.id}>
         <WindowBox icon={icon} />
+
         {icon.children && icon.children.length > 0 && renderIconsRecursively(icon.children)}
       </Fragment>
     );
