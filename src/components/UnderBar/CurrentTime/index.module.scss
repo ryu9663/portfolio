@@ -1,10 +1,11 @@
 @use 'src/styles/libs' as *;
+
 .relative {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 253px;
+  width: 270px;
 }
 .current_time {
   color: $GRAY-500;
