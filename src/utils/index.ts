@@ -31,7 +31,7 @@ export const findIconByIdWithChildren = (id: number, icons: IconType[]): IconTyp
   return null;
 };
 
-// 객체 배열을 순회하면서 각 객체의 children 속성도 순회하는 함수
+/** 객체 배열을 순회하면서 각 객체의 children 속성도 순회하는 함수 */
 export const flattenAndExtract = <T extends { children?: T[] }, U>(nodes: T[], callback: (node: T) => U): U[] => {
   const result: U[] = [];
 
