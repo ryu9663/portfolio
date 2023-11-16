@@ -14,7 +14,7 @@ export const getZIndexesWithChildren = (icons: IconType[]) =>
   }, []);
 
 /** children까지 탐색한다. */
-export const findIconByIdWithChildren = (id: number, icons: IconType[]): IconType | null => {
+export const findIconByIdWithChildren = (id: number, icons: IconType[]): IconType => {
   for (const icon of icons) {
     if (icon.id === id) {
       return icon;
@@ -28,7 +28,7 @@ export const findIconByIdWithChildren = (id: number, icons: IconType[]): IconTyp
     }
   }
 
-  return null;
+  throw Error('id가 맞는 아이콘을 찾지 못했습니다.');
 };
 
 /** 객체 배열을 순회하면서 각 객체의 children 속성도 순회하는 함수 */

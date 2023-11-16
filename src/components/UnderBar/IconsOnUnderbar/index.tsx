@@ -25,7 +25,7 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<IconType, 'id'> }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
-  const thisWindow = findIconByIdWithChildren(icon.id, windows) as IconType;
+  const thisWindow = findIconByIdWithChildren(icon.id, windows);
   const setThisWindowState = useThisWindowState(thisWindow.id, windows);
 
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
