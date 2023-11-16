@@ -60,6 +60,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
         return styles[windowState];
     }
   })();
+
   return (
     isOpen && (
       <div
@@ -85,7 +86,11 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
         }}
       >
         <header className={styles['windowbox_header']}>
-          <ul>
+          <div className={styles['windowbox_header_info']}>
+            <img className={styles['windowbox_header_info-img']} src={icon.src} alt={icon.alt} width={25} height={25} />
+            <span className={styles['windowbox_header_info-title']}>{icon.alt}</span>
+          </div>
+          <ul className={styles['windowbox_header_buttons']}>
             <li>
               <Button
                 className={styles.button}
