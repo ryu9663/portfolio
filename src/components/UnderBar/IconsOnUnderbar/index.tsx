@@ -13,22 +13,20 @@ export const IconsOnUnderbar = () => {
   const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);
 
   return (
-    <>
-      <ul className={styles['window_infoes']}>
-        {iconsOnUnderbar.map(icon => (
-          <IconOnUnderbar key={icon.id} icon={icon} />
-        ))}
-      </ul>
-    </>
+    <ul className={styles['window_infoes']}>
+      {iconsOnUnderbar.map(icon => (
+        <IconOnUnderbar key={icon.id} icon={icon} />
+      ))}
+    </ul>
   );
 };
 
-const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
+const IconOnUnderbar = ({ icon }: { icon: Pick<IconType, 'id'> }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const [openedWindows, setOpenedWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
-  const thisIconOnOpened = findIconByIdWithChildren(icon.id, openedWindows) as IconType;
-  const setThisWindowState = useThisWindowState(thisIconOnOpened.id, openedWindows);
+  const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const thisWindow = findIconByIdWithChildren(icon.id, windows) as IconType;
+  const setThisWindowState = useThisWindowState(thisWindow.id, windows);
 
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
@@ -37,15 +35,15 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
 
   const closeWindow = (id: number) => {
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
-    setOpenedWindows(openedWindows => openedWindows.filter(icon => icon.id !== id));
+    setWindows(windows => windows.filter(window => window.id !== id));
   };
 
   const openWindow = () => {
-    const zIndexs = getZIndexesWithChildren(openedWindows);
+    const zIndexs = getZIndexesWithChildren(windows);
     setThisWindowState(
       {
-        ...thisIconOnOpened,
-        windowState: thisIconOnOpened.prevWindowState || 'normal',
+        ...thisWindow,
+        windowState: thisWindow.prevWindowState || 'normal',
         zIndex: Math.max(...zIndexs) + 1,
         activated: true,
       },
@@ -53,12 +51,12 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
     );
   };
 
-  const handleClick = (icon: IconType) => {
-    const { activated, windowState } = icon;
+  const handleClick = (window: IconType) => {
+    const { activated, windowState } = window;
     if (activated) {
       if (windowState === WindowState.MAXIMIZED || windowState === WindowState.NORMAL) {
         setThisWindowState({
-          ...thisIconOnOpened,
+          ...thisWindow,
           windowState: WindowState.MINIMIZED,
           prevWindowState: windowState,
           activated: false,
@@ -66,10 +64,10 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
       }
     } else {
       if (windowState !== 'minimized') {
-        const zIndexs = getZIndexesWithChildren(openedWindows);
+        const zIndexs = getZIndexesWithChildren(windows);
         setThisWindowState(
           {
-            ...thisIconOnOpened,
+            ...thisWindow,
             zIndex: Math.max(...zIndexs) + 1,
             activated: true,
           },
@@ -84,7 +82,7 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
   };
 
   return (
-    <li data-testid="windowinfo" key={icon.id} style={{ background: thisIconOnOpened.activated ? 'red' : 'blue' }}>
+    <li data-testid="windowinfo" key={thisWindow.id} style={{ background: thisWindow.activated ? 'red' : 'blue' }}>
       <Button
         className={styles['window_infoes-button']}
         onContextMenu={e => {
@@ -93,26 +91,27 @@ const IconOnUnderbar = ({ icon }: { icon: IconType }) => {
           setIsInfoModalOpen(true);
         }}
         onClick={() => {
-          handleClick(thisIconOnOpened);
+          handleClick(thisWindow);
         }}
       >
-        <img src={icon.src} alt={icon.alt} width={30} height={30} /> <span>{icon.alt}</span>
+        <img src={thisWindow.src} alt={thisWindow.alt} width={30} height={30} /> <span>{thisWindow.alt}</span>
       </Button>
       <InfoModal
         isUpward
+        isBackdropTransparent
         isOpen={isInfoModalOpen}
         onClose={closeInfoModal}
         options={[
           {
-            name: `${icon.alt} 열기`,
+            name: `${thisWindow.activated ? '✓' : ''} ${thisWindow.alt} 열기`,
             onClick: () => {
-              console.log('최소화 되어있는거 꺼내기');
+              handleClick(thisWindow);
             },
           },
           {
             name: '닫기',
             onClick: () => {
-              closeWindow(icon.id);
+              closeWindow(thisWindow.id);
             },
           },
         ]}

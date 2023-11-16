@@ -9,23 +9,23 @@
   background-color: rgba(0, 0, 0, 0.3);
   @include priority-background-layer;
 
-  .info_modal {
-    position: absolute;
-
-    background-color: $GRAY-300;
-    border-radius: 10px;
-    padding: 6px;
-    li {
-      padding: 6px;
-      border-radius: 6px;
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-      }
-    }
-  }
-
   &.backdrop-transperant {
     background-color: transparent;
+  }
+  @include priority-focus-layer;
+}
+
+.info_modal {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 6px;
+  li {
+    padding: 6px;
+    border-radius: 6px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+    }
   }
 }

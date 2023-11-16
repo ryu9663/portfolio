@@ -200,7 +200,6 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
               handleClickToEditIconTitle('onMenu');
             },
           },
-          { name: '정보 보기', onClick: () => console.log('정보 보기') },
         ]}
       ></InfoModal>
     </>
