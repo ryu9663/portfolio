@@ -81,6 +81,14 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<IconType, 'id'> }) => {
     }
   };
 
+  const openOrMinimizOrActivate = (() => {
+    if (thisWindow.windowState === WindowState.MINIMIZED) {
+      return '열기';
+    } else if (thisWindow.activated) {
+      return '최소화';
+    } else return '맨 위로 보기';
+  })();
+
   return (
     <li data-testid="windowinfo" key={thisWindow.id} style={{ background: thisWindow.activated ? 'red' : 'blue' }}>
       <Button
@@ -103,7 +111,7 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<IconType, 'id'> }) => {
         onClose={closeInfoModal}
         options={[
           {
-            name: `${thisWindow.activated ? '✓' : ''} ${thisWindow.alt} 열기`,
+            name: `${thisWindow.alt} ${openOrMinimizOrActivate}`,
             onClick: () => {
               handleClick(thisWindow);
             },
