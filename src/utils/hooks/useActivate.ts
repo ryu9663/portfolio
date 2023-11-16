@@ -5,11 +5,8 @@ export const useActivate = <T extends HTMLDivElement>(icon: IconType) => {
   const ref = useRef<T>(null);
 
   useEffect(() => {
-    if (ref.current === null) return;
-    if (!icon.activated) {
+    if (ref.current && !icon.activated) {
       ref.current.blur();
-    } else {
-      ref.current.focus();
     }
   }, [icon.activated]);
 
