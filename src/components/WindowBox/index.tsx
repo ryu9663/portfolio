@@ -58,12 +58,13 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
 
   const windowClassName = (() => {
     switch (windowState) {
-      case 'maximized':
+      case WindowState.MAXIMIZED:
         return `${styles[windowState]} ${styles['priority-1']}`;
       default:
         return styles[windowState];
     }
   })();
+
   return (
     isOpen && (
       <div
