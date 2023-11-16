@@ -47,9 +47,8 @@ export const useHighestZIndex = (windows: IconType[], setWindows: (prev: SetStat
           if (window.id === highestZIndexIdInOpenedWindows) {
             return {
               ...window,
-              windowState: window.prevWindowState || 'normal',
-              activated: true,
               children: window.children ? updateWindow(window.children) : undefined,
+              activated: true,
             };
           } else
             return {

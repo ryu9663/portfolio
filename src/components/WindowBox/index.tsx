@@ -2,7 +2,7 @@ import styles from './index.module.scss';
 import { IconType, WindowState } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
@@ -18,7 +18,7 @@ const CLASS_OF_ICON_ON_UNDERBAR = '_window_infoes-button_p0zcy_472';
 
 export const WindowBox = ({ icon }: WindowBoxProps) => {
   const { id, src, alt, left, top, children, windowState } = icon;
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = windowState !== WindowState.CLOSED;
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
   const activateRef = useActivate(icon);
@@ -29,12 +29,11 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   ]);
   const zIndexs = getZIndexesWithChildren(windows);
 
-  useEffect(() => {
-    setIsOpen(true);
-  }, [id]);
-
   const onClose = (id: number) => {
-    setIsOpen(false);
+    setThisWindowState({
+      ...icon,
+      windowState: WindowState.CLOSED,
+    });
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
   };
 
@@ -65,7 +64,6 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
         return styles[windowState];
     }
   })();
-
   return (
     isOpen && (
       <div
@@ -98,7 +96,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
             <img className={styles['windowbox_header_info-img']} src={icon.src} alt={icon.alt} width={25} height={25} />
             <span className={styles['windowbox_header_info-title']}>{icon.alt}</span>
           </div>
-          <ul className={styles['windowbox_header_buttons']}>
+          <ul className={styles['windowbox_header_buttons']} onFocus={e => e.stopPropagation()}>
             <li>
               <Button
                 className={styles.button}
@@ -125,12 +123,16 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
                       ...icon,
                       windowState: WindowState.MAXIMIZED,
                       prevWindowState: WindowState.NORMAL,
+                      activated: true,
+                      zIndex: Math.max(...zIndexs) + 1,
                     });
                   } else
                     setThisWindowState({
                       ...icon,
                       windowState: WindowState.NORMAL,
                       prevWindowState: WindowState.MAXIMIZED,
+                      activated: true,
+                      zIndex: Math.max(...zIndexs) + 1,
                     });
                 }}
               >
