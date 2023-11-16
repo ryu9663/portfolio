@@ -13,6 +13,9 @@ interface WindowBoxProps {
   icon: IconType;
 }
 
+/** 언더바에 있는 아이콘의 클래스명 */
+const CLASS_OF_ICON_ON_UNDERBAR = '_window_infoes-button_p0zcy_472';
+
 export const WindowBox = ({ icon }: WindowBoxProps) => {
   const { id, src, alt, left, top, children, windowState } = icon;
   const [isOpen, setIsOpen] = useState(false);
@@ -84,8 +87,10 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
             },
           );
         }}
-        onBlur={() => {
-          setWindows(windows => windows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)));
+        onBlur={e => {
+          if (e.relatedTarget?.className !== CLASS_OF_ICON_ON_UNDERBAR) {
+            setWindows(windows => windows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)));
+          }
         }}
       >
         <header className={styles['windowbox_header']}>
