@@ -7,6 +7,7 @@ import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 import { getZIndexesWithChildren } from '@/utils';
+import { useActivate } from '@/utils/hooks/useActivate';
 
 interface WindowBoxProps {
   icon: IconType;
@@ -17,6 +18,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
+  const activateRef = useActivate(icon);
   const [iconsOnUnderbar, setIconsOnUnderbar, getIndexOnUnderbar] = useUnderbarStore(state => [
     state.iconsOnUnderbar,
     state.setIconsOnUnderbar,
@@ -64,6 +66,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   return (
     isOpen && (
       <div
+        ref={activateRef}
         tabIndex={0}
         className={`${styles.windowbox} ${windowClassName}`}
         style={{
