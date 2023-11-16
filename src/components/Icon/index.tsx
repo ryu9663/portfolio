@@ -80,10 +80,6 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
   };
 
   const openWindow = (icon: IconType) => {
-    // const setThisWindowState = (thisWindowState: IconType, otherWindowState?: Partial<IconType>) => {
-    //   setWindowState(icon.id, windows, thisWindowState, otherWindowState);
-    // };
-
     const zIndexs = getZIndexesWithChildren(windows);
     setThisWindowState(
       { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
