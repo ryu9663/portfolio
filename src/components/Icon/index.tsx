@@ -1,4 +1,4 @@
-import { useRef, useState, DragEvent, Dispatch, SetStateAction } from 'react';
+import { useRef, useState, DragEvent, Dispatch, SetStateAction, ReactNode } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/components/Draggable/index.store';
 import { InfoModal } from '@/components/InfoModal';
@@ -10,18 +10,34 @@ import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 /**
  * @description 'closed' : 언더바에도 없는 상태, 'normal' : 일반 크기로 켜진 상태, 'maximized' : 최대화된 상태, 'minimized' : 최소화된 상태, 언더바에 있음
  */
-export const WindowState = {
+export const WindowStateType = {
   CLOSED: 'closed',
   NORMAL: 'normal',
   MAXIMIZED: 'maximized',
   MINIMIZED: 'minimized',
 } as const;
 
-export type PrevWindowStateType = typeof WindowState.NORMAL | typeof WindowState.MAXIMIZED;
-export type WindowStateType = (typeof WindowState)[keyof typeof WindowState];
+export const IconType = {
+  FOLDER: 'folder',
+  FILE: 'file',
+  LINK: 'link',
+} as const;
 
-export interface IconType {
-  type: 'file' | 'folder' | '';
+export type PrevWindowStateType = typeof WindowStateType.NORMAL | typeof WindowStateType.MAXIMIZED;
+export type WindowStateType = (typeof WindowStateType)[keyof typeof WindowStateType];
+export type OpenableIconType = IconFileType | IconFolderType;
+export interface IconLinkType {
+  type: 'link';
+  id: number;
+  src: string;
+  alt: string;
+  left: number;
+  top: number;
+  link: string;
+}
+
+export interface IconFileType {
+  type: 'file';
   windowState: WindowStateType;
   activated?: boolean;
   prevWindowState?: PrevWindowStateType;
@@ -31,9 +47,23 @@ export interface IconType {
   left: number;
   top: number;
   zIndex: number;
-  //! TODO : type 이 folder' 인데 children 필수값 아닌 이슈.
-  children?: IconType['type'] extends 'file' ? undefined : IconType[];
+  content: ReactNode;
 }
+
+export interface IconFolderType {
+  type: 'folder';
+  windowState: WindowStateType;
+  activated?: boolean;
+  prevWindowState?: PrevWindowStateType;
+  id: number;
+  src: string;
+  alt: string;
+  left: number;
+  top: number;
+  zIndex: number;
+  children?: OpenableIconType[];
+}
+export type IconType = IconFileType | IconFolderType | IconLinkType;
 export interface IconComponentProps {
   icon: IconType;
   setIcons: Dispatch<SetStateAction<IconType[]>>;
@@ -81,10 +111,14 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
 
   const openWindow = (icon: IconType) => {
     const zIndexs = getZIndexesWithChildren(windows);
-    setThisWindowState(
-      { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
-      { activated: false },
-    );
+    if (icon.type === IconType.FOLDER || icon.type === IconType.FILE) {
+      setThisWindowState(
+        { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
+        { activated: false },
+      );
+    } else if (icon.type === IconType.LINK) {
+      console.log('link');
+    }
   };
 
   const handleDoubleClickIcon = (icon: IconType) => {
@@ -93,14 +127,13 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
       const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);
 
       if (!isAlreadySameIconOpened) {
-        setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
+        setIconsOnUnderbar([...iconsOnUnderbar, icon]);
         openWindow(icon);
       }
-
-      setTimeout(() => {
-        iconClickCountRef.current = 0;
-      }, 1000);
     }
+    setTimeout(() => {
+      iconClickCountRef.current = 0;
+    }, 1000);
   };
 
   return (

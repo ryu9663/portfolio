@@ -5,7 +5,7 @@ import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { WindowBox } from '@/components/WindowBox';
 import { useHighestZIndex } from '@/utils/hooks/useZIndex';
 import { Fragment } from 'react';
-import { IconType } from '@/components/Icon';
+import { OpenableIconType } from '@/components/Icon';
 
 export const Home = () => {
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
@@ -20,10 +20,10 @@ export const Home = () => {
   );
 };
 
-const renderIconsRecursively = (icons: IconType[]) =>
-  icons.map((icon: IconType) => (
+const renderIconsRecursively = (icons: OpenableIconType[]) =>
+  icons.map((icon: OpenableIconType) => (
     <Fragment key={icon.id}>
       <WindowBox icon={icon} />
-      {icon.children && icon.children.length > 0 && renderIconsRecursively(icon.children)}
+      {icon.type === 'folder' && icon.children && icon.children.length > 0 && renderIconsRecursively(icon.children)}
     </Fragment>
   ));

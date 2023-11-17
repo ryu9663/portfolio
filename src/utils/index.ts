@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IconType } from '@/components/Icon';
+import { OpenableIconType } from '@/components/Icon';
 
 /** children까지 순회하여 zIndex를 모은다. */
-export const getZIndexesWithChildren = (icons: IconType[]) =>
+export const getZIndexesWithChildren = (icons: OpenableIconType[]) =>
   icons.reduce<number[]>((zIndexes, icon) => {
     zIndexes.push(icon.zIndex);
 
-    if (icon.children && icon.children.length > 0) {
-      zIndexes = zIndexes.concat(getZIndexesWithChildren(icon.children));
+    if (icon.type !== 'file' && icon.children && icon.children.length > 0) {
+      const { children } = icon;
+      zIndexes = zIndexes.concat(getZIndexesWithChildren(children));
     }
 
     return zIndexes;
   }, []);
 
 /** children까지 탐색한다. */
-export const findIconByIdWithChildren = (id: number, icons: IconType[]): IconType => {
+export const findIconByIdWithChildren = (id: number, icons: OpenableIconType[]): OpenableIconType => {
   for (const icon of icons) {
     if (icon.id === id) {
       return icon;
     }
 
-    if (icon.children) {
+    if (icon.type === 'folder' && icon.children) {
       const childResult = findIconByIdWithChildren(id, icon.children);
       if (childResult) {
         return childResult;

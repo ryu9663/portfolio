@@ -1,7 +1,7 @@
-import { IconType } from '@/components/Icon';
+import { OpenableIconType } from '@/components/Icon';
 import { useEffect, useRef } from 'react';
 
-export const useActivate = <T extends HTMLDivElement>(icon: IconType) => {
+export const useActivate = <T extends HTMLDivElement>(icon: OpenableIconType) => {
   const ref = useRef<T>(null);
 
   useEffect(() => {

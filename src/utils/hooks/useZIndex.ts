@@ -1,7 +1,14 @@
-import { IconType } from '@/components/Icon';
+import { IconFileType, IconFolderType, OpenableIconType } from '@/components/Icon';
 import { flattenAndExtract } from '@/utils';
 import { useMountedEffect } from 'junyeol-components';
 import { SetStateAction } from 'react';
+
+/** SUGAR type */
+interface FileWithChildrenType extends IconFileType {
+  children?: undefined;
+}
+
+type AlwaysHaveChildrenType = IconFolderType | FileWithChildrenType;
 
 /**
  *
@@ -11,12 +18,15 @@ import { SetStateAction } from 'react';
  */
 
 //! zIndexs 넣고 리팩토링. 리턴값 있어야함.
-export const useHighestZIndex = (windows: IconType[], setWindows: (prev: SetStateAction<IconType[]>) => void) => {
+export const useHighestZIndex = (
+  windows: OpenableIconType[],
+  setWindows: (prev: SetStateAction<OpenableIconType[]>) => void,
+) => {
   /**
    * 열려있는 것(normal || maximized)중에 zIndex가 제일 높은것 찾는다.
    */
   const highestZIndexIdInOpenedWindows = (() => {
-    const openedWindows = flattenAndExtract(windows, window => {
+    const openedWindows = flattenAndExtract(windows as AlwaysHaveChildrenType[], window => {
       if (window.windowState !== 'closed' && window.windowState !== 'minimized') {
         return { id: window.id, zIndex: window.zIndex };
       } else return;
@@ -42,20 +52,23 @@ export const useHighestZIndex = (windows: IconType[], setWindows: (prev: SetStat
 
   useMountedEffect(() => {
     if (highestZIndexIdInOpenedWindows) {
-      const updateWindow = (windows: IconType[]): IconType[] =>
+      const updateWindow = (windows: OpenableIconType[]): OpenableIconType[] =>
         windows.map(window => {
           if (window.id === highestZIndexIdInOpenedWindows) {
-            return {
-              ...window,
-              children: window.children ? updateWindow(window.children) : undefined,
-              activated: true,
-            };
-          } else
+            if (window.type === 'folder') {
+              return {
+                ...window,
+                children: window.children ? updateWindow(window.children) : undefined,
+                activated: true,
+              };
+            } else return { ...window, activated: true };
+          } else if (window.type === 'folder') {
             return {
               ...window,
               children: window.children ? updateWindow(window.children) : undefined,
               activated: false,
             };
+          } else return { ...window, activated: false };
         });
       const updatedWindows = updateWindow(windows);
 

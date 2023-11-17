@@ -1,8 +1,8 @@
-import { IconType } from '@/components/Icon';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
+import { IconFileType, IconFolderType, OpenableIconType } from '@/components/Icon';
+import { OtherWindowType, useWindowBoxStore } from '@/components/WindowBox/index.store';
 
-export const useThisWindowState = (id: number, windows: IconType[]) => {
+export const useThisWindowState = (id: number, windows: OpenableIconType[]) => {
   const setWindowState = useWindowBoxStore(state => state.setWindowState);
-  return (thisWindowState: IconType, otherWindowState?: Partial<IconType>) =>
+  return (thisWindowState: IconFileType | IconFolderType, otherWindowState?: OtherWindowType) =>
     setWindowState(id, windows, thisWindowState, otherWindowState);
 };
