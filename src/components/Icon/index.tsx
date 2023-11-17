@@ -127,7 +127,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
       const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);
 
       if (!isAlreadySameIconOpened) {
-        setIconsOnUnderbar([...iconsOnUnderbar, ...[icon]]);
+        setIconsOnUnderbar([...iconsOnUnderbar, icon]);
         openWindow(icon);
       }
     }
