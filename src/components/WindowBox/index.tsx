@@ -1,5 +1,5 @@
 import styles from './index.module.scss';
-import { IconFileType, IconFolderType, WindowState } from '@/components/Icon';
+import { IconFileType, IconFolderType, WindowStateType } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
 import { useMemo } from 'react';
@@ -16,7 +16,7 @@ interface WindowBoxProps {
 
 export const WindowBox = ({ icon }: WindowBoxProps) => {
   const { type, id, src, alt, left, top, windowState } = icon;
-  const isOpen = windowState !== WindowState.CLOSED;
+  const isOpen = windowState !== WindowStateType.CLOSED;
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
   const activateRef = useActivate(icon);
@@ -30,7 +30,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   const onClose = (id: number) => {
     setThisWindowState({
       ...icon,
-      windowState: WindowState.CLOSED,
+      windowState: WindowStateType.CLOSED,
     });
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
   };
@@ -40,11 +40,11 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
       (() => {
         const indexOnUnderbar = getIndexOnUnderbar(id, iconsOnUnderbar);
 
-        if (windowState === WindowState.MAXIMIZED) {
+        if (windowState === WindowStateType.MAXIMIZED) {
           return { bottom: 0, left: 0, zIndex: icon.zIndex };
-        } else if (windowState === WindowState.MINIMIZED) {
+        } else if (windowState === WindowStateType.MINIMIZED) {
           return { bottom: '-100px', left: `${70 + indexOnUnderbar * 120}px` };
-        } else if (windowState === WindowState.NORMAL) {
+        } else if (windowState === WindowStateType.NORMAL) {
           return { left: `${300 + indexOnUnderbar * 120}px`, bottom: 150 + indexOnUnderbar * 30, zIndex: icon.zIndex };
         } else {
           return { left: 0, top: 0 };
@@ -56,7 +56,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
 
   const windowClassName = (() => {
     switch (windowState) {
-      case (WindowState.MAXIMIZED, WindowState.MINIMIZED):
+      case (WindowStateType.MAXIMIZED, WindowStateType.MINIMIZED):
         return `${styles[windowState]} ${styles['priority-0']}`;
       default:
         return styles[windowState];
@@ -100,10 +100,10 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
               <Button
                 className={styles.button}
                 onClick={() => {
-                  if (windowState === WindowState.MAXIMIZED || windowState === WindowState.NORMAL) {
+                  if (windowState === WindowStateType.MAXIMIZED || windowState === WindowStateType.NORMAL) {
                     setThisWindowState({
                       ...icon,
-                      windowState: WindowState.MINIMIZED,
+                      windowState: WindowStateType.MINIMIZED,
                       prevWindowState: windowState,
                       activated: false,
                     });
@@ -117,19 +117,19 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
               <Button
                 className={styles.button}
                 onClick={() => {
-                  if (windowState === WindowState.NORMAL) {
+                  if (windowState === WindowStateType.NORMAL) {
                     setThisWindowState({
                       ...icon,
-                      windowState: WindowState.MAXIMIZED,
-                      prevWindowState: WindowState.NORMAL,
+                      windowState: WindowStateType.MAXIMIZED,
+                      prevWindowState: WindowStateType.NORMAL,
                       activated: true,
                       zIndex: Math.max(...zIndexs) + 1,
                     });
                   } else
                     setThisWindowState({
                       ...icon,
-                      windowState: WindowState.NORMAL,
-                      prevWindowState: WindowState.MAXIMIZED,
+                      windowState: WindowStateType.NORMAL,
+                      prevWindowState: WindowStateType.MAXIMIZED,
                       activated: true,
                       zIndex: Math.max(...zIndexs) + 1,
                     });

@@ -2,7 +2,7 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import styles from './index.module.scss';
 import { Button } from 'junyeol-components';
 import { InfoModal } from '@/components/InfoModal';
-import { OpenableIconType, WindowState } from '@/components/Icon';
+import { OpenableIconType, WindowStateType } from '@/components/Icon';
 import { useState } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useDraggableStore } from '@/components/Draggable/index.store';
@@ -52,16 +52,16 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
   const handleClick = (window: OpenableIconType) => {
     const { activated, windowState } = window;
     if (activated) {
-      if (windowState === WindowState.MAXIMIZED || windowState === WindowState.NORMAL) {
+      if (windowState === WindowStateType.MAXIMIZED || windowState === WindowStateType.NORMAL) {
         setThisWindowState({
           ...thisWindow,
-          windowState: WindowState.MINIMIZED,
+          windowState: WindowStateType.MINIMIZED,
           prevWindowState: windowState,
           activated: false,
         });
       }
     } else {
-      if (windowState !== WindowState.MINIMIZED) {
+      if (windowState !== WindowStateType.MINIMIZED) {
         const zIndexs = getZIndexesWithChildren(windows);
         setThisWindowState(
           {
@@ -80,7 +80,7 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
   };
 
   const openOrMinimizOrActivate = (() => {
-    if (thisWindow.windowState === WindowState.MINIMIZED) {
+    if (thisWindow.windowState === WindowStateType.MINIMIZED) {
       return '열기';
     } else if (thisWindow.activated) {
       return '최소화';

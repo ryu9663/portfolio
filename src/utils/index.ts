@@ -28,7 +28,7 @@ export const findIconByIdWithChildren = (id: number, icons: OpenableIconType[]):
       }
     }
   }
-  console.log(id);
+
   throw Error('id가 맞는 아이콘을 찾지 못했습니다.');
 };
 

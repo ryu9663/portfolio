@@ -4,6 +4,10 @@ import { SetStateAction } from 'react';
 import { devtools } from 'zustand/middleware';
 import { ICONS } from '@/utils/constant';
 
+export type OtherWindowType = Pick<
+  Partial<IconFolderType> | Partial<IconFileType>,
+  'activated' | 'prevWindowState' | 'windowState' | 'zIndex'
+>;
 interface WindowBoxStoreProps {
   windows: OpenableIconType[];
   setWindows: (prev: SetStateAction<OpenableIconType[]>) => void;
@@ -11,10 +15,7 @@ interface WindowBoxStoreProps {
     id: number,
     windows: OpenableIconType[],
     thisWindow: OpenableIconType,
-    otherWindow?: Pick<
-      Partial<IconFolderType> | Partial<IconFileType>,
-      'activated' | 'prevWindowState' | 'windowState' | 'zIndex'
-    >,
+    otherWindow?: OtherWindowType,
   ) => void;
 }
 export const useWindowBoxStore = create<WindowBoxStoreProps>()(
@@ -31,10 +32,7 @@ export const useWindowBoxStore = create<WindowBoxStoreProps>()(
         id: number,
         windows: OpenableIconType[],
         thisWindow: OpenableIconType,
-        otherWindow?: Pick<
-          Partial<IconFolderType> | Partial<IconFileType>,
-          'activated' | 'prevWindowState' | 'windowState' | 'zIndex'
-        >,
+        otherWindow?: OtherWindowType,
       ) => {
         const updateWindows = (iconsArray: OpenableIconType[]): OpenableIconType[] => {
           const updatedWindows = iconsArray.map((window: OpenableIconType) => {
