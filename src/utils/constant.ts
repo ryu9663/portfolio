@@ -14,15 +14,13 @@ export const ICONS: IconType[] = [
     link: 'https://www.notion.so/41daf0a85b9f46d186114573d2781a78?pvs=4',
   },
   {
-    type: 'file',
-    windowState: 'closed',
+    type: 'link',
     id: 2,
     src: GithubSVG,
     alt: 'github',
     left: 150,
     top: 50,
-    zIndex: 100,
-    content: '',
+    link: 'https://github.com/ryu9663',
   },
   {
     type: 'folder',

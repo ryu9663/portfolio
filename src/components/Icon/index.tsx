@@ -87,8 +87,8 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
   const [windows] = useWindowBoxStore(state => [state.windows, state.setWindowState]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
 
-  const titleClickCountRef = useRef(0);
-  const iconClickCountRef = useRef(0);
+  const titleClickCountRef = useRef<number>(0);
+  const iconClickCountRef = useRef<number>(0);
   const iconTitleInpuRef = useRef<HTMLInputElement>(null);
 
   const handleClickToEditIconTitle = (whichClick: 'onTitle' | 'onMenu') => {
@@ -117,7 +117,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
         { activated: false },
       );
     } else if (icon.type === IconType.LINK) {
-      console.log('link');
+      window.open(icon.link);
     }
   };
 
