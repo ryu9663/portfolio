@@ -1,5 +1,5 @@
 import styles from './index.module.scss';
-import { IconType, WindowState } from '@/components/Icon';
+import { IconFileType, IconFolderType, WindowState } from '@/components/Icon';
 import { Draggable } from '@/components/Draggable';
 import { Button } from 'junyeol-components';
 import { useMemo } from 'react';
@@ -8,16 +8,14 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 import { getZIndexesWithChildren } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
+import { CLASS_OF_ICON_ON_UNDERBAR } from '@/utils/constant';
 
 interface WindowBoxProps {
-  icon: IconType;
+  icon: IconFileType | IconFolderType;
 }
 
-/** 언더바에 있는 아이콘의 클래스명 */
-const CLASS_OF_ICON_ON_UNDERBAR = '_window_infoes-button_p0zcy_472';
-
 export const WindowBox = ({ icon }: WindowBoxProps) => {
-  const { id, src, alt, left, top, children, windowState } = icon;
+  const { type, id, src, alt, left, top, windowState } = icon;
   const isOpen = windowState !== WindowState.CLOSED;
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
@@ -58,8 +56,8 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
 
   const windowClassName = (() => {
     switch (windowState) {
-      case WindowState.MAXIMIZED:
-        return `${styles[windowState]} ${styles['priority-1']}`;
+      case (WindowState.MAXIMIZED, WindowState.MINIMIZED):
+        return `${styles[windowState]} ${styles['priority-0']}`;
       default:
         return styles[windowState];
     }
@@ -158,8 +156,8 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
           </ul>
         </header>
         <section className={styles['windowbox_body']} onClick={e => e.stopPropagation()}>
-          {children ? (
-            <Draggable icons={children} />
+          {type === 'folder' && icon.children ? (
+            <Draggable icons={icon.children} />
           ) : (
             <div>
               ({id}, {src}, {alt}, {left}, {top})

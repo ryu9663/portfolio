@@ -2,7 +2,7 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import styles from './index.module.scss';
 import { Button } from 'junyeol-components';
 import { InfoModal } from '@/components/InfoModal';
-import { IconType, WindowState } from '@/components/Icon';
+import { OpenableIconType, WindowState } from '@/components/Icon';
 import { useState } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useDraggableStore } from '@/components/Draggable/index.store';
@@ -14,14 +14,12 @@ export const IconsOnUnderbar = () => {
 
   return (
     <ul className={styles['window_infoes']}>
-      {iconsOnUnderbar.map(icon => (
-        <IconOnUnderbar key={icon.id} icon={icon} />
-      ))}
+      {iconsOnUnderbar.map(icon => icon.type !== 'link' && <IconOnUnderbar key={icon.id} icon={icon} />)}
     </ul>
   );
 };
 
-const IconOnUnderbar = ({ icon }: { icon: Pick<IconType, 'id'> }) => {
+const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
@@ -51,7 +49,7 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<IconType, 'id'> }) => {
     );
   };
 
-  const handleClick = (window: IconType) => {
+  const handleClick = (window: OpenableIconType) => {
     const { activated, windowState } = window;
     if (activated) {
       if (windowState === WindowState.MAXIMIZED || windowState === WindowState.NORMAL) {
@@ -63,7 +61,7 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<IconType, 'id'> }) => {
         });
       }
     } else {
-      if (windowState !== 'minimized') {
+      if (windowState !== WindowState.MINIMIZED) {
         const zIndexs = getZIndexesWithChildren(windows);
         setThisWindowState(
           {

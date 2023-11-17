@@ -1,4 +1,4 @@
-import { useRef, useState, DragEvent, Dispatch, SetStateAction } from 'react';
+import { useRef, useState, DragEvent, Dispatch, SetStateAction, ReactNode } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/components/Draggable/index.store';
 import { InfoModal } from '@/components/InfoModal';
@@ -19,9 +19,19 @@ export const WindowState = {
 
 export type PrevWindowStateType = typeof WindowState.NORMAL | typeof WindowState.MAXIMIZED;
 export type WindowStateType = (typeof WindowState)[keyof typeof WindowState];
+export type OpenableIconType = IconFileType | IconFolderType;
+export interface IconLinkType {
+  type: 'link';
+  id: number;
+  src: string;
+  alt: string;
+  left: number;
+  top: number;
+  link: string;
+}
 
-export interface IconType {
-  type: 'file' | 'folder' | '';
+export interface IconFileType {
+  type: 'file';
   windowState: WindowStateType;
   activated?: boolean;
   prevWindowState?: PrevWindowStateType;
@@ -31,12 +41,26 @@ export interface IconType {
   left: number;
   top: number;
   zIndex: number;
-  //! TODO : type 이 folder' 인데 children 필수값 아닌 이슈.
-  children?: IconType['type'] extends 'file' ? undefined : IconType[];
+  content: ReactNode;
 }
+
+export interface IconFolderType {
+  type: 'folder';
+  windowState: WindowStateType;
+  activated?: boolean;
+  prevWindowState?: PrevWindowStateType;
+  id: number;
+  src: string;
+  alt: string;
+  left: number;
+  top: number;
+  zIndex: number;
+  children?: OpenableIconType[];
+}
+export type IconType = IconFileType | IconFolderType | IconLinkType;
 export interface IconComponentProps {
-  icon: IconType;
-  setIcons: Dispatch<SetStateAction<IconType[]>>;
+  icon: OpenableIconType;
+  setIcons: Dispatch<SetStateAction<OpenableIconType[]>>;
   handleDragStart: (e: DragEvent, id: number) => void;
 }
 
@@ -79,15 +103,16 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     }
   };
 
-  const openWindow = (icon: IconType) => {
+  const openWindow = (icon: OpenableIconType) => {
     const zIndexs = getZIndexesWithChildren(windows);
+
     setThisWindowState(
       { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
       { activated: false },
     );
   };
 
-  const handleDoubleClickIcon = (icon: IconType) => {
+  const handleDoubleClickIcon = (icon: OpenableIconType) => {
     iconClickCountRef.current++;
     if (iconClickCountRef.current === 2) {
       const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);

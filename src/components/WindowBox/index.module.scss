@@ -16,7 +16,6 @@
   &.maximized {
     width: 100%;
     height: 100%;
-
     @include priority-background-layer;
   }
 
@@ -24,6 +23,7 @@
     width: 100px;
     height: 0;
     left: 0;
+    @include priority-background-layer;
   }
   transition:
     width 1s,

@@ -1,38 +1,70 @@
 import { create } from 'zustand';
-import { IconType } from '@/components/Icon';
+import { IconFileType, IconFolderType, OpenableIconType } from '@/components/Icon';
 import { SetStateAction } from 'react';
 import { devtools } from 'zustand/middleware';
 import { ICONS } from '@/utils/constant';
 
 interface WindowBoxStoreProps {
-  windows: IconType[];
-  setWindows: (prev: SetStateAction<IconType[]>) => void;
-  setWindowState: (id: number, windows: IconType[], thisWindow: IconType, otherWindow?: Partial<IconType>) => void;
+  windows: OpenableIconType[];
+  setWindows: (prev: SetStateAction<OpenableIconType[]>) => void;
+  setWindowState: (
+    id: number,
+    windows: OpenableIconType[],
+    thisWindow: OpenableIconType,
+    otherWindow?: Pick<
+      Partial<IconFolderType> | Partial<IconFileType>,
+      'activated' | 'prevWindowState' | 'windowState' | 'zIndex'
+    >,
+  ) => void;
 }
 export const useWindowBoxStore = create<WindowBoxStoreProps>()(
   devtools(
     set => ({
-      windows: ICONS,
-      setWindows: (prev: SetStateAction<IconType[]>) => {
+      windows: ICONS.filter(icon => icon.type === 'folder' || icon.type === 'file') as
+        | IconFolderType[]
+        | IconFileType[],
+
+      setWindows: (prev: SetStateAction<OpenableIconType[]>) => {
         prev instanceof Function ? set(state => ({ windows: prev(state.windows) })) : set({ windows: prev });
       },
-      setWindowState: (id: number, windows: IconType[], thisWindow: IconType, otherWindow?: Partial<IconType>) => {
-        const updateWindows = (iconsArray: IconType[]): IconType[] =>
-          iconsArray.map(window => {
+      setWindowState: (
+        id: number,
+        windows: OpenableIconType[],
+        thisWindow: OpenableIconType,
+        otherWindow?: Pick<
+          Partial<IconFolderType> | Partial<IconFileType>,
+          'activated' | 'prevWindowState' | 'windowState' | 'zIndex'
+        >,
+      ) => {
+        const updateWindows = (iconsArray: OpenableIconType[]): OpenableIconType[] => {
+          const updatedWindows = iconsArray.map((window: OpenableIconType) => {
             if (window.id === id) {
-              return { ...thisWindow, children: window.children ? updateWindows(window.children) : undefined };
+              if (window.type === 'folder' && thisWindow.type === 'folder') {
+                const a: IconFolderType = {
+                  ...thisWindow,
+                  children: window.children ? updateWindows(window.children) : undefined,
+                };
+                return a;
+              } else if (window.type === 'file' && thisWindow.type === 'file') return thisWindow;
+            } else if (window.type === 'folder') {
+              const a: IconFolderType = {
+                ...window,
+                children: window.children ? updateWindows(window.children) : undefined,
+                ...otherWindow,
+              };
+              return a;
+            } else {
+              const a: IconFileType = { ...window, ...otherWindow };
+              return a;
             }
-
-            return {
-              ...window,
-              children: window.children ? updateWindows(window.children) : undefined,
-              ...otherWindow,
-            };
+            throw Error('setWindow에서 에러가 나타났어. 모든 조건을 뛰어넘다니.');
           });
+          return updatedWindows;
+        };
 
-        const updatedIcons = updateWindows(windows);
+        const updatedWindows = updateWindows(windows);
 
-        set({ windows: updatedIcons });
+        set({ windows: updatedWindows });
       },
     }),
 
