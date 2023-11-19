@@ -3,9 +3,8 @@ import styles from './index.module.scss';
 import { useDraggableStore } from '@/components/Draggable/index.store';
 import { InfoModal } from '@/components/InfoModal';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
-import { getZIndexesWithChildren } from '@/utils';
-import { useThisWindowState } from '@/utils/hooks/useThisWindow';
+
+import { useWindow } from '@/utils/hooks/useWindow';
 
 /**
  * @description 'closed' : 언더바에도 없는 상태, 'normal' : 일반 크기로 켜진 상태, 'maximized' : 최대화된 상태, 'minimized' : 최소화된 상태, 언더바에 있음
@@ -79,14 +78,11 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.isDraggable,
     state.setIsDraggable,
   ]);
-
+  const openWindow = useWindow(icon);
   const [iconsOnUnderbar, setIconsOnUnderbar] = useUnderbarStore(state => [
     state.iconsOnUnderbar,
     state.setIconsOnUnderbar,
   ]);
-
-  const [windows] = useWindowBoxStore(state => [state.windows, state.setWindowState]);
-  const setThisWindowState = useThisWindowState(icon.id, windows);
 
   const titleClickCountRef = useRef<number>(0);
   const iconClickCountRef = useRef<number>(0);
@@ -110,25 +106,12 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     }
   };
 
-  const openWindow = (icon: IconType) => {
-    const zIndexs = getZIndexesWithChildren(windows);
-    if (icon.type === IconType.FOLDER || icon.type === IconType.FILE) {
-      setThisWindowState(
-        { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
-        { activated: false },
-      );
-    } else if (icon.type === IconType.LINK) {
-      window.open(icon.link);
-    }
-  };
-
   const handleDoubleClickIcon = (icon: IconType) => {
     iconClickCountRef.current++;
     if (iconClickCountRef.current === 2) {
       const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);
 
       if (!isAlreadySameIconOpened) {
-        setIconsOnUnderbar([...iconsOnUnderbar, icon]);
         openWindow(icon);
       }
     }

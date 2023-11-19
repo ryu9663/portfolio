@@ -3,6 +3,10 @@ import styles from './index.module.scss';
 import { User } from 'react-feather';
 import GithubSVG from '@/assets/github.svg';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
+import { IconFileType } from '@/components/Icon';
+import { useWindow } from '@/utils/hooks/useWindow';
+
+import CodestatesLogo from '@/assets/codestates-logo.svg';
 
 const GRAY_500 = '#a3a3a3';
 
@@ -37,15 +41,43 @@ export const NavBar = () => {
       <ul className={styles.nav_project}>
         <span className={styles.nav_title}>PROJECT</span>
         <li>
-          <Button>지원선발 시스템 어드민</Button>
+          <OpenWindowButton
+            icon={{
+              type: 'file',
+              windowState: 'closed',
+              id: 5,
+              src: CodestatesLogo,
+              alt: '지원선발 시스템',
+              left: 50,
+              top: 50,
+              zIndex: 100,
+              markdown: '/markdown/admission-admin.md',
+            }}
+          />
         </li>
+
         <li>
-          <Button>지원선발 시스템 클라이언트</Button>
-        </li>
-        <li>
-          <Button>코드스테이츠 랜딩페이지</Button>
+          <OpenWindowButton
+            icon={{
+              type: 'file',
+              windowState: 'closed',
+              id: 4,
+              src: CodestatesLogo,
+              alt: '코드스테이츠 랜딩페이지',
+              left: 50,
+              top: 150,
+              zIndex: 100,
+              markdown: '/markdown/landing-page.md',
+            }}
+          />
         </li>
       </ul>
     </nav>
   );
+};
+
+const OpenWindowButton = ({ icon }: { icon: IconFileType }) => {
+  const openWindow = useWindow(icon);
+
+  return <Button onClick={() => openWindow(icon)}>{icon.alt}</Button>;
 };
