@@ -93,12 +93,14 @@
   box-sizing: border-box;
   min-width: 200px;
   max-width: 980px;
-  margin: 0 auto;
-  padding: 45px;
+  // margin: 0 auto;
+  // padding: 45px;
   @media (max-width: 767px) {
     padding: 15px;
   }
-
+  img {
+    width: 800px;
+  }
   ol li {
     list-style: decimal;
   }
@@ -136,6 +138,7 @@
     font-size: vars.$LARGE4X;
   }
   h3 {
+    margin-left: 5px;
     font-size: vars.$LARGE2X;
   }
   h4 {

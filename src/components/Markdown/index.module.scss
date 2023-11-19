@@ -1,0 +1,7 @@
+@use 'src/styles/libs' as *;
+
+.markdown {
+  // @include flex-column-centerize;
+  @include markdown-body;
+  padding: 32px 32px 100px;
+}

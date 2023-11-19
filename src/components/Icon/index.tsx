@@ -1,4 +1,4 @@
-import { useRef, useState, DragEvent, Dispatch, SetStateAction, ReactNode } from 'react';
+import { useRef, useState, DragEvent, Dispatch, SetStateAction } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/components/Draggable/index.store';
 import { InfoModal } from '@/components/InfoModal';
@@ -47,7 +47,9 @@ export interface IconFileType {
   left: number;
   top: number;
   zIndex: number;
-  content: ReactNode;
+  // content: Element;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  markdown: string;
 }
 
 export interface IconFolderType {
