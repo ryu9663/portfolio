@@ -1,0 +1,6 @@
+@use 'src/styles/libs' as *;
+
+.markdown {
+  @include markdown-body;
+  padding: 32px 32px 100px;
+}
