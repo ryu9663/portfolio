@@ -40,10 +40,6 @@
     max-width: 70px;
     &_edit {
       outline: auto;
-    }
-
-    &:hover {
-      text-overflow: unset;
       width: fit-content;
     }
     &.ellipsis {

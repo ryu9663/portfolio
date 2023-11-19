@@ -71,6 +71,7 @@ export interface IconComponentProps {
 }
 
 export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) => {
+  const isEllipsis = icon.alt.length > 8;
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isRightClick, setIsRightClick] = useState(false);
   const [setMousePosition, isDraggable, setIsDraggable] = useDraggableStore(state => [
@@ -163,7 +164,10 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
           ref={iconTitleInpuRef}
           type="text"
           readOnly={isReadOnly}
-          className={`${styles.icon_title} ${isReadOnly ? '' : styles.icon_title_edit}`}
+          className={`${styles.icon_title} ${isReadOnly ? '' : styles.icon_title_edit} ${
+            isEllipsis ? styles.ellipsis : ''
+          }`}
+          size={isEllipsis ? undefined : icon.alt.length + 4}
           onClick={e => {
             e.stopPropagation();
             handleClickToEditIconTitle('onTitle');
