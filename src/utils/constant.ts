@@ -2,6 +2,7 @@ import NotionSVG from '@/assets/notion.svg';
 import GithubSVG from '@/assets/github.svg';
 import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
+
 import { IconType } from '@/components/Icon';
 
 export const ICONS: IconType[] = [
@@ -42,7 +43,18 @@ export const ICONS: IconType[] = [
         left: 50,
         top: 50,
         zIndex: 100,
-        content: '',
+        markdown: '/markdown/landing-page.md',
+      },
+      {
+        type: 'file',
+        windowState: 'closed',
+        id: 4,
+        src: CodestatesLogo,
+        alt: '지원선발 시스템',
+        left: 200,
+        top: 50,
+        zIndex: 100,
+        markdown: '/markdown/admission-admin.md',
       },
     ],
   },

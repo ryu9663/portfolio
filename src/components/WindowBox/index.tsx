@@ -9,13 +9,14 @@ import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 import { getZIndexesWithChildren } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
 import { CLASS_OF_ICON_ON_UNDERBAR } from '@/utils/constant';
+import { Markdown } from '@/components/Markdown';
 
 interface WindowBoxProps {
   icon: IconFileType | IconFolderType;
 }
 
 export const WindowBox = ({ icon }: WindowBoxProps) => {
-  const { type, id, src, alt, left, top, windowState } = icon;
+  const { type, id, windowState } = icon;
   const isOpen = windowState !== WindowStateType.CLOSED;
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
@@ -155,13 +156,13 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
             </li>
           </ul>
         </header>
-        <section className={styles['windowbox_body']} onClick={e => e.stopPropagation()}>
+        <section className={`${styles['windowbox_body']} ${styles.scroll}`} onClick={e => e.stopPropagation()}>
           {type === 'folder' && icon.children ? (
             <Draggable icons={icon.children} />
           ) : (
-            <div>
-              ({id}, {src}, {alt}, {left}, {top})
-            </div>
+            <>
+              <Markdown markdown={(icon as IconFileType).markdown} />
+            </>
           )}
         </section>
       </div>
