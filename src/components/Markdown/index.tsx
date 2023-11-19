@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-// import LANDINGPAGE_MD from '@/markdown/landing-page.md';
+
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import styles from './index.module.scss';
@@ -13,7 +13,7 @@ export const Markdown = ({ markdown }: { markdown: string }) => {
 
   useEffect(() => {
     const fetchMarkdown = async () => {
-      const response = await fetch(`${markdown}`); // public 폴더가 기본적으로 제공되므로 /assets 경로를 사용합니다.
+      const response = await fetch(`${markdown}`);
       const data = await response.text();
       setMarkdownContent(data);
     };

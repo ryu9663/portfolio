@@ -2,7 +2,6 @@ import NotionSVG from '@/assets/notion.svg';
 import GithubSVG from '@/assets/github.svg';
 import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
-// import LANDINGPAGE_MD from '@/markdown/landing-page.md';
 
 import { IconType } from '@/components/Icon';
 

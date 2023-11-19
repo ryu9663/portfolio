@@ -47,8 +47,6 @@ export interface IconFileType {
   left: number;
   top: number;
   zIndex: number;
-  // content: Element;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   markdown: string;
 }
 
