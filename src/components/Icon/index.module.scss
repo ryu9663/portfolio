@@ -24,8 +24,15 @@
     text-align: center;
     outline: none;
     padding: 3px;
+    text-overflow: ellipsis;
+    width: 120px;
     &_edit {
       outline: auto;
+    }
+
+    &:hover {
+      text-overflow: unset;
+      width: fit-content;
     }
   }
 }

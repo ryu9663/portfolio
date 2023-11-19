@@ -135,7 +135,6 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
       iconClickCountRef.current = 0;
     }, 1000);
   };
-
   return (
     <>
       <div
@@ -164,7 +163,6 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
           ref={iconTitleInpuRef}
           type="text"
           readOnly={isReadOnly}
-          size={icon.alt.length + 2}
           className={`${styles.icon_title} ${isReadOnly ? '' : styles.icon_title_edit}`}
           onClick={e => {
             e.stopPropagation();
