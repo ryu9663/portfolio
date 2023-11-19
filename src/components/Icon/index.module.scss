@@ -14,6 +14,13 @@
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px rgba(0, 0, 0, 0.1) solid;
     border-radius: 5px;
+
+    .icon_title {
+      text-overflow: unset;
+      width: fit-content;
+      max-width: 199px;
+      text-overflow: unset;
+    }
   }
 
   &_title {
@@ -24,14 +31,18 @@
     text-align: center;
     outline: none;
     padding: 3px;
-    text-overflow: ellipsis;
-    width: 120px;
+
+    &.ellipsis {
+      text-overflow: ellipsis;
+      width: fit-content;
+      max-width: 120px;
+      &:hover {
+        text-overflow: unset;
+        width: fit-content;
+      }
+    }
     &_edit {
       outline: auto;
-    }
-
-    &:hover {
-      text-overflow: unset;
       width: fit-content;
     }
   }
