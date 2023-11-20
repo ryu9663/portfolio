@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { OpenableIconType } from '@/components/Icon';
+import { Draggable } from '@/components/Draggable';
+import { IconFileType, OpenableIconType } from '@/components/Icon';
+import { Iframe } from '@/components/Iframe';
+import { Markdown } from '@/components/Markdown';
+import { FocusEventHandler } from 'react';
 
 /** children까지 순회하여 zIndex를 모은다. */
 export const getZIndexesWithChildren = (icons: OpenableIconType[]) =>
   icons.reduce<number[]>((zIndexes, icon) => {
     zIndexes.push(icon.zIndex);
 
-    if (icon.type !== 'file' && icon.children && icon.children.length > 0) {
+    if (icon.type === 'folder' && icon.children && icon.children.length > 0) {
       const { children } = icon;
       zIndexes = zIndexes.concat(getZIndexesWithChildren(children));
     }
@@ -43,4 +47,21 @@ export const flattenAndExtract = <T extends { children?: T[] }, U>(nodes: T[], c
     }
   });
   return result;
+};
+
+export const renderWindowbox = (icon: OpenableIconType, onFocus: FocusEventHandler<HTMLDivElement>) => {
+  switch (icon.type) {
+    case 'folder':
+      if (icon.children) {
+        return <Draggable icons={icon.children} />;
+      } else return <></>;
+    case 'file':
+      return (
+        <>
+          <Markdown markdown={(icon as IconFileType).markdown} />
+        </>
+      );
+    case 'iframe':
+      return <Iframe src={icon.iframeSrc} onFocus={onFocus} />;
+  }
 };
