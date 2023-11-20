@@ -1,22 +1,20 @@
 import styles from './index.module.scss';
-import { IconFileType, IconFolderType, WindowStateType } from '@/components/Icon';
-import { Draggable } from '@/components/Draggable';
+import { OpenableIconType, WindowStateType } from '@/components/Icon';
 import { Button } from 'junyeol-components';
-import { useMemo } from 'react';
+import { FocusEventHandler, useMemo } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
-import { getZIndexesWithChildren } from '@/utils';
+import { getZIndexesWithChildren, renderWindowbox } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
 import { CLASS_OF_ICON_ON_UNDERBAR } from '@/utils/constant';
-import { Markdown } from '@/components/Markdown';
 
 interface WindowBoxProps {
-  icon: IconFileType | IconFolderType;
+  icon: OpenableIconType;
 }
 
 export const WindowBox = ({ icon }: WindowBoxProps) => {
-  const { type, id, windowState } = icon;
+  const { id, windowState } = icon;
   const isOpen = windowState !== WindowStateType.CLOSED;
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
@@ -64,6 +62,19 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
     }
   })();
 
+  const handleFocus: FocusEventHandler<HTMLDivElement> = () => {
+    setThisWindowState(
+      {
+        ...icon,
+        activated: true,
+        zIndex: Math.max(...zIndexs) + 1,
+      },
+      {
+        activated: false,
+      },
+    );
+  };
+
   return (
     isOpen && (
       <div
@@ -73,18 +84,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
         style={{
           ...position,
         }}
-        onFocus={() => {
-          setThisWindowState(
-            {
-              ...icon,
-              activated: true,
-              zIndex: Math.max(...zIndexs) + 1,
-            },
-            {
-              activated: false,
-            },
-          );
-        }}
+        onFocus={handleFocus}
         onBlur={e => {
           if (e.relatedTarget?.className !== CLASS_OF_ICON_ON_UNDERBAR) {
             setWindows(windows => windows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)));
@@ -157,13 +157,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
           </ul>
         </header>
         <section className={`${styles['windowbox_body']} ${styles.scroll}`} onClick={e => e.stopPropagation()}>
-          {type === 'folder' && icon.children ? (
-            <Draggable icons={icon.children} />
-          ) : (
-            <>
-              <Markdown markdown={(icon as IconFileType).markdown} />
-            </>
-          )}
+          {renderWindowbox(icon, handleFocus)}
         </section>
       </div>
     )
