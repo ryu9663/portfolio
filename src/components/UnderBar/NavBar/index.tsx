@@ -79,5 +79,5 @@ export const NavBar = () => {
 const OpenWindowButton = ({ icon }: { icon: IconFileType }) => {
   const openWindow = useWindow(icon);
 
-  return <Button onClick={() => openWindow(icon)}>{icon.alt}</Button>;
+  return <Button onClick={() => openWindow()}>{icon.alt}</Button>;
 };

@@ -13,7 +13,7 @@ export const useWindow = (icon: IconType) => {
 
   const setThisWindowState = useThisWindowState(icon.id, windows);
 
-  const openWindow = (icon: IconType) => {
+  const openWindow = () => {
     const zIndexs = getZIndexesWithChildren(windows);
     if (icon.type === IconType.FOLDER || icon.type === IconType.FILE || icon.type === IconType.IFRAME) {
       setThisWindowState(

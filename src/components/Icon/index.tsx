@@ -127,7 +127,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
       const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);
 
       if (!isAlreadySameIconOpened) {
-        openWindow(icon);
+        openWindow();
       }
     }
     setTimeout(() => {
@@ -222,7 +222,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
           {
             name: icon.alt,
             onClick: () => {
-              openWindow(icon);
+              openWindow();
             },
           },
           {
