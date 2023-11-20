@@ -8,7 +8,6 @@ import 'github-markdown-css/github-markdown-light.css';
 import remarkGfm from 'remark-gfm';
 
 export const Markdown = ({ markdown }: { markdown: string }) => {
-  console.log(markdown);
   const [markdownContent, setMarkdownContent] = useState('');
 
   useEffect(() => {

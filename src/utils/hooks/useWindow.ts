@@ -15,7 +15,7 @@ export const useWindow = (icon: IconType) => {
 
   const openWindow = (icon: IconType) => {
     const zIndexs = getZIndexesWithChildren(windows);
-    if (icon.type === IconType.FOLDER || icon.type === IconType.FILE) {
+    if (icon.type === IconType.FOLDER || icon.type === IconType.FILE || icon.type === IconType.IFRAME) {
       setThisWindowState(
         { ...icon, windowState: 'normal', activated: true, zIndex: Math.max(...zIndexs) + 1 },
         { activated: false },

@@ -1,4 +1,4 @@
-import { IconFileType, IconFolderType, OpenableIconType } from '@/components/Icon';
+import { IconFileType, IconFolderType, IconIframeType, OpenableIconType } from '@/components/Icon';
 import { flattenAndExtract } from '@/utils';
 import { useMountedEffect } from 'junyeol-components';
 import { SetStateAction } from 'react';
@@ -8,7 +8,11 @@ interface FileWithChildrenType extends IconFileType {
   children?: undefined;
 }
 
-type AlwaysHaveChildrenType = IconFolderType | FileWithChildrenType;
+interface IframeWithChildrenType extends IconIframeType {
+  children?: undefined;
+}
+
+type AlwaysHaveChildrenType = IconFolderType | FileWithChildrenType | IframeWithChildrenType;
 
 /**
  *

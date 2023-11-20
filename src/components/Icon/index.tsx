@@ -20,11 +20,26 @@ export const IconType = {
   FOLDER: 'folder',
   FILE: 'file',
   LINK: 'link',
+  IFRAME: 'iframe',
 } as const;
 
 export type PrevWindowStateType = typeof WindowStateType.NORMAL | typeof WindowStateType.MAXIMIZED;
 export type WindowStateType = (typeof WindowStateType)[keyof typeof WindowStateType];
-export type OpenableIconType = IconFileType | IconFolderType;
+export type OpenableIconType = IconFileType | IconFolderType | IconIframeType;
+export interface IconIframeType {
+  type: 'iframe';
+  windowState: WindowStateType;
+  activated?: boolean;
+  prevWindowState?: PrevWindowStateType;
+  id: number;
+  src: string;
+  alt: string;
+  left: number;
+  top: number;
+  zIndex: number;
+  iframeSrc: string;
+}
+
 export interface IconLinkType {
   type: 'link';
   id: number;
@@ -62,7 +77,7 @@ export interface IconFolderType {
   zIndex: number;
   children?: OpenableIconType[];
 }
-export type IconType = IconFileType | IconFolderType | IconLinkType;
+export type IconType = IconFileType | IconFolderType | IconLinkType | IconIframeType;
 export interface IconComponentProps {
   icon: IconType;
   setIcons: Dispatch<SetStateAction<IconType[]>>;
