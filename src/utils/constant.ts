@@ -2,6 +2,7 @@ import NotionSVG from '@/assets/notion.svg';
 import GithubSVG from '@/assets/github.svg';
 import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
+import BlogLogoSVG from '@/assets/blog-logo.svg';
 
 import { IconType } from '@/components/Icon';
 
@@ -25,13 +26,22 @@ export const ICONS: IconType[] = [
     link: 'https://github.com/ryu9663',
   },
   {
+    type: 'link',
+    id: 8,
+    src: BlogLogoSVG,
+    alt: '블로그',
+    left: 50,
+    top: 250,
+    link: 'https://www.wnsdufdl.com/',
+  },
+  {
     type: 'folder',
     windowState: 'closed',
     id: 3,
     src: FolderSVG,
     alt: '프로젝트',
     left: 50,
-    top: 250,
+    top: 350,
     zIndex: 100,
     children: [
       {
