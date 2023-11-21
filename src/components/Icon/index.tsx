@@ -5,6 +5,8 @@ import { InfoModal } from '@/components/InfoModal';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 
 import { useWindow } from '@/utils/hooks/useWindow';
+import { useWindowBoxStore } from '@/components/WindowBox/index.store';
+import { findIconByIdWithChildren } from '@/utils';
 
 /**
  * @description 'closed' : 언더바에도 없는 상태, 'normal' : 일반 크기로 켜진 상태, 'maximized' : 최대화된 상태, 'minimized' : 최소화된 상태, 언더바에 있음
@@ -98,6 +100,8 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.iconsOnUnderbar,
     state.setIconsOnUnderbar,
   ]);
+
+  const [windows, setWindowState] = useWindowBoxStore(state => [state.windows, state.setWindowState]);
 
   const titleClickCountRef = useRef<number>(0);
   const iconClickCountRef = useRef<number>(0);
@@ -206,6 +210,10 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
                 });
                 return updatedIcons;
               });
+              if (icon.type === IconType.FOLDER || icon.type === IconType.FILE || icon.type === IconType.IFRAME) {
+                const thisWindow = findIconByIdWithChildren(icon.id, windows);
+                setWindowState(icon.id, windows, { ...thisWindow, alt: icon.alt });
+              }
             }
           }}
         />
