@@ -5,10 +5,8 @@ import GithubSVG from '@/assets/github.svg';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { IconFileType } from '@/components/Icon';
 import { useWindow } from '@/utils/hooks/useWindow';
-
 import CodestatesLogo from '@/assets/codestates-logo.svg';
-
-const GRAY_500 = '#a3a3a3';
+import { GRAY_500 } from '@/utils/colors';
 
 export const NavBar = () => {
   const isModalOpen = useUnderbarStore(state => state.isModalOpen);
@@ -25,7 +23,7 @@ export const NavBar = () => {
           </Button>
         </li>
         <li>
-          <a href="https://wnsdufdl.tistory.com" target="_blank">
+          <a href="https://wnsdufdl.com" target="_blank">
             <Button>BLOG</Button>
           </a>
         </li>

@@ -88,7 +88,7 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
   })();
 
   return (
-    <li data-testid="windowinfo" key={thisWindow.id} style={{ background: thisWindow.activated ? 'red' : 'blue' }}>
+    <li data-testid="windowinfo" key={thisWindow.id}>
       <Button
         className={styles['window_infoes-button']}
         onContextMenu={e => {
