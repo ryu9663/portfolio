@@ -164,3 +164,6 @@ export const ICONS: IconType[] = [
 
 /** 언더바에 있는 아이콘의 클래스명 */
 export const CLASS_OF_ICON_ON_UNDERBAR = '_window_infoes-button_p0zcy_472';
+
+//** 언더바 height */
+export const UNDERBAR_HEIGHT = 50;
