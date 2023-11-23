@@ -36,7 +36,6 @@ export const findIconByIdWithChildren = (id: number, icons: OpenableIconType[]):
 
     return null;
   };
-
   const thisIcon = findThisIcon(id, icons);
   if (thisIcon === null) throw Error('id를 못찾는데 이건 설계상 있을 수 없는 일이야.');
   return thisIcon;

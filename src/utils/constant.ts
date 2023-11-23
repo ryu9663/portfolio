@@ -3,7 +3,7 @@ import GithubSVG from '@/assets/github.svg';
 import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
 import BlogLogoSVG from '@/assets/blog-logo.svg';
-import BrickSVG from '@/assets/blog-logo.svg';
+import BrickSVG from '@/assets/brick.svg';
 
 import { IconType } from '@/components/Icon';
 
