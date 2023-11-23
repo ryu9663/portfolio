@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Draggable } from '@/components/Draggable';
-import { IconFileType, OpenableIconType } from '@/components/Icon';
+import { IconFileType, IconType, OpenableIconType } from '@/components/Icon';
 import { Iframe } from '@/components/Iframe';
 import { Markdown } from '@/components/Markdown';
 import { FocusEventHandler } from 'react';
@@ -51,17 +51,16 @@ export const flattenAndExtract = <T extends { children?: T[] }, U>(nodes: T[], c
 
 export const renderWindowbox = (icon: OpenableIconType, onFocus: FocusEventHandler<HTMLDivElement>) => {
   switch (icon.type) {
-    case 'folder':
-      if (icon.children) {
-        return <Draggable icons={icon.children} />;
-      } else return <></>;
-    case 'file':
+    case IconType.FOLDER:
+      return <Draggable icons={icon.children || []} />;
+
+    case IconType.FILE:
       return (
         <>
           <Markdown markdown={(icon as IconFileType).markdown} />
         </>
       );
-    case 'iframe':
+    case IconType.IFRAME:
       return <Iframe src={icon.iframeSrc} onFocus={onFocus} />;
   }
 };
