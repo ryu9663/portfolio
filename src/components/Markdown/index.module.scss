@@ -3,4 +3,5 @@
 .markdown {
   @include markdown-body;
   padding: 32px 32px 100px;
+  width: 100%;
 }

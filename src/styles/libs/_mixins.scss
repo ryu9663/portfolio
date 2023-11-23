@@ -111,7 +111,7 @@
   pre {
     margin-left: auto;
     margin-right: auto;
-    width: 800px;
+
     overflow: auto;
   }
 
@@ -131,16 +131,18 @@
   }
 
   h1 {
-    font-size: vars.$LARGE6X;
+    font-size: vars.$LARGE6X !important;
   }
   h2 {
-    font-size: vars.$LARGE4X;
+    font-size: vars.$LARGE4X !important;
   }
   h3 {
     margin-left: 5px;
-    font-size: vars.$LARGE2X;
+    font-size: vars.$LARGE2X !important;
   }
-  h4 {
-    font-size: vars.$LARGE;
+  h4,
+  h5,
+  h6 {
+    font-size: vars.$LARGE !important;
   }
 }
