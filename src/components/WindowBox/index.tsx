@@ -7,7 +7,7 @@ import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 import { getZIndexesWithChildren, renderWindowbox } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
-import { CLASS_OF_ICON_ON_UNDERBAR } from '@/utils/constant';
+import { CLASS_OF_ICON_ON_UNDERBAR, UNDERBAR_HEIGHT } from '@/utils/constant';
 
 interface WindowBoxProps {
   icon: OpenableIconType;
@@ -40,9 +40,9 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
         const indexOnUnderbar = getIndexOnUnderbar(id, iconsOnUnderbar);
 
         if (windowState === WindowStateType.MAXIMIZED) {
-          return { bottom: 0, left: 0, zIndex: icon.zIndex };
+          return { bottom: `${UNDERBAR_HEIGHT}px`, left: 0, zIndex: icon.zIndex };
         } else if (windowState === WindowStateType.MINIMIZED) {
-          return { bottom: '-100px', left: `${70 + indexOnUnderbar * 120}px` };
+          return { bottom: `-150px`, left: `${70 + indexOnUnderbar * 120}px` };
         } else if (windowState === WindowStateType.NORMAL) {
           return { left: `${300 + indexOnUnderbar * 120}px`, bottom: 150 + indexOnUnderbar * 30, zIndex: icon.zIndex };
         } else {
