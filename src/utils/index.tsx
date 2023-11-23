@@ -20,20 +20,26 @@ export const getZIndexesWithChildren = (icons: OpenableIconType[]) =>
 
 /** children까지 탐색한다. */
 export const findIconByIdWithChildren = (id: number, icons: OpenableIconType[]): OpenableIconType => {
-  for (const icon of icons) {
-    if (icon.id === id) {
-      return icon;
-    }
+  const findThisIcon = (id: number, icons: OpenableIconType[]): OpenableIconType | null => {
+    for (const icon of icons) {
+      if (icon.id === id) {
+        return icon;
+      }
 
-    if (icon.type === 'folder' && icon.children) {
-      const childResult = findIconByIdWithChildren(id, icon.children);
-      if (childResult) {
-        return childResult;
+      if (icon.type === 'folder' && icon.children) {
+        const childResult = findThisIcon(id, icon.children);
+        if (childResult) {
+          return childResult;
+        }
       }
     }
-  }
 
-  throw Error('id가 맞는 아이콘을 찾지 못했습니다.');
+    return null;
+  };
+
+  const thisIcon = findThisIcon(id, icons);
+  if (thisIcon === null) throw Error('id를 못찾는데 이건 설계상 있을 수 없는 일이야.');
+  return thisIcon;
 };
 
 /** 객체 배열을 순회하면서 각 객체의 children 속성도 순회하는 함수 */
