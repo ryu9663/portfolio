@@ -3,6 +3,7 @@ import GithubSVG from '@/assets/github.svg';
 import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
 import BlogLogoSVG from '@/assets/blog-logo.svg';
+import BrickSVG from '@/assets/blog-logo.svg';
 
 import { IconType } from '@/components/Icon';
 
@@ -37,6 +38,29 @@ export const ICONS: IconType[] = [
   {
     type: 'folder',
     windowState: 'closed',
+    id: 6,
+    src: FolderSVG,
+    alt: '벽돌깨기',
+    left: 150,
+    top: 350,
+    zIndex: 100,
+    children: [
+      {
+        type: 'iframe',
+        windowState: 'closed',
+        id: 7,
+        src: BrickSVG,
+        alt: '벽돌깨기',
+        left: 50,
+        top: 150,
+        zIndex: 300,
+        iframeSrc: 'https://ryu9663.github.io/break-brick-game/',
+      },
+    ],
+  },
+  {
+    type: 'folder',
+    windowState: 'closed',
     id: 3,
     src: FolderSVG,
     alt: '프로젝트',
@@ -65,29 +89,6 @@ export const ICONS: IconType[] = [
         top: 50,
         zIndex: 100,
         markdown: '/markdown/admission-admin.md',
-      },
-      {
-        type: 'folder',
-        windowState: 'closed',
-        id: 6,
-        src: FolderSVG,
-        alt: '벽돌깨기',
-        left: 150,
-        top: 350,
-        zIndex: 100,
-        children: [
-          {
-            type: 'iframe',
-            windowState: 'closed',
-            id: 7,
-            src: CodestatesLogo,
-            alt: '벽돌깨기',
-            left: 50,
-            top: 150,
-            zIndex: 300,
-            iframeSrc: 'https://ryu9663.github.io/break-brick-game/',
-          },
-        ],
       },
     ],
   },
