@@ -100,7 +100,15 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
           handleClick(thisWindow);
         }}
       >
-        <img src={thisWindow.src} alt={thisWindow.alt} width={30} height={30} /> <span>{thisWindow.alt}</span>
+        <img
+          src={thisWindow.src}
+          className={styles['window_infoes-button_img']}
+          alt={thisWindow.alt}
+          width={30}
+          height={30}
+        />
+
+        <span className={styles['window_infoes-button_title']}>{thisWindow.alt}</span>
       </Button>
       <InfoModal
         isUpward

@@ -10,11 +10,21 @@
   &-button {
     margin-left: 20px;
     height: 100%;
+
     padding: 0 10px;
 
     color: $GRAY-500;
     font-size: $SMALL2X;
     font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &_title {
+      margin-top: 10px;
+      line-height: 0.8rem;
+    }
 
     &:hover {
       background-color: $GRAY-800;
