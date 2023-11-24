@@ -1,7 +1,7 @@
 import styles from './index.module.scss';
 import { OpenableIconType, WindowStateType } from '@/components/Icon';
 import { Button } from 'junyeol-components';
-import { FocusEventHandler, useMemo } from 'react';
+import { FocusEventHandler, useMemo, useRef } from 'react';
 import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
@@ -19,6 +19,8 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
   const setThisWindowState = useThisWindowState(icon.id, windows);
   const activateRef = useActivate(icon);
+  const headerClickCountRef = useRef<number>(0);
+  const headerIconClickCountRef = useRef<number>(0);
   const [iconsOnUnderbar, setIconsOnUnderbar, getIndexOnUnderbar] = useUnderbarStore(state => [
     state.iconsOnUnderbar,
     state.setIconsOnUnderbar,
@@ -30,6 +32,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
     setThisWindowState({
       ...icon,
       windowState: WindowStateType.CLOSED,
+      activated: false,
     });
     setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
   };
@@ -75,6 +78,31 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
     );
   };
 
+  const handleHeaderDoubleClickIcon = (icon: OpenableIconType) => {
+    headerClickCountRef.current++;
+    if (headerClickCountRef.current === 2) {
+      setThisWindowState({
+        ...icon,
+        windowState: icon.windowState === WindowStateType.NORMAL ? WindowStateType.MAXIMIZED : WindowStateType.NORMAL,
+        activated: true,
+        zIndex: Math.max(...zIndexs) + 1,
+      });
+    }
+    setTimeout(() => {
+      headerClickCountRef.current = 0;
+    }, 1000);
+  };
+
+  const handleHeaderIconDoubleClick = (id: OpenableIconType['id']) => {
+    headerIconClickCountRef.current++;
+
+    if (headerIconClickCountRef.current === 2) {
+      onClose(id);
+    }
+    setTimeout(() => {
+      headerIconClickCountRef.current = 0;
+    }, 1000);
+  };
   return (
     isOpen && (
       <div
@@ -91,12 +119,26 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
           }
         }}
       >
-        <header className={styles['windowbox_header']}>
-          <div className={styles['windowbox_header_info']}>
-            <img className={styles['windowbox_header_info-img']} src={icon.src} alt={icon.alt} width={25} height={25} />
+        <header onClick={() => handleHeaderDoubleClickIcon(icon)} className={styles['windowbox_header']}>
+          <div className={styles['windowbox_header_info']} onClick={e => e.stopPropagation()}>
+            <img
+              className={styles['windowbox_header_info-img']}
+              src={icon.src}
+              alt={icon.alt}
+              width={25}
+              height={25}
+              onClick={e => {
+                e.stopPropagation();
+                handleHeaderIconDoubleClick(icon.id);
+              }}
+            />
             <span className={styles['windowbox_header_info-title']}>{icon.alt}</span>
           </div>
-          <ul className={styles['windowbox_header_buttons']} onFocus={e => e.stopPropagation()}>
+          <ul
+            className={styles['windowbox_header_buttons']}
+            onFocus={e => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
+          >
             <li>
               <Button
                 className={styles.button}
@@ -143,11 +185,6 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
               <Button
                 className={styles.button}
                 onClick={() => {
-                  setThisWindowState({
-                    ...icon,
-                    windowState: 'closed',
-                    prevWindowState: undefined,
-                  });
                   onClose(icon.id);
                 }}
               >
