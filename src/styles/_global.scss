@@ -7,13 +7,15 @@
 }
 
 main {
-  margin: 100px 16px;
   width: 100vw;
   height: 100vh;
+  margin-bottom: 50px;
 }
 
 body {
   color: libs.$BLUISH-GRAY-800;
+  overflow: hidden;
+  line-height: 1;
   font-family:
     'Pretendard Variable',
     Pretendard,
@@ -28,6 +30,7 @@ body {
     'Open Sans',
     'Helvetica Neue',
     sans-serif;
+  overflow: hidden;
 }
 
 html {
