@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
 import '@/styles/_global.scss';
-
 import 'junyeol-components/style.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
