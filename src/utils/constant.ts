@@ -4,8 +4,10 @@ import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
 import BlogLogoSVG from '@/assets/blog-logo.svg';
 import BrickSVG from '@/assets/brick.svg';
+import HiviliageSVG from '@/assets/hiviliage.svg';
+import StorybookSVG from '@/assets/storybook.svg';
 import { IconType } from '@/components/Icon';
-//9차례
+//11차례
 export const ICONS: IconType[] = [
   {
     type: 'link',
@@ -37,7 +39,7 @@ export const ICONS: IconType[] = [
   {
     type: 'link',
     id: 9,
-    src: BlogLogoSVG,
+    src: StorybookSVG,
     alt: '컴포넌트 라이브러리',
     left: 50,
     top: 350,
@@ -46,7 +48,7 @@ export const ICONS: IconType[] = [
   {
     type: 'link',
     id: 10,
-    src: BlogLogoSVG,
+    src: HiviliageSVG,
     alt: '하이빌리지',
     left: 50,
     top: 450,
