@@ -4,8 +4,10 @@ import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
 import BlogLogoSVG from '@/assets/blog-logo.svg';
 import BrickSVG from '@/assets/brick.svg';
+import HiviliageSVG from '@/assets/hiviliage.svg';
+import StorybookSVG from '@/assets/storybook.svg';
 import { IconType } from '@/components/Icon';
-
+//11차례
 export const ICONS: IconType[] = [
   {
     type: 'link',
@@ -35,13 +37,31 @@ export const ICONS: IconType[] = [
     link: 'https://www.wnsdufdl.com/',
   },
   {
+    type: 'link',
+    id: 9,
+    src: StorybookSVG,
+    alt: '컴포넌트 라이브러리',
+    left: 50,
+    top: 350,
+    link: 'https://junyeol-components.vercel.app/',
+  },
+  {
+    type: 'link',
+    id: 10,
+    src: HiviliageSVG,
+    alt: '하이빌리지',
+    left: 50,
+    top: 450,
+    link: 'https://hivillage.wnsdufdl.com/',
+  },
+  {
     type: 'folder',
     windowState: 'closed',
     id: 3,
     src: FolderSVG,
     alt: '프로젝트',
-    left: 50,
-    top: 350,
+    left: 150,
+    top: 50,
     zIndex: 100,
     children: [
       {
