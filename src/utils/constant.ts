@@ -6,8 +6,9 @@ import BlogLogoSVG from '@/assets/blog-logo.svg';
 import BrickSVG from '@/assets/brick.svg';
 import HiviliageSVG from '@/assets/hiviliage.svg';
 import StorybookSVG from '@/assets/storybook.svg';
+import DigimonSVG from '@/assets/digimon.svg';
 import { IconType } from '@/components/Icon';
-//11차례
+//12차례
 export const ICONS: IconType[] = [
   {
     type: 'link',
@@ -91,7 +92,7 @@ export const ICONS: IconType[] = [
         windowState: 'closed',
         id: 6,
         src: FolderSVG,
-        alt: '벽돌깨기',
+        alt: '심심풀이',
         left: 150,
         top: 350,
         zIndex: 100,
@@ -106,6 +107,17 @@ export const ICONS: IconType[] = [
             top: 150,
             zIndex: 300,
             iframeSrc: 'https://ryu9663.github.io/break-brick-game/',
+          },
+          {
+            type: 'iframe',
+            windowState: 'closed',
+            id: 11,
+            src: DigimonSVG,
+            alt: '디지몬 카드 돌리기',
+            left: 50,
+            top: 250,
+            zIndex: 300,
+            iframeSrc: 'https://ryu9663.github.io/card-rotation/',
           },
         ],
       },

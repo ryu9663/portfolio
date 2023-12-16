@@ -1,0 +1,12 @@
+.iframe_area {
+  position: relative; /* absolute는 부모가 relative일 때 부모를 따라간다. */
+  width: 100%;
+  height: 100%;
+}
+.iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* 부모에 맞게 꽉 채운다. */
+  height: 100%;
+}
