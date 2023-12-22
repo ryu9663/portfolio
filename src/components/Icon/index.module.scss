@@ -6,14 +6,26 @@
   align-items: center;
   width: fit-content;
   position: absolute;
-  cursor: pointer;
+  cursor: grab;
+
   padding: 5px;
+
   @include priority-background-layer;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px rgba(0, 0, 0, 0.1) solid;
     border-radius: 5px;
+
+    .icon_title {
+      text-overflow: unset;
+      width: fit-content;
+      max-width: 70px;
+      text-overflow: unset;
+      &.ellipsis {
+        max-width: 199px;
+      }
+    }
   }
 
   &_title {
@@ -24,8 +36,8 @@
     text-align: center;
     outline: none;
     padding: 3px;
-    text-overflow: ellipsis;
-    width: 120px;
+    width: fit-content;
+    max-width: 70px;
     &_edit {
       outline: auto;
     }
@@ -33,6 +45,9 @@
     &:hover {
       text-overflow: unset;
       width: fit-content;
+    }
+    &.ellipsis {
+      text-overflow: ellipsis;
     }
   }
 }
