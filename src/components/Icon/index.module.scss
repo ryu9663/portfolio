@@ -18,12 +18,7 @@
 
     .icon_title {
       text-overflow: unset;
-      width: fit-content;
-      max-width: 70px;
       text-overflow: unset;
-      &.ellipsis {
-        max-width: 199px;
-      }
     }
   }
 
@@ -35,11 +30,17 @@
     text-align: center;
     outline: none;
     padding: 3px;
+
+    overflow: hidden;
+    resize: none;
+    word-break: keep-all;
+    height: fit-content;
     width: fit-content;
-    max-width: 70px;
+    max-width: 90px;
     &_edit {
       outline: auto;
       width: fit-content;
+      min-height: unset;
     }
     &.ellipsis {
       text-overflow: ellipsis;
