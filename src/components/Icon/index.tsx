@@ -217,11 +217,9 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
               }
             }
 
-            if (e.key === 'Backspace') {
-              if (iconTitleRef.current) {
-                iconTitleRef.current.style.height = 'auto'; // 초기 높이로 재설정
-                iconTitleRef.current.style.height = `${iconTitleRef.current.scrollHeight}px`;
-              }
+            if (e.key === 'Backspace' && iconTitleRef.current) {
+              iconTitleRef.current.style.height = 'auto';
+              iconTitleRef.current.style.height = `${iconTitleRef.current.scrollHeight}px`;
             }
           }}
         />

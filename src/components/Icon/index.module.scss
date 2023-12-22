@@ -34,13 +34,12 @@
     overflow: hidden;
     resize: none;
     word-break: keep-all;
-    height: fit-content;
+
     width: fit-content;
     max-width: 90px;
     &_edit {
       outline: auto;
       width: fit-content;
-      min-height: unset;
     }
     &.ellipsis {
       text-overflow: ellipsis;
