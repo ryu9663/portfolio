@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styles from './index.module.scss';
 import { OpenableIconType, WindowStateType } from '@/components/Icon';
 import { Button } from 'junyeol-components';
@@ -52,7 +53,6 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
           return { left: 0, top: 0 };
         }
       })(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [id, iconsOnUnderbar.length, windowState, icon.zIndex],
   );
 

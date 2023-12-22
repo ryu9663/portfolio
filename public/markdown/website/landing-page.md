@@ -1,6 +1,6 @@
 # [코드스테이츠 랜딩페이지](https://www.codestates.com)
 
-![코드스테이츠 홈페이지](https://www.datocms-assets.com/107137/1698302941-2023-10-26-3-48-56.png)
+![코드스테이츠 홈페이지](https://www.datocms-assets.com/107137/1698302941-2023-10-26-3-48-56.png?w=900)
 
 ## 소개
 
