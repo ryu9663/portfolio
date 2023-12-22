@@ -87,7 +87,7 @@ export interface IconComponentProps {
 }
 
 export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) => {
-  const isEllipsis = icon.alt.length > 8;
+  const isEllipsis = icon.alt.length > 5;
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [isRightClick, setIsRightClick] = useState(false);
   const [setMousePosition, isDraggable, setIsDraggable] = useDraggableStore(state => [
@@ -105,14 +105,14 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
 
   const titleClickCountRef = useRef<number>(0);
   const iconClickCountRef = useRef<number>(0);
-  const iconTitleInpuRef = useRef<HTMLInputElement>(null);
+  const iconTitleRef = useRef<HTMLTextAreaElement>(null);
 
   const handleClickToEditIconTitle = (whichClick: 'onTitle' | 'onMenu') => {
     if (whichClick === 'onTitle') {
       titleClickCountRef.current++;
     } else {
       titleClickCountRef.current = 2;
-      iconTitleInpuRef.current?.focus();
+      iconTitleRef.current?.focus();
     }
 
     if (titleClickCountRef.current === 2) {
@@ -162,14 +162,12 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
         onClick={() => handleDoubleClickIcon(icon)}
       >
         <img src={icon.src} alt={icon.alt} width={30} height={30} />
-        <input
-          ref={iconTitleInpuRef}
-          type="text"
+        <textarea
+          ref={iconTitleRef}
           readOnly={isReadOnly}
           className={`${styles.icon_title} ${isReadOnly ? '' : styles.icon_title_edit} ${
             isEllipsis ? styles.ellipsis : ''
           }`}
-          size={isEllipsis ? undefined : icon.alt.length + 4}
           onClick={e => {
             e.stopPropagation();
             handleClickToEditIconTitle('onTitle');
@@ -186,6 +184,9 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
           value={icon.alt}
           onChange={e => {
             if (!isReadOnly) {
+              if (iconTitleRef.current) {
+                iconTitleRef.current.style.height = iconTitleRef.current.scrollHeight + 'px';
+              }
               setIcons(prev => {
                 const updatedIcons = prev.map(i => {
                   if (i.id === icon.id) {
@@ -214,6 +215,11 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
                 const thisWindow = findIconByIdWithChildren(icon.id, windows);
                 setWindowState(icon.id, windows, { ...thisWindow, alt: icon.alt });
               }
+            }
+
+            if (e.key === 'Backspace' && iconTitleRef.current) {
+              iconTitleRef.current.style.height = 'auto';
+              iconTitleRef.current.style.height = `${iconTitleRef.current.scrollHeight}px`;
             }
           }}
         />
