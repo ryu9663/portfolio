@@ -10,4 +10,4 @@
 - 컴포넌트는 npm publish 되어 있는 [개인 컴포넌트 라이브러리](https://www.npmjs.com/package/junyeol-components)를 이용했습니다.
 
 - 동일한 내용을 검색시에는 캐시된 데이터를 불러오도록 하여 요청수를 줄였습니다. (캐시 기간 하루)
-  ![하이빌리지 캐시](https://www.datocms-assets.com/107137/1703219475-ezgif-com-video-to-gif-converted.gif?w=900)
+  ![하이빌리지 캐시](https://www.datocms-assets.com/107137/1703219497-hivilliage-cache.gif?w=900)
