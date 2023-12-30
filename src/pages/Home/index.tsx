@@ -1,20 +1,19 @@
 import { Draggable } from '@/components/Draggable';
 import { ICONS } from '@/utils/constant';
 import styles from './index.module.scss';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { WindowBox } from '@/components/WindowBox';
 import { useHighestZIndex } from '@/utils/hooks/useZIndex';
 import { Fragment } from 'react';
 import { OpenableIconType } from '@/components/Icon';
+import { useWindowRouter } from '@/utils/hooks/useWindowRouter';
 
 export const Home = () => {
-  const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const { windows, setWindowState } = useWindowRouter();
 
-  useHighestZIndex(windows, setWindows);
-
+  useHighestZIndex(windows, setWindowState);
   return (
     <div className={styles.home}>
-      <Draggable icons={ICONS} />
+      <Draggable icons={[...ICONS.filter(i => i.type === 'link'), ...windows]} />
       {renderIconsRecursively(windows)}
     </div>
   );
