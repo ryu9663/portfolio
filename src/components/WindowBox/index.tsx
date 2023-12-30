@@ -3,12 +3,12 @@ import styles from './index.module.scss';
 import { OpenableIconType, WindowStateType } from '@/components/Icon';
 import { Button } from 'junyeol-components';
 import { FocusEventHandler, useMemo, useRef } from 'react';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 import { getZIndexesWithChildren, renderWindowbox } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
 import { CLASS_OF_ICON_ON_UNDERBAR, UNDERBAR_HEIGHT } from '@/utils/constant';
+import { useWindowRouter } from '@/utils/hooks/useWindowRouter';
 
 interface WindowBoxProps {
   icon: OpenableIconType;
@@ -17,7 +17,8 @@ interface WindowBoxProps {
 export const WindowBox = ({ icon }: WindowBoxProps) => {
   const { id, windowState } = icon;
   const isOpen = windowState !== WindowStateType.CLOSED;
-  const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const { windows, setWindowState } = useWindowRouter();
+
   const setThisWindowState = useThisWindowState(icon.id, windows);
   const activateRef = useActivate(icon);
   const headerClickCountRef = useRef<number>(0);
@@ -115,7 +116,8 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
         onFocus={handleFocus}
         onBlur={e => {
           if (e.relatedTarget?.className !== CLASS_OF_ICON_ON_UNDERBAR) {
-            setWindows(windows => windows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)));
+            // setWindows(windows => windows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)));
+            setWindowState(icon.id, windows, { ...icon, activated: false });
           }
         }}
       >

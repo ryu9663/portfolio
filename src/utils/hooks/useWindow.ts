@@ -1,11 +1,12 @@
 import { IconType } from '@/components/Icon';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { getZIndexesWithChildren } from '@/utils';
 import { useThisWindowState } from '@/utils/hooks/useThisWindow';
+import { useWindowRouter } from '@/utils/hooks/useWindowRouter';
 
 export const useWindow = (icon: IconType) => {
-  const [windows] = useWindowBoxStore(state => [state.windows]);
+  const { windows } = useWindowRouter();
+
   const [iconsOnUnderbar, setIconsOnUnderbar] = useUnderbarStore(state => [
     state.iconsOnUnderbar,
     state.setIconsOnUnderbar,

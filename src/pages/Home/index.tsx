@@ -6,9 +6,11 @@ import { WindowBox } from '@/components/WindowBox';
 import { useHighestZIndex } from '@/utils/hooks/useZIndex';
 import { Fragment } from 'react';
 import { OpenableIconType } from '@/components/Icon';
+import { useWindowRouter } from '@/utils/hooks/useWindowRouter';
 
 export const Home = () => {
-  const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const [, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+  const { windows } = useWindowRouter();
 
   useHighestZIndex(windows, setWindows);
 
