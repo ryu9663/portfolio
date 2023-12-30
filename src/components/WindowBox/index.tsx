@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './index.module.scss';
-import { IconFileType, IconFolderType, OpenableIconType, WindowStateType } from '@/components/Icon';
+import { IconFileType, IconFolderType, IconType, OpenableIconType, WindowStateType } from '@/components/Icon';
 import { Button } from 'junyeol-components';
 import { FocusEventHandler, useMemo, useRef } from 'react';
-import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { getZIndexesWithChildren, renderWindowbox } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
 import { CLASS_OF_ICON_ON_UNDERBAR, UNDERBAR_HEIGHT } from '@/utils/constant';
@@ -22,11 +21,9 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   const { id, windowState } = icon;
   const isOpen = windowState !== WindowStateType.CLOSED;
   const { windows, setWindowState, iconsOnUnderbar } = useWindowRouter();
-
   const activateRef = useActivate(icon);
   const headerClickCountRef = useRef<number>(0);
   const headerIconClickCountRef = useRef<number>(0);
-  const [getIndexOnUnderbar] = useUnderbarStore(state => [state.getIndexOnUnderbar]);
   const zIndexs = getZIndexesWithChildren(windows);
 
   const onClose = (id: number) => {
@@ -44,6 +41,9 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
       iconsOnUnderbar.filter(icon => icon.id !== id),
     );
   };
+
+  const getIndexOnUnderbar = (id: number, windowsOnUnderbar: IconType[]) =>
+    windowsOnUnderbar.findIndex(window => window.id === id);
 
   const position = useMemo(
     () =>
