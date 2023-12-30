@@ -4,7 +4,6 @@ import { OpenableIconType, WindowStateType } from '@/components/Icon';
 import { Button } from 'junyeol-components';
 import { FocusEventHandler, useMemo, useRef } from 'react';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
-import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 import { getZIndexesWithChildren, renderWindowbox } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
 import { CLASS_OF_ICON_ON_UNDERBAR, UNDERBAR_HEIGHT } from '@/utils/constant';
@@ -17,26 +16,26 @@ interface WindowBoxProps {
 export const WindowBox = ({ icon }: WindowBoxProps) => {
   const { id, windowState } = icon;
   const isOpen = windowState !== WindowStateType.CLOSED;
-  const { windows, setWindowState } = useWindowRouter();
+  const { windows, setWindowState, iconsOnUnderbar } = useWindowRouter();
 
-  const setThisWindowState = useThisWindowState(icon.id, windows);
   const activateRef = useActivate(icon);
   const headerClickCountRef = useRef<number>(0);
   const headerIconClickCountRef = useRef<number>(0);
-  const [iconsOnUnderbar, setIconsOnUnderbar, getIndexOnUnderbar] = useUnderbarStore(state => [
-    state.iconsOnUnderbar,
-    state.setIconsOnUnderbar,
-    state.getIndexOnUnderbar,
-  ]);
+  const [getIndexOnUnderbar] = useUnderbarStore(state => [state.getIndexOnUnderbar]);
   const zIndexs = getZIndexesWithChildren(windows);
 
   const onClose = (id: number) => {
-    setThisWindowState({
-      ...icon,
-      windowState: WindowStateType.CLOSED,
-      activated: false,
-    });
-    setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
+    setWindowState(
+      id,
+      windows,
+      {
+        ...icon,
+        windowState: WindowStateType.CLOSED,
+        activated: false,
+      },
+      undefined,
+      iconsOnUnderbar.filter(icon => icon.id !== id),
+    );
   };
 
   const position = useMemo(
@@ -67,7 +66,9 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   })();
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = () => {
-    setThisWindowState(
+    setWindowState(
+      id,
+      windows,
       {
         ...icon,
         activated: true,
@@ -82,7 +83,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   const handleHeaderDoubleClickIcon = (icon: OpenableIconType) => {
     headerClickCountRef.current++;
     if (headerClickCountRef.current === 2) {
-      setThisWindowState({
+      setWindowState(id, windows, {
         ...icon,
         windowState: icon.windowState === WindowStateType.NORMAL ? WindowStateType.MAXIMIZED : WindowStateType.NORMAL,
         activated: true,
@@ -146,7 +147,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
                 className={styles.button}
                 onClick={() => {
                   if (windowState === WindowStateType.MAXIMIZED || windowState === WindowStateType.NORMAL) {
-                    setThisWindowState({
+                    setWindowState(id, windows, {
                       ...icon,
                       windowState: WindowStateType.MINIMIZED,
                       prevWindowState: windowState,
@@ -163,7 +164,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
                 className={styles.button}
                 onClick={() => {
                   if (windowState === WindowStateType.NORMAL) {
-                    setThisWindowState({
+                    setWindowState(id, windows, {
                       ...icon,
                       windowState: WindowStateType.MAXIMIZED,
                       prevWindowState: WindowStateType.NORMAL,
@@ -171,7 +172,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
                       zIndex: Math.max(...zIndexs) + 1,
                     });
                   } else
-                    setThisWindowState({
+                    setWindowState(id, windows, {
                       ...icon,
                       windowState: WindowStateType.NORMAL,
                       prevWindowState: WindowStateType.MAXIMIZED,

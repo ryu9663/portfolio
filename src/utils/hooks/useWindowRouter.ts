@@ -2,22 +2,24 @@ import { IconFileType, IconFolderType, OpenableIconType } from '@/components/Ico
 import { OtherWindowType } from '@/components/WindowBox/index.store';
 import { ICONS } from '@/utils/constant';
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 export const initWindows = ICONS.filter(icon => icon.type === 'folder' || icon.type === 'file') as
   | IconFolderType[]
   | IconFileType[];
 
 export const useWindowRouter = () => {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const windows = parseQueryStringToArray.windows(searchParams.get('windows')) || initWindows;
+  const windows: OpenableIconType[] = parseQueryStringToArray.windows(searchParams.get('windows')) || initWindows;
+  const iconsOnUnderbar: OpenableIconType[] =
+    parseQueryStringToArray.windows(searchParams.get('icons-on-underbar')) || [];
   const setWindowState = (
     id: number,
     windows: OpenableIconType[],
     thisWindow: OpenableIconType,
     otherWindow?: OtherWindowType,
+    updatedIconsOnUnderbar?: OpenableIconType[],
   ) => {
     const updateWindows = (iconsArray: OpenableIconType[]): OpenableIconType[] => {
       const updatedWindows = iconsArray.map((window: OpenableIconType) => {
@@ -43,16 +45,20 @@ export const useWindowRouter = () => {
     };
 
     const updatedWindows = updateWindows(windows);
-    console.log(updatedWindows);
-    setSearchParams({ windows: serializeArrayToQueryString(updatedWindows) });
+
+    setSearchParams({
+      windows: serializeArrayToQueryString(updatedWindows),
+      'icons-on-underbar': serializeArrayToQueryString(updatedIconsOnUnderbar || iconsOnUnderbar),
+    });
   };
 
   useEffect(() => {
-    // const dataArray = parseQueryStringToArray.windows(searchParams.get('windows')!);
-    // console.log(dataArray);
-  }, []);
+    if (iconsOnUnderbar.length === 0) {
+      setSearchParams({});
+    }
+  }, [iconsOnUnderbar.length]);
 
-  return { windows, setWindowState };
+  return { windows, iconsOnUnderbar, setWindowState };
 };
 
 export const parseQueryStringToArray = {
@@ -64,7 +70,14 @@ export const parseQueryStringToArray = {
       return [];
     }
   },
-  // iconsOnUnderbar:
+  iconsOnUnderbar: (queryString: string | null) => {
+    try {
+      if (typeof queryString === 'string') return JSON.parse(decodeURIComponent(queryString));
+    } catch (error) {
+      console.error('Error parsing query string:', error);
+      return [];
+    }
+  },
 };
 
 const serializeArrayToQueryString = (array: OpenableIconType[]) => encodeURIComponent(JSON.stringify(array));

@@ -5,6 +5,9 @@ import { useWindowRouter } from '@/utils/hooks/useWindowRouter';
 export const useThisWindowState = (id: number, windows: OpenableIconType[]) => {
   const { setWindowState } = useWindowRouter();
 
-  return (thisWindowState: OpenableIconType, otherWindowState?: OtherWindowType) =>
-    setWindowState(id, windows, thisWindowState, otherWindowState);
+  return (
+    thisWindowState: OpenableIconType,
+    otherWindowState?: OtherWindowType,
+    iconsOnUnderbar?: OpenableIconType[],
+  ) => setWindowState(id, windows, thisWindowState, otherWindowState, iconsOnUnderbar);
 };

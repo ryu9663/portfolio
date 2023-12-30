@@ -1,30 +1,31 @@
-import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import styles from './index.module.scss';
 import { Button } from 'junyeol-components';
 import { InfoModal } from '@/components/InfoModal';
 import { OpenableIconType, WindowStateType } from '@/components/Icon';
 import { useState } from 'react';
-import { useWindowBoxStore } from '@/components/WindowBox/index.store';
 import { useDraggableStore } from '@/components/Draggable/index.store';
-import { useThisWindowState } from '@/utils/hooks/useThisWindow';
 import { findIconByIdWithChildren, getZIndexesWithChildren } from '@/utils';
+import { useWindowRouter } from '@/utils/hooks/useWindowRouter';
 
 export const IconsOnUnderbar = () => {
-  const iconsOnUnderbar = useUnderbarStore(state => state.iconsOnUnderbar);
+  const { iconsOnUnderbar } = useWindowRouter();
 
   return (
     <ul className={styles['window_infoes']}>
-      {iconsOnUnderbar.map(icon => icon.type !== 'link' && <IconOnUnderbar key={icon.id} icon={icon} />)}
+      {iconsOnUnderbar.map(icon => (
+        <IconOnUnderbar key={icon.id} icon={icon} iconsOnUnderbar={iconsOnUnderbar} />
+      ))}
     </ul>
   );
 };
 
-const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
+const IconOnUnderbar = ({ icon }: { icon: OpenableIconType; iconsOnUnderbar: OpenableIconType[] }) => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-  const setIconsOnUnderbar = useUnderbarStore(state => state.setIconsOnUnderbar);
-  const [windows, setWindows] = useWindowBoxStore(state => [state.windows, state.setWindows]);
+
+  const { windows, iconsOnUnderbar, setWindowState } = useWindowRouter();
+
   const thisWindow = findIconByIdWithChildren(icon.id, windows);
-  const setThisWindowState = useThisWindowState(thisWindow.id, windows);
+  const { id } = thisWindow;
 
   const setMousePosition = useDraggableStore(state => state.setMousePosition);
   const closeInfoModal = () => {
@@ -32,13 +33,24 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
   };
 
   const closeWindow = (id: number) => {
-    setIconsOnUnderbar(iconsOnUnderbar => iconsOnUnderbar.filter(icon => icon.id !== id));
-    setWindows(windows => windows.filter(window => window.id !== id));
+    setWindowState(
+      id,
+      windows,
+      {
+        ...icon,
+        windowState: WindowStateType.CLOSED,
+        activated: false,
+      },
+      undefined,
+      iconsOnUnderbar.filter(icon => icon.id !== id),
+    );
   };
 
   const openWindow = () => {
     const zIndexs = getZIndexesWithChildren(windows);
-    setThisWindowState(
+    setWindowState(
+      id,
+      windows,
       {
         ...thisWindow,
         windowState: thisWindow.prevWindowState || 'normal',
@@ -53,7 +65,7 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
     const { activated, windowState } = window;
     if (activated) {
       if (windowState === WindowStateType.MAXIMIZED || windowState === WindowStateType.NORMAL) {
-        setThisWindowState({
+        setWindowState(id, windows, {
           ...thisWindow,
           windowState: WindowStateType.MINIMIZED,
           prevWindowState: windowState,
@@ -63,7 +75,9 @@ const IconOnUnderbar = ({ icon }: { icon: Pick<OpenableIconType, 'id'> }) => {
     } else {
       if (windowState !== WindowStateType.MINIMIZED) {
         const zIndexs = getZIndexesWithChildren(windows);
-        setThisWindowState(
+        setWindowState(
+          id,
+          windows,
           {
             ...thisWindow,
             zIndex: Math.max(...zIndexs) + 1,

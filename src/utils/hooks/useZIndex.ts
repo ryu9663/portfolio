@@ -1,7 +1,7 @@
 import { IconFileType, IconFolderType, IconIframeType, OpenableIconType } from '@/components/Icon';
-import { flattenAndExtract } from '@/utils';
+import { OtherWindowType } from '@/components/WindowBox/index.store';
+import { findIconByIdWithChildren, flattenAndExtract } from '@/utils';
 import { useMountedEffect } from 'junyeol-components';
-import { SetStateAction } from 'react';
 
 /** SUGAR type */
 interface FileWithChildrenType extends IconFileType {
@@ -24,7 +24,13 @@ type AlwaysHaveChildrenType = IconFolderType | FileWithChildrenType | IframeWith
 //! zIndexs 넣고 리팩토링. 리턴값 있어야함.
 export const useHighestZIndex = (
   windows: OpenableIconType[],
-  setWindows: (prev: SetStateAction<OpenableIconType[]>) => void,
+  setWindowState: (
+    id: number,
+    windows: OpenableIconType[],
+    thisWindow: OpenableIconType,
+    otherWindow?: OtherWindowType,
+    updatedIconsOnUnderbar?: OpenableIconType[],
+  ) => void,
 ) => {
   /**
    * 열려있는 것(normal || maximized)중에 zIndex가 제일 높은것 찾는다.
@@ -56,27 +62,8 @@ export const useHighestZIndex = (
 
   useMountedEffect(() => {
     if (highestZIndexIdInOpenedWindows) {
-      const updateWindow = (windows: OpenableIconType[]): OpenableIconType[] =>
-        windows.map(window => {
-          if (window.id === highestZIndexIdInOpenedWindows) {
-            if (window.type === 'folder') {
-              return {
-                ...window,
-                children: window.children ? updateWindow(window.children) : undefined,
-                activated: true,
-              };
-            } else return { ...window, activated: true };
-          } else if (window.type === 'folder') {
-            return {
-              ...window,
-              children: window.children ? updateWindow(window.children) : undefined,
-              activated: false,
-            };
-          } else return { ...window, activated: false };
-        });
-      const updatedWindows = updateWindow(windows);
-
-      setWindows(updatedWindows);
+      const thisWindow = findIconByIdWithChildren(highestZIndexIdInOpenedWindows, windows);
+      setWindowState(highestZIndexIdInOpenedWindows, windows, { ...thisWindow, activated: true }, { activated: false });
     }
   }, [highestZIndexIdInOpenedWindows]);
 };

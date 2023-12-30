@@ -2,7 +2,6 @@ import { useRef, useState, DragEvent, Dispatch, SetStateAction } from 'react';
 import styles from './index.module.scss';
 import { useDraggableStore } from '@/components/Draggable/index.store';
 import { InfoModal } from '@/components/InfoModal';
-import { useUnderbarStore } from '@/components/UnderBar/index.store';
 
 import { useWindow } from '@/utils/hooks/useWindow';
 import { findIconByIdWithChildren } from '@/utils';
@@ -96,12 +95,8 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     state.setIsDraggable,
   ]);
   const openWindow = useWindow(icon);
-  const [iconsOnUnderbar, setIconsOnUnderbar] = useUnderbarStore(state => [
-    state.iconsOnUnderbar,
-    state.setIconsOnUnderbar,
-  ]);
 
-  const { windows, setWindowState } = useWindowRouter();
+  const { windows, iconsOnUnderbar, setWindowState } = useWindowRouter();
 
   const titleClickCountRef = useRef<number>(0);
   const iconClickCountRef = useRef<number>(0);
@@ -129,7 +124,6 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
     iconClickCountRef.current++;
     if (iconClickCountRef.current === 2) {
       const isAlreadySameIconOpened = !!iconsOnUnderbar.find(i => i.id === icon.id);
-
       if (!isAlreadySameIconOpened) {
         openWindow();
       }
@@ -202,18 +196,21 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
             if (e.key === 'Enter') {
               setIsReadOnly(true);
               setIsDraggable(true);
-              setIconsOnUnderbar(prev => {
-                const updatedIcons = prev.map(i => {
-                  if (i.id === icon.id) {
-                    return { ...i, alt: icon.alt };
-                  }
-                  return i;
-                });
-                return updatedIcons;
-              });
+
               if (icon.type === IconType.FOLDER || icon.type === IconType.FILE || icon.type === IconType.IFRAME) {
                 const thisWindow = findIconByIdWithChildren(icon.id, windows);
-                setWindowState(icon.id, windows, { ...thisWindow, alt: icon.alt });
+                setWindowState(
+                  icon.id,
+                  windows,
+                  { ...thisWindow, alt: icon.alt },
+                  undefined,
+                  iconsOnUnderbar.map(i => {
+                    if (i.id === icon.id) {
+                      return { ...i, alt: icon.alt };
+                    }
+                    return i;
+                  }),
+                );
               }
             }
 
