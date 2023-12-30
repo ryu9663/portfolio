@@ -1,5 +1,5 @@
 import { IconFileType, IconFolderType, OpenableIconType } from '@/components/Icon';
-import { OtherWindowType } from '@/components/WindowBox/index.store';
+import { OtherWindowType } from '@/components/WindowBox';
 import { ICONS } from '@/utils/constant';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -15,12 +15,15 @@ export const useWindowRouter = () => {
   const iconsOnUnderbar: OpenableIconType[] =
     parseQueryStringToArray.windows(searchParams.get('icons-on-underbar')) || [];
   const setWindowState = (
-    id: number,
-    windows: OpenableIconType[],
-    thisWindow: OpenableIconType,
-    otherWindow?: OtherWindowType,
+    windowsOnWallpapers: {
+      id: number;
+      windows: OpenableIconType[];
+      thisWindow: OpenableIconType;
+      otherWindow?: OtherWindowType;
+    },
     updatedIconsOnUnderbar?: OpenableIconType[],
   ) => {
+    const { id, windows, thisWindow, otherWindow } = windowsOnWallpapers;
     const updateWindows = (iconsArray: OpenableIconType[]): OpenableIconType[] => {
       const updatedWindows = iconsArray.map((window: OpenableIconType) => {
         if (window.id === id) {
@@ -56,12 +59,13 @@ export const useWindowRouter = () => {
     if (iconsOnUnderbar.length === 0) {
       setSearchParams({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iconsOnUnderbar.length]);
 
   return { windows, iconsOnUnderbar, setWindowState };
 };
 
-export const parseQueryStringToArray = {
+const parseQueryStringToArray = {
   windows: (queryString: string | null) => {
     try {
       if (typeof queryString === 'string') return JSON.parse(decodeURIComponent(queryString));

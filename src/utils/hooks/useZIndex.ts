@@ -1,5 +1,5 @@
 import { IconFileType, IconFolderType, IconIframeType, OpenableIconType } from '@/components/Icon';
-import { OtherWindowType } from '@/components/WindowBox/index.store';
+import { OtherWindowType } from '@/components/WindowBox';
 import { findIconByIdWithChildren, flattenAndExtract } from '@/utils';
 import { useMountedEffect } from 'junyeol-components';
 
@@ -25,10 +25,12 @@ type AlwaysHaveChildrenType = IconFolderType | FileWithChildrenType | IframeWith
 export const useHighestZIndex = (
   windows: OpenableIconType[],
   setWindowState: (
-    id: number,
-    windows: OpenableIconType[],
-    thisWindow: OpenableIconType,
-    otherWindow?: OtherWindowType,
+    windowsOnWallpapers: {
+      id: number;
+      windows: OpenableIconType[];
+      thisWindow: OpenableIconType;
+      otherWindow?: OtherWindowType;
+    },
     updatedIconsOnUnderbar?: OpenableIconType[],
   ) => void,
 ) => {
@@ -63,7 +65,12 @@ export const useHighestZIndex = (
   useMountedEffect(() => {
     if (highestZIndexIdInOpenedWindows) {
       const thisWindow = findIconByIdWithChildren(highestZIndexIdInOpenedWindows, windows);
-      setWindowState(highestZIndexIdInOpenedWindows, windows, { ...thisWindow, activated: true }, { activated: false });
+      setWindowState({
+        id: highestZIndexIdInOpenedWindows,
+        windows,
+        thisWindow: { ...thisWindow, activated: true },
+        otherWindow: { activated: false },
+      });
     }
   }, [highestZIndexIdInOpenedWindows]);
 };

@@ -34,57 +34,62 @@ const IconOnUnderbar = ({ icon }: { icon: OpenableIconType; iconsOnUnderbar: Ope
 
   const closeWindow = (id: number) => {
     setWindowState(
-      id,
-      windows,
       {
-        ...icon,
-        windowState: WindowStateType.CLOSED,
-        activated: false,
+        id,
+        windows,
+        thisWindow: {
+          ...icon,
+          windowState: WindowStateType.CLOSED,
+          activated: false,
+        },
       },
-      undefined,
       iconsOnUnderbar.filter(icon => icon.id !== id),
     );
   };
 
   const openWindow = () => {
     const zIndexs = getZIndexesWithChildren(windows);
-    setWindowState(
+    setWindowState({
       id,
       windows,
-      {
+      thisWindow: {
         ...thisWindow,
         windowState: thisWindow.prevWindowState || 'normal',
         zIndex: Math.max(...zIndexs) + 1,
         activated: true,
       },
-      { activated: false },
-    );
+      otherWindow: { activated: false },
+    });
   };
 
   const handleClick = (window: OpenableIconType) => {
     const { activated, windowState } = window;
     if (activated) {
       if (windowState === WindowStateType.MAXIMIZED || windowState === WindowStateType.NORMAL) {
-        setWindowState(id, windows, {
-          ...thisWindow,
-          windowState: WindowStateType.MINIMIZED,
-          prevWindowState: windowState,
-          activated: false,
+        setWindowState({
+          id,
+          windows,
+          thisWindow: {
+            ...thisWindow,
+            windowState: WindowStateType.MINIMIZED,
+            prevWindowState: windowState,
+            activated: false,
+          },
         });
       }
     } else {
       if (windowState !== WindowStateType.MINIMIZED) {
         const zIndexs = getZIndexesWithChildren(windows);
-        setWindowState(
+        setWindowState({
           id,
           windows,
-          {
+          thisWindow: {
             ...thisWindow,
             zIndex: Math.max(...zIndexs) + 1,
             activated: true,
           },
-          { activated: false },
-        );
+          otherWindow: { activated: false },
+        });
       }
 
       if (windowState === 'minimized') {

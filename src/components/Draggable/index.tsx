@@ -15,7 +15,6 @@ interface DraggableProps {
 export const Draggable = ({ icons: _icons }: DraggableProps) => {
   const [draggingIcon, setDraggingIcon] = useState<{ id: number } | null>(null);
   const [icons, setIcons] = useState(_icons);
-
   const isDraggable = useDraggableStore(state => state.isDraggable);
 
   const handleDragStart = (e: DragEvent, id: number) => _handleDragStart(e, id, isDraggable, setDraggingIcon);

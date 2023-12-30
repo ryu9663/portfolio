@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './index.module.scss';
-import { OpenableIconType, WindowStateType } from '@/components/Icon';
+import { IconFileType, IconFolderType, OpenableIconType, WindowStateType } from '@/components/Icon';
 import { Button } from 'junyeol-components';
 import { FocusEventHandler, useMemo, useRef } from 'react';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
@@ -8,6 +8,11 @@ import { getZIndexesWithChildren, renderWindowbox } from '@/utils';
 import { useActivate } from '@/utils/hooks/useActivate';
 import { CLASS_OF_ICON_ON_UNDERBAR, UNDERBAR_HEIGHT } from '@/utils/constant';
 import { useWindowRouter } from '@/utils/hooks/useWindowRouter';
+
+export type OtherWindowType = Pick<
+  Partial<IconFolderType> | Partial<IconFileType>,
+  'activated' | 'prevWindowState' | 'windowState' | 'zIndex'
+>;
 
 interface WindowBoxProps {
   icon: OpenableIconType;
@@ -26,14 +31,16 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
 
   const onClose = (id: number) => {
     setWindowState(
-      id,
-      windows,
       {
-        ...icon,
-        windowState: WindowStateType.CLOSED,
-        activated: false,
+        id,
+        windows,
+        thisWindow: {
+          ...icon,
+          windowState: WindowStateType.CLOSED,
+          activated: false,
+        },
       },
-      undefined,
+
       iconsOnUnderbar.filter(icon => icon.id !== id),
     );
   };
@@ -66,28 +73,32 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   })();
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = () => {
-    setWindowState(
+    setWindowState({
       id,
       windows,
-      {
+      thisWindow: {
         ...icon,
         activated: true,
         zIndex: Math.max(...zIndexs) + 1,
       },
-      {
+      otherWindow: {
         activated: false,
       },
-    );
+    });
   };
 
   const handleHeaderDoubleClickIcon = (icon: OpenableIconType) => {
     headerClickCountRef.current++;
     if (headerClickCountRef.current === 2) {
-      setWindowState(id, windows, {
-        ...icon,
-        windowState: icon.windowState === WindowStateType.NORMAL ? WindowStateType.MAXIMIZED : WindowStateType.NORMAL,
-        activated: true,
-        zIndex: Math.max(...zIndexs) + 1,
+      setWindowState({
+        id,
+        windows,
+        thisWindow: {
+          ...icon,
+          windowState: icon.windowState === WindowStateType.NORMAL ? WindowStateType.MAXIMIZED : WindowStateType.NORMAL,
+          activated: true,
+          zIndex: Math.max(...zIndexs) + 1,
+        },
       });
     }
     setTimeout(() => {
@@ -117,8 +128,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
         onFocus={handleFocus}
         onBlur={e => {
           if (e.relatedTarget?.className !== CLASS_OF_ICON_ON_UNDERBAR) {
-            // setWindows(windows => windows.map(icon => (icon.id === id ? { ...icon, activated: false } : icon)));
-            setWindowState(icon.id, windows, { ...icon, activated: false });
+            setWindowState({ id: icon.id, windows, thisWindow: { ...icon, activated: false } });
           }
         }}
       >
@@ -147,11 +157,15 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
                 className={styles.button}
                 onClick={() => {
                   if (windowState === WindowStateType.MAXIMIZED || windowState === WindowStateType.NORMAL) {
-                    setWindowState(id, windows, {
-                      ...icon,
-                      windowState: WindowStateType.MINIMIZED,
-                      prevWindowState: windowState,
-                      activated: false,
+                    setWindowState({
+                      id,
+                      windows,
+                      thisWindow: {
+                        ...icon,
+                        windowState: WindowStateType.MINIMIZED,
+                        prevWindowState: windowState,
+                        activated: false,
+                      },
                     });
                   }
                 }}
@@ -164,20 +178,28 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
                 className={styles.button}
                 onClick={() => {
                   if (windowState === WindowStateType.NORMAL) {
-                    setWindowState(id, windows, {
-                      ...icon,
-                      windowState: WindowStateType.MAXIMIZED,
-                      prevWindowState: WindowStateType.NORMAL,
-                      activated: true,
-                      zIndex: Math.max(...zIndexs) + 1,
+                    setWindowState({
+                      id,
+                      windows,
+                      thisWindow: {
+                        ...icon,
+                        windowState: WindowStateType.MAXIMIZED,
+                        prevWindowState: WindowStateType.NORMAL,
+                        activated: true,
+                        zIndex: Math.max(...zIndexs) + 1,
+                      },
                     });
                   } else
-                    setWindowState(id, windows, {
-                      ...icon,
-                      windowState: WindowStateType.NORMAL,
-                      prevWindowState: WindowStateType.MAXIMIZED,
-                      activated: true,
-                      zIndex: Math.max(...zIndexs) + 1,
+                    setWindowState({
+                      id,
+                      windows,
+                      thisWindow: {
+                        ...icon,
+                        windowState: WindowStateType.NORMAL,
+                        prevWindowState: WindowStateType.MAXIMIZED,
+                        activated: true,
+                        zIndex: Math.max(...zIndexs) + 1,
+                      },
                     });
                 }}
               >

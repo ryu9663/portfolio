@@ -200,10 +200,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
               if (icon.type === IconType.FOLDER || icon.type === IconType.FILE || icon.type === IconType.IFRAME) {
                 const thisWindow = findIconByIdWithChildren(icon.id, windows);
                 setWindowState(
-                  icon.id,
-                  windows,
-                  { ...thisWindow, alt: icon.alt },
-                  undefined,
+                  { id: icon.id, windows, thisWindow: { ...thisWindow, alt: icon.alt } },
                   iconsOnUnderbar.map(i => {
                     if (i.id === icon.id) {
                       return { ...i, alt: icon.alt };
