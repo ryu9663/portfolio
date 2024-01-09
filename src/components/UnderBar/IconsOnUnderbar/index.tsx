@@ -107,7 +107,7 @@ const IconOnUnderbar = ({ icon }: { icon: OpenableIconType; iconsOnUnderbar: Ope
   })();
 
   return (
-    <li data-testid="windowinfo" key={icon.id}>
+    <li data-testid="underbar-testid" key={icon.id}>
       <Button
         className={styles['window_infoes-button']}
         onContextMenu={e => {
