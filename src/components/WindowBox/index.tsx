@@ -119,6 +119,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   return (
     isOpen && (
       <div
+        data-testid="windowbox-testid"
         ref={activateRef}
         tabIndex={0}
         className={`${styles.windowbox} ${windowClassName}`}
