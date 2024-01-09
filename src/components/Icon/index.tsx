@@ -173,6 +173,17 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
             if (!isRightClick) {
               setIsReadOnly(true);
               setIsDraggable(true);
+              const thisWindow = findIconByIdWithChildren(icon.id, windows);
+
+              setWindowState(
+                { id: icon.id, windows, thisWindow: { ...thisWindow, alt: icon.alt } },
+                iconsOnUnderbar.map(i => {
+                  if (i.id === icon.id) {
+                    return { ...i, alt: icon.alt };
+                  }
+                  return i;
+                }),
+              );
             }
           }}
           value={icon.alt}
@@ -181,6 +192,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
               if (iconTitleRef.current) {
                 iconTitleRef.current.style.height = iconTitleRef.current.scrollHeight + 'px';
               }
+
               setIcons(prev => {
                 const updatedIcons = prev.map(i => {
                   if (i.id === icon.id) {
@@ -194,6 +206,7 @@ export const Icon = ({ icon, setIcons, handleDragStart }: IconComponentProps) =>
           }}
           onKeyDown={e => {
             if (e.key === 'Enter') {
+              e.preventDefault();
               setIsReadOnly(true);
               setIsDraggable(true);
 
