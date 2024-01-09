@@ -50,3 +50,6 @@ test('헤더에 버튼을 눌러서 창을 최소화,최대화 할 수 있다.',
   const { bottom: bottomMinimizedWindow } = window.getComputedStyle(windowBox);
   expect(bottomMinimizedWindow).toBe('-150px');
 });
+
+//! TODO : zIndex
+//! TODO : 창 두개 켜놓고 이리저리 해볼때
