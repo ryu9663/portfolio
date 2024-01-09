@@ -23,6 +23,9 @@ jobs:
       # Run build
       - name: Build Library
         run: pnpm run build
+      # Run test
+      - name: Run test
+        run: pnpm run test
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel

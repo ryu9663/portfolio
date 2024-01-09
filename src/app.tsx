@@ -9,9 +9,7 @@ export const App = () => {
       <main id="detail" onClick={() => isModalOpen && setIsModalOpen(false)}>
         <Outlet />
       </main>
-      {/* <input type="text" /> */}
-      {/* <br /> */}
-      {/* <span>div</span> */}
+
       <Underbar />
     </>
   );
