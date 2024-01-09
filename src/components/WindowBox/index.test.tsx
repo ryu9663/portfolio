@@ -37,7 +37,6 @@ describe('윈도우창과 관련된 테스트', () => {
       expect(windowBox).toHaveClass(CLASS_NORMAL);
 
       it('최대화 버튼을 누르면 최대화가 된다.', async () => {
-        // 최대화 버튼을 누른다.
         const maximizeButton = screen.getByText('+');
         await user.click(maximizeButton);
         expect(windowBox).toHaveClass(CLASS_MAXIMIZE);
@@ -46,7 +45,6 @@ describe('윈도우창과 관련된 테스트', () => {
       });
 
       it('최소화 버튼을 누르면 최소화가 된다.', async () => {
-        // 최소화 버튼을 누른다.
         const minimizeButton = screen.getByText('-');
         await user.click(minimizeButton);
         expect(windowBox).toHaveClass(CLASS_MINIMIZE);
