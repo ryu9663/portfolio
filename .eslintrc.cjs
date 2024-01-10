@@ -7,10 +7,12 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
   ],
+
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'prefer-arrow'],
   rules: {
+    'no-console': ['error', { allow: ['warn', 'error'] }],
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'arrow-body-style': ['error', 'as-needed'],
     'react-refresh/only-export-components': 'warn',

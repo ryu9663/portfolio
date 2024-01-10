@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Draggable } from '@/components/Draggable';
 import { IconFileType, IconType, OpenableIconType } from '@/components/Icon';
 import { Iframe } from '@/components/Iframe';

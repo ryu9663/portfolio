@@ -73,7 +73,6 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   })();
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = () => {
-    console.log('하이', icon.alt, icon.zIndex);
     setWindowState({
       id,
       windows,
