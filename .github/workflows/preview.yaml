@@ -23,6 +23,9 @@ jobs:
       # Run build
       - name: Build Library
         run: pnpm run build
+      # Run lint
+      - name: Run lint
+        run: pnpm run lint
       # Run test
       - name: Run test
         run: pnpm run test
