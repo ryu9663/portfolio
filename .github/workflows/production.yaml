@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  version_up:
+  Deploy-Product:
     runs-on: ubuntu-latest
 
     steps:
