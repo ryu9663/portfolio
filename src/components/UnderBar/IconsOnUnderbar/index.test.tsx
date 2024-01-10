@@ -13,7 +13,7 @@ describe('최소화후에 언더바에 아이콘을 클릭하면 이전상태로
   const folderIcon = screen.getByAltText((ICONS[3] as IconFolderType).alt);
   await user.dblClick(folderIcon);
   // 윈도우 창이 열린다.
-  const windowBox = screen.getByTestId('windowbox-testid');
+  const windowBox = screen.getByTestId(`windowbox-testid-${(ICONS[3] as IconFolderType).alt}`);
   expect(windowBox).toBeInTheDocument();
 
   describe('윈도우창이 열리면 아이콘 이미지는 3개다. (윈도우창, 언더바, 바탕화면)', () => {

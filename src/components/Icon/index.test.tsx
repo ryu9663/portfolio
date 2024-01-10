@@ -17,7 +17,7 @@ describe('아이콘과 관련된 테스트', () => {
     await user.dblClick(folderIcon);
 
     // 윈도우창이 열린다.
-    const windowBox = screen.getByTestId('windowbox-testid');
+    const windowBox = screen.getByTestId(`windowbox-testid-${(ICONS[3] as IconFolderType).alt}`);
     expect(windowBox).toBeInTheDocument();
 
     // 윈도우창이 열리면 아이콘 이미지는 3개다. (윈도우창, 언더바, 바탕화면)
@@ -53,7 +53,7 @@ describe('아이콘과 관련된 테스트', () => {
     // 아이콘을 더블클릭해서 윈도우창을 킨다.
     const folderIcon = screen.getByAltText((ICONS[3] as IconFolderType).alt);
     await user.dblClick(folderIcon);
-    const windowBox = screen.getByTestId('windowbox-testid');
+    const windowBox = screen.getByTestId(`windowbox-testid-${(ICONS[3] as IconFolderType).alt}`);
     expect(windowBox).toBeInTheDocument();
 
     // 아이콘 타이틀을 더블클릭하면 readonly가 풀린다.
@@ -85,7 +85,7 @@ describe('아이콘과 관련된 테스트', () => {
     // 아이콘을 더블클릭해서 윈도우창을 킨다.
     const folderIcon = screen.getByAltText((ICONS[3] as IconFolderType).alt);
     await user.dblClick(folderIcon);
-    const windowBox = screen.getByTestId('windowbox-testid');
+    const windowBox = screen.getByTestId(`windowbox-testid-${(ICONS[3] as IconFolderType).alt}`);
     expect(windowBox).toBeInTheDocument();
 
     // 아이콘 타이틀을 더블클릭하면 readonly가 풀린다.
