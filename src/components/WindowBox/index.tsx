@@ -45,7 +45,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   const getIndexOnUnderbar = (id: number, windowsOnUnderbar: IconType[]) =>
     windowsOnUnderbar.findIndex(window => window.id === id);
 
-  const position = useMemo(
+  const style = useMemo(
     () =>
       (() => {
         const indexOnUnderbar = getIndexOnUnderbar(id, iconsOnUnderbar);
@@ -73,6 +73,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   })();
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = () => {
+    console.log('하이', icon.alt, icon.zIndex);
     setWindowState({
       id,
       windows,
@@ -119,13 +120,11 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
   return (
     isOpen && (
       <div
-        data-testid="windowbox-testid"
+        data-testid={`windowbox-testid-${icon.alt}`}
         ref={activateRef}
         tabIndex={0}
         className={`${styles.windowbox} ${windowClassName}`}
-        style={{
-          ...position,
-        }}
+        style={style}
         onFocus={handleFocus}
         onBlur={e => {
           if (e.relatedTarget?.className !== CLASS_OF_ICON_ON_UNDERBAR) {

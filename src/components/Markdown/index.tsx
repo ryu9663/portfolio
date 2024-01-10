@@ -18,7 +18,8 @@ export const Markdown = ({ markdown }: { markdown: string }) => {
     };
 
     fetchMarkdown();
-  });
+  }, [markdown]);
+
   return (
     <div className={`${styles.markdown} markdown-body oction`}>
       <ReactMarkdown
