@@ -23,10 +23,6 @@
 
 - surveyJS를 이용하여 지원서를 생성할 수 있는 화면 구축
 - 공통 컴포넌트 구현
-- 유연한 확장을 위한 지속적 리팩토링
-  - 커스텀 useQuery, useMutation hook과 swagger 내부의 메소드를 연동하여 따로 query function을 만드는 작업을 없앰
-  - 캐싱전략 사용하여 요청수 감소
-- GitHub Actions 이용하여 신규코드에 대한 안전성 확보
 
 ### 유저사이드 페이지
 

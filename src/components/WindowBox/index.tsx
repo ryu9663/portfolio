@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from './index.module.scss';
 import { IconFileType, IconFolderType, IconType, OpenableIconType, WindowStateType } from '@/components/Icon';
@@ -116,6 +117,7 @@ export const WindowBox = ({ icon }: WindowBoxProps) => {
       headerIconClickCountRef.current = 0;
     }, 1000);
   };
+
   return (
     isOpen && (
       <div
