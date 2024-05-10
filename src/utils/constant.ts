@@ -1,4 +1,4 @@
-import NotionSVG from '@/assets/notion.svg';
+// import NotionSVG from '@/assets/notion.svg';
 import GithubSVG from '@/assets/github.svg';
 import FolderSVG from '@/assets/folder.svg';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
@@ -10,15 +10,15 @@ import DigimonSVG from '@/assets/digimon.svg';
 import { IconType } from '@/components/Icon';
 //12차례
 export const ICONS: IconType[] = [
-  {
-    type: 'link',
-    id: 1,
-    src: NotionSVG,
-    alt: '이력서',
-    left: 50,
-    top: 50,
-    link: 'https://www.notion.so/41daf0a85b9f46d186114573d2781a78?pvs=4',
-  },
+  // {
+  //   type: 'link',
+  //   id: 1,
+  //   src: NotionSVG,
+  //   alt: '이력서',
+  //   left: 50,
+  //   top: 50,
+  //   link: 'https://www.notion.so/41daf0a85b9f46d186114573d2781a78?pvs=4',
+  // },
   {
     type: 'link',
     id: 2,
@@ -34,7 +34,7 @@ export const ICONS: IconType[] = [
     src: BlogLogoSVG,
     alt: '블로그',
     left: 50,
-    top: 250,
+    top: 50,
     link: 'https://www.wnsdufdl.com/',
   },
 

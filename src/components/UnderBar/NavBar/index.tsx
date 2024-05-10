@@ -1,12 +1,10 @@
 import { Button } from 'junyeol-components';
 import styles from './index.module.scss';
-import { User } from 'react-feather';
 import GithubSVG from '@/assets/github.svg';
 import { useUnderbarStore } from '@/components/UnderBar/index.store';
 import { IconFileType } from '@/components/Icon';
 import { useWindow } from '@/utils/hooks/useWindow';
 import CodestatesLogo from '@/assets/codestates-logo.svg';
-import { GRAY_500 } from '@/utils/colors';
 
 export const NavBar = () => {
   const isModalOpen = useUnderbarStore(state => state.isModalOpen);
@@ -15,13 +13,6 @@ export const NavBar = () => {
     <nav className={`${styles['priority-0']} ${styles.nav} ${isModalOpen ? styles.nav_isopen : ''}`}>
       <ul className={styles.nav_information}>
         <span className={styles.nav_title}>INFO</span>
-        <li>
-          <Button>
-            <a href="https://www.notion.so/41daf0a85b9f46d186114573d2781a78?pvs=4" target="_blank">
-              <User color={GRAY_500} />
-            </a>
-          </Button>
-        </li>
         <li>
           <a href="https://wnsdufdl.com" target="_blank">
             <Button>BLOG</Button>
