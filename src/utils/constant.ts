@@ -71,6 +71,17 @@ export const ICONS: IconType[] = [
         markdown: '/markdown/admission-admin/admission-admin.md',
       },
       {
+        type: 'file',
+        windowState: 'closed',
+        id: 12,
+        src: CodestatesLogo,
+        alt: 'X-Factor-PMA',
+        left: 150,
+        top: 50,
+        zIndex: 100,
+        markdown: '/markdown/Xion/pma.md',
+      },
+      {
         type: 'folder',
         windowState: 'closed',
         id: 6,
